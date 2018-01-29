@@ -163,6 +163,7 @@ DESTDIR=$PWD
 
 cmd=$(abs $0)
 
+# gestion des options et arguments
 while [ ! -z "$1" ] ;
 do
     case "$1" in
@@ -197,19 +198,22 @@ dsttex=$(basename $1 .md).tex
 dstpdf=$(basename $1 .md).pdf
 shift
 
+# le répertoire de travail
 mkdir -p $TMPDIR
 
+# les fichiers nécessaires au thème
 list-files $THEME | while read f
 do
     extract-file $TMPDIR $f
 done
 
-[ $# -ne 0 ] && { tar -cf - "$@" | tar -C $TMPDIR -xf - ; }
+# les fichiers sources et images
+[ $# -ne 0 ] && { tar -chf - "$@" | tar -C $TMPDIR -xf - ; }
 
 $LATEX_ONLY || cd $TMPDIR
 
 pandoc -s \
-       -f markdown+pandoc_title_block+pipe_tables-implicit_figures+link_attributes \
+       -f markdown+yaml_metadata_block+pipe_tables-implicit_figures+link_attributes \
        --toc \
        -t beamer \
        --template=$TMPDIR/beamer-pandoc.tex \
@@ -564,6 +568,7 @@ Ugo+PgpzdGFydHhyZWYKOTQ0OQolJUVPRgo=
 
 %% Quelques paquets utiles
 \usepackage{array}              % pour faciliter les styles de tableaux
+\usepackage{longtable,booktabs} % pour les longues tables générées par pandoc
 \usepackage{relsize}            % pour faciliter le changement de taille des polices
 \usepackage[normalem]{ulem}     % pour avoir des soulignements funky
 \usepackage{tikz}               % pour les dessins portables
