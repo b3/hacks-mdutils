@@ -72,7 +72,7 @@
 
 # DETAILS TECHNIQUES
 #
-# Les autres fichiers nécessaires (thèmes beamer, logos) sont embaqués en fin
+# Les autres fichiers nécessaires (thèmes beamer, logos) sont embarqués en fin
 # de script (pour pouvoir diffuser le script et rien d'autre). L'embarquement
 # est fait entre deux lignes sous la forme :
 #
