@@ -26,7 +26,7 @@
 #
 #     -h, --help           affiche ce message d'aide
 #     -t, --theme THEME    utilise THEME pour la forme du diaporama au lieu de
-#                          lille1. 'list' permet de lister les thèmes.
+#                          ulille. 'list' permet de lister les thèmes.
 #     -s, --slide-level N  spéficie le niveau de titre qui définit une diapo
 #                          au lieu du niveau 2
 #     -L, --latex          produit le source LaTeX plutôt que le résultat PDF
@@ -153,10 +153,10 @@ list-themes ()
 
 ##############################################################################
 
-VERSION=1.0-beta1
+VERSION=1.0
 LATEX_ONLY=false
 DEBUG=false
-THEME=lille1
+THEME=ulille
 TMPDIR=/tmp/md2beamer
 SLIDELEVEL=2
 DESTDIR=$PWD
@@ -244,8 +244,10 @@ exit 0
 
 # begin-lille1 beamerthemelille1.sty cat
 % Un thème Beamer pour l'Université de Lille 1
-% Copyright (C) 2015-2016 Bruno BEAUFILS
+% Copyright (C) 2015-2018 Bruno BEAUFILS
 % This file is distributed under the terms of the WTFPL license.
+
+\def\filedate{2018/01/31}
 
 % Paramétrages génériques %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -263,6 +265,11 @@ exit 0
 \definecolor{Lille1ViveRouge}{RGB}{249,66,58}     % en HTML : f9423a
 \definecolor{Lille1ViveVert}{RGB}{120,190,32}     % en HTML : 78be20
 \definecolor{Lille1ViveJaune}{RGB}{252,227,0}     % en HTML : fce300
+
+%% Des "jolies" polices de caractères
+\usepackage{lmodern}            % pour sf et tt
+\usepackage{fourier}            % pour rm
+\usepackage{bbm}                % pour les mathbbm
 
 %% La police Lille 1 n'est pas libre (Verdana) on prend le truc le plus proche
 \usepackage[scaled=.92]{helvet}
@@ -298,7 +305,7 @@ exit 0
 \setbeamercolor{alerted text}{fg=Lille1Pourpre}
 
 %% Polices de caractères
-%\usefonttheme[stillsansseriftext]{serif}
+\usefonttheme[stillsansseriflarge]{serif}
 \usefonttheme[onlylarge]{structurebold}
 \setbeamerfont{date in head/foot}{series=\bfseries}
 \setbeamerfont{date}{series=\bfseries}
@@ -313,11 +320,150 @@ exit 0
 
 %% Adaptation des modèles
 
+%%% La page de titre
+\renewcommand{\maketitle}[1][]{\addtocounter{framenumber}{-1}\frame[plain,#1]{\titlepage}}
+
 %%% Sections dans la table des matières
 \setbeamertemplate{sections/subsections in toc}[sections numbered]
 
 %%% Une page simple (avec table des matières) devant chaque section
-\setbeamertemplate{section page}{\tableofcontents[currentsection,subsubsectionstyle=show/show/show/shaded]}
+\setbeamertemplate{section page}{%
+  \tableofcontents[currentsection,subsubsectionstyle=show/show/show/shaded]}
+\AtBeginSection[]{\frame{\sectionpage}}
+
+%%% Styles des blocs
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamerfont{block title}{size={}}
+
+%%% Style des listes
+\setbeamertemplate{items}[triangle] % ou ball
+
+%%% Type des continuations
+\setbeamertemplate{frametitle continuation}[from second][(suite)]
+
+%%% Des pieds de diapo simples
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{footline}
+      \usebeamerfont{date in head/foot}
+      \hspace*{1.25ex}
+      \inserttitle{} \hspace*{3ex} \emph{\textmd{\insertsection}}
+      \hfill
+      \insertframenumber{} / \inserttotalframenumber
+      \hspace*{1.25ex}
+      \llap{\raisebox{2em}{\insertlogo}\hspace{.75ex}}
+    \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\setbeamertemplate{navigation symbols}{} % pas de navigation affichée
+\setbeamertemplate{sidebar right}{}      % pas de logo
+
+%% D'autres paramètres Beamer en vrac
+
+%%% On découvre lentement les trucs cachés
+\setbeamercovered{dynamic}      
+
+%%% Marges
+\setbeamersize{text margin left=1em,text margin right=1em}
+
+% Local Variables:
+% time-stamp-active: t 
+% time-stamp-pattern: "5/\\filedate{%:y/%02m/%02d}$"
+% End:
+# end beamerthemelille1.sty
+
+##############################################################################
+
+# begin-ulille beamerthemeulille.sty cat
+% Un thème Beamer pour l'Université de Lille
+% Copyright (C) 2018 Bruno BEAUFILS
+% This file is distributed under the terms of the WTFPL license.
+
+\def\filedate{2018/01/31}
+
+% Paramétrages génériques %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Les couleurs de l'Université de Lille 1
+\definecolor{Lille1Pourpre}{RGB}{174,37,115}      % en HTML : ae2573
+\definecolor{Lille1NeutreNoir}{RGB}{56,47,45}     % en HTML : 382f2d
+\definecolor{Lille1NeutreBleu}{RGB}{127,160,172}  % en HTML : 7fa0ac
+\definecolor{Lille1NeutreRose}{RGB}{216,200,209}  % en HTML : d8c8d1
+\definecolor{Lille1FroideBleu}{RGB}{29,66,138}    % en HTML : 1d428a
+\definecolor{Lille1FroideVert}{RGB}{0,179,152}    % en HTML : 00b398
+\definecolor{Lille1FroideCyan}{RGB}{141,200,232}  % en HTML : 8dc8e8
+\definecolor{Lille1ChaudeViolet}{RGB}{114,0,98}   % en HTML : 720062
+\definecolor{Lille1ChaudeMarron}{RGB}{211,130,53} % en HTML : d38235
+\definecolor{Lille1ChaudeTaupe}{RGB}{213,203,159} % en HTML : d5cb9f
+\definecolor{Lille1ViveRouge}{RGB}{249,66,58}     % en HTML : f9423a
+\definecolor{Lille1ViveVert}{RGB}{120,190,32}     % en HTML : 78be20
+\definecolor{Lille1ViveJaune}{RGB}{252,227,0}     % en HTML : fce300
+
+%% Des "jolies" polices de caractères
+\usepackage{lmodern}            % pour sf et tt
+\usepackage{fourier}            % pour rm
+\usepackage{bbm}                % pour les mathbbm
+
+%% La police Lille 1 n'est pas libre (Verdana) on prend le truc le plus proche
+\usepackage[scaled=.92]{helvet}
+
+%% Paramétrage hyperref
+\hypersetup{%
+  colorlinks,%
+  linkcolor=,%
+  urlcolor=Lille1Pourpre}
+  
+% Paramétrage Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\mode<presentation>             % pour le mode présentation seulement
+
+%% Logos
+\titlegraphic{%
+  \raisebox{-0.5\height}{\includegraphics[width=6em]{logo-univ-lille}}
+}
+\logo{\includegraphics[height=1.5em]{logo-univ-lille}}
+
+%% Couleurs
+\usecolortheme{spruce}
+\setbeamercolor{normal text}{fg=Lille1NeutreNoir}
+\setbeamercolor{structure}{fg=black}
+\setbeamercolor{frametitle}{fg=white,bg=Lille1Pourpre}
+\setbeamercolor{title}{fg=Lille1Pourpre,bg=white}
+\setbeamercolor{subtitle}{fg=Lille1NeutreBleu}
+\setbeamercolor{footline}{fg=white,bg=Lille1Pourpre}
+\setbeamercolor{block title}{fg=white,bg=Lille1Pourpre}
+\setbeamercolor{block body}{fg=Lille1NeutreNoir,bg=Lille1NeutreRose}
+\setbeamercolor{block title example}{fg=white,bg=Lille1NeutreBleu}
+\setbeamercolor{block body example}{fg=Lille1NeutreNoir,bg=Lille1NeutreRose}
+\setbeamercolor{alerted text}{fg=Lille1Pourpre}
+
+%% Polices de caractères
+%\usefonttheme[stillsansseriflarge]{serif}
+\usefonttheme[onlylarge]{structurebold}
+\setbeamerfont{date in head/foot}{series=\bfseries}
+\setbeamerfont{date}{series=\bfseries}
+\setbeamerfont{alerted text}{series=\bfseries}
+
+%% Traduction en français
+\uselanguage{french}
+\languagepath{french}
+\deftranslation[to=french]{Definition}{Définition}
+\deftranslation[to=french]{Example}{Exemple}
+\deftranslation[to=french]{Theorem}{Théorème}
+
+%% Adaptation des modèles
+
+%%% La page de titre
+\renewcommand{\maketitle}[1][]{%
+  \addtocounter{framenumber}{-1}\frame[plain,#1]{\titlepage}}
+
+%%% Sections dans la table des matières
+\setbeamertemplate{sections/subsections in toc}[sections numbered]
+
+%%% Une page simple (avec table des matières) devant chaque section
+\setbeamertemplate{section page}{%
+  \tableofcontents[currentsection,subsubsectionstyle=show/show/show/shaded]}
 \AtBeginSection[]{\frame{\sectionpage}}
 
 %%% Styles des blocs
@@ -350,9 +496,18 @@ exit 0
 \setbeamertemplate{sidebar right}{}      % pas de logo
 
 %% D'autres paramètres Beamer en vrac
-\setbeamercovered{dynamic}      % on découvre lentement les trucs cachés
+
+%%% On découvre lentement les trucs cachés
+\setbeamercovered{dynamic}      
+
+%%% Marges
 \setbeamersize{text margin left=1em,text margin right=1em}
-# end beamerthemelille1.sty
+
+% Local Variables:
+% time-stamp-active: t 
+% time-stamp-pattern: "5/\\filedate{%:y/%02m/%02d}$"
+% End:
+# end beamerthemeulille.sty
 
 ##############################################################################
 
@@ -536,6 +691,103 @@ IG4gCjAwMDAwMDkxMDUgMDAwMDAgbiAKMDAwMDAwOTI2OCAwMDAwMCBuIAowMDAwMDA5Mzk2IDAw
 MDAwIG4gCnRyYWlsZXIKPDwgL1NpemUgMjkKICAgL1Jvb3QgMjggMCBSCiAgIC9JbmZvIDI3IDAg
 Ugo+PgpzdGFydHhyZWYKOTQ0OQolJUVPRgo=
 # end logo-univ-lille1.pdf
+
+##############################################################################
+
+# begin-ulille logo-univ-lille.pdf base64 --decode
+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
+XpqPrZkFTOIFFSZjYVE8mjivgFtzPIhBEX/zaD738JJKPmmhCD4/r615cYrwVcufaLQVXyLdo+Kd
+G7HkXYMs+LgJkAm4jT1uksLr6OPm0syRzDr+0KWaLwmPRneekY/meMCLU7XrzaP1qmXz3vG4uTWP
+U7rm8p3km+bFzaNabvLuPB4fCgixSvPxMs0Hrxcv08LCFy8x7/urk8WEDUdz7F9OvvkznWw0nB0U
+1vWnxfnWn3aJbEUmFaK8vkhRd5ujcHsPdsIP9384MFuiCmVuZHN0cmVhbQplbmRvYmoKNSAwIG9i
+agogICAyODY2CmVuZG9iagozIDAgb2JqCjw8CiAgIC9FeHRHU3RhdGUgPDwKICAgICAgL2EwIDw8
+IC9DQSAxIC9jYSAxID4+CiAgID4+CiAgIC9YT2JqZWN0IDw8IC94NiA2IDAgUiA+Pgo+PgplbmRv
+YmoKMiAwIG9iago8PCAvVHlwZSAvUGFnZQogICAvUGFyZW50IDEgMCBSCiAgIC9NZWRpYUJveCBb
+IDAgMCA3NTAgMjUwLjE5MjEzOSBdCiAgIC9Db250ZW50cyA0IDAgUgogICAvR3JvdXAgPDwKICAg
+ICAgL1R5cGUgL0dyb3VwCiAgICAgIC9TIC9UcmFuc3BhcmVuY3kKICAgICAgL0kgdHJ1ZQogICAg
+ICAvQ1MgL0RldmljZVJHQgogICA+PgogICAvUmVzb3VyY2VzIDMgMCBSCj4+CmVuZG9iago2IDAg
+b2JqCjw8IC9MZW5ndGggOCAwIFIKICAgL0ZpbHRlciAvRmxhdGVEZWNvZGUKICAgL1R5cGUgL1hP
+YmplY3QKICAgL1N1YnR5cGUgL0Zvcm0KICAgL0JCb3ggWyAwIDAgNzUwIDI1MSBdCiAgIC9SZXNv
+dXJjZXMgNyAwIFIKPj4Kc3RyZWFtCnicXVZJkhw3DLzXK/gCigCxkM/wExwVIfkwOlj6f4Qzweoe
+eU4S0CCWzARq/r1Gl5nq3vAfFY9d/3Hb7deP9u3v0X78vtyzx9Ame/ac1n42ejxentU+Pj1rdd/2
+eEIFnujLtewcecHh3WbZG9lkWRdb7YZndXHm0L5HlO2wpOfasHYfm/Gjm7T7ah6jr4n4jK6GCuF9
+7gV79kBGT+ljfNqokP4/jyOXJntK63OhKZSOxYDsK5JP1uyqE56FJwLb+pi72oi96/f59LyueqDd
+zGvMNEyR+6QEMjpm9SCFy+5rO18EJpMAmor58SK0j4ir4NWI9pWAu/1zsY8qs6PHnCQFBQibbOug
+sjnTBQpvIWCOx5H4eWWfBw0EgpnrUBAGBwB0r9lkewUwlAA7+rgr5y58pEe9GCS1oU5fw8EJsguq
+SQRJPvgJe48jFQeyTvww5BLCMzo5e0yiEX1vTv+KwEtywwwO8ki7Alh03FdKCSdLQixKrtyBDbtE
+VzoNXbliEGgHxahFPhnFBpVgUL0btOa7RuVAbgm/HLXhd7ywADgPWsoIL12S15h/2MCZxNxvjw4r
+XbOGgSAVZW22NWtpVEBJ7mcFUF1VzgbEIVnVDiGpBcHLvgtOSOP6DMG6BEQEHOqpQ4bKGki5tGhH
+w8YcA7Cib8qjulrcoqtYTzc43viC1EjkGFhQ/PtRWcmiyqD6STLRUsGuEhs0ARVcNarvs3pQiDEr
+Qh0hXFo/Nv0cLU3f9v2ss7w8Z991zyoqugssTgAsK/DAN9OPx6tReEzseKzuEjCdAfR1oDf3Wkhd
+fCR1ur5u1t2+X4k5uDxEGyD/bG8HcwjS0sHdpMLGLnNpw2ZTuokRhmW7IEguw10ernbwOO4yQ2YL
+LxAS0FOd1WpWuPeNnoKLiXBw50KuyL7Djropj4n4Of505DxQEh60OHHchrSgIqyi4Z9IF1oI5Ny1
+TyhPKfFn7DL3cp7wrF3BcLyAmLrSJc9NVa6dS7JG5pPKVDSBHgsZLOsiklzVgg3HqoCVumw5jzIA
+P6EF1nP2DcnsLCpzSqECM3cifdZOP+Z9wBno4BUA7ChwyHqsKKhtR6szaA8VtqwcwOqjHA4Vl0Pa
+Rc/ulvBErR9n5IeGS4AOCRfxwKlwLnEaKoHEsyyJS6ILUc6ugQuuAK8CLiizM3z3HeAW8YJ2nRfH
+CT454K9cLTDvOiu8NMTrUd/XxJWB0nDh0hmuBZ6PEt7hll8DOwDnhG6BFo5ZZulm7OuxCB04BAbP
+r7gIRKpOoReOEwOi/jkk5E5RE7WEqzD2OUVoBUcRdp5Nt9oIxA8kqJPfTQHMmHVVMFnwNbSXxrFN
+o6KFZS/iomAjBz4UhPXR6MvMouJ+O9aqEZidqogSJQ4XthW3G0nnjId1XHJ4/NnAQ6KM80cIZVV/
+vjz2XdBRqo+HCi+YZJwW0kYdH2bMdZidvVJaSQ1/DWBr8eHCqDzVpHZREnu9FhHsJU4Rv9xaUkRO
+0sVPes4ikyDhOx3L2pdNuXip/rr+A9SQ5s8KZW5kc3RyZWFtCmVuZG9iago4IDAgb2JqCiAgIDEx
+NDQKZW5kb2JqCjcgMCBvYmoKPDwKICAgL0V4dEdTdGF0ZSA8PAogICAgICAvYTAgPDwgL0NBIDEg
+L2NhIDEgPj4KICAgPj4KPj4KZW5kb2JqCjEgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzCiAgIC9LaWRz
+IFsgMiAwIFIgXQogICAvQ291bnQgMQo+PgplbmRvYmoKOSAwIG9iago8PCAvUHJvZHVjZXIgKGNh
+aXJvIDEuMTUuOCAoaHR0cDovL2NhaXJvZ3JhcGhpY3Mub3JnKSkKPj4KZW5kb2JqCjEwIDAgb2Jq
+Cjw8IC9UeXBlIC9DYXRhbG9nCiAgIC9QYWdlcyAxIDAgUgo+PgplbmRvYmoKeHJlZgowIDExCjAw
+MDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwNDY5OSAwMDAwMCBuIAowMDAwMDAzMDgxIDAwMDAwIG4g
+CjAwMDAwMDI5ODEgMDAwMDAgbiAKMDAwMDAwMDAxNSAwMDAwMCBuIAowMDAwMDAyOTU4IDAwMDAw
+IG4gCjAwMDAwMDMzMDIgMDAwMDAgbiAKMDAwMDAwNDYyNyAwMDAwMCBuIAowMDAwMDA0NjA0IDAw
+MDAwIG4gCjAwMDAwMDQ3NjQgMDAwMDAgbiAKMDAwMDAwNDgzNyAwMDAwMCBuIAp0cmFpbGVyCjw8
+IC9TaXplIDExCiAgIC9Sb290IDEwIDAgUgogICAvSW5mbyA5IDAgUgo+PgpzdGFydHhyZWYKNDg5
+MAolJUVPRgo=
+# end logo-univ-lille.pdf
 
 ##############################################################################
 
