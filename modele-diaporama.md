@@ -96,7 +96,7 @@ La syntaxe de Markdown permet
 
 - d'inclure des éléments de mise en forme logique 
 
-  *emphase*, **emphase forte**, `code`
+    *emphase*, **accentuation forte** et `code`
 
 - d'inclure des liens vers des URL
     - <https://daringfireball.net/projects/markdown>
