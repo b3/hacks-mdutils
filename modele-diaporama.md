@@ -11,14 +11,14 @@ date: 16 mars 2017
 
 ### Un exemple
 
-- Cette présentation est produite à partir de `modele-presentation.md`
+- Cette présentation est produite à partir de `modele-diaporama.md`
 - Elle est conçue pour des présentations simples
 
 ### Un modèle
 
 - Elle constitue un *modèle* pour faire d'autre présentations :
     1. créer un nouveau dossier
-    2. y copier, renommer puis modifier le fichier `modele-presentation.md`
+    2. y copier, renommer puis modifier le fichier `modele-diaporama.md`
     3. créer la présentation via la commande
 
             md2beamer nom-du-fichier.md
