@@ -3,6 +3,8 @@ title: md2beamer
 author:
 - Bruno BEAUFILS
 date: 16 mars 2017
+logo: logo-markdown
+logo-width: .2
 ...
 
 # Introduction
@@ -91,7 +93,7 @@ La syntaxe de Markdown permet
     - **titres de différents niveaux** : lignes débutant par des `#`
     - **listes libres** : indentation de paragraphe avec lignes débutant par des `-` ou des `*`
     - **listes ordonnées** : indentation avec lignes débutant par des `1.`
-    - **blocs de citations** : paragraphes préfixés `> `
+    - **blocs de citations** : paragraphes préfixés par "`> `"
     - **blocs de codes** : paragraphes indentés par 4 espaces
 
 - d'inclure des éléments de mise en forme logique 
@@ -113,7 +115,7 @@ Elle est décrite en détails ailleurs (cf liens de cette diapo)
 ![Texte alternatif pour HTML](img/tex-friendly-zone.svg)
 
 
-## Les images avec `md2beamer`
+## `md2beamer` : images
 
 - centre les images horizontalement 
 - ajuste la largeur automatiquement (attention à la hauteur, cf diapo précédente)
@@ -129,10 +131,10 @@ Elle est décrite en détails ailleurs (cf liens de cette diapo)
 
 ![Tux](img/tux.svg)
 
-Une diapo nommé `{.plain}` n'a pas de titre ni de pied de page
+Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
 
 
-## Les tableaux avec `md2beamer`
+## `md2beamer` : tableaux
 
 - Un support très basique des tableaux est inclus
     - utilisation de l'option `pipe_tables` de `pandoc`
@@ -144,30 +146,41 @@ Une diapo nommé `{.plain}` n'a pas de titre ni de pied de page
 | `beamer`   | jeux de balisage LaTeX pour la composition de présentation  |
 
 
-## Utilisation de `md2beamer`
-
-**Comportement par défaut**
+## `md2beamer` : réglages `pandoc` utilisés
 
 - les diapositives sont les élements de niveau 2
     - modifiable avec l'option `-s`
     - niveaux supérieurs sont les sections du diaporama
     - niveaux inférieurs sont des blocs 
-- plusieurs thèmes inclus 
-    - choix du thème via l'option `-t`
-- le document doit commencer par un bloc [YAML](http://yaml.org/)
-    - méta-données du document (titre, auteurs, date)
 
-**Extensions activées**
+    . . .
 
+- le document peut commencer par un bloc [YAML](http://yaml.org/)
+    - `title`, `subtitle`, `author`, `date`
+    - `logo` : le fichier du logo de la page de titre (sans extension)
+    - `logo-width` : largeur logo en pourcentage (<1) de largeur diapo
+
+    . . .
+	
 - affichage incrémental
 
-    > - pause via une ligne de trois points `. . .`
-    > - des items de listes dans des blocs de citations `> -`
+	> - pause via un paragraphe avec une ligne de trois points
+    > 
+    >         . . .
+    > 
+    > - des items de listes dans des blocs de citations
+    > 
+    >         > -
+	
 
-. . .
+## `md2beamer` : utilisation
 
-**Documentation**
+- plusieurs thèmes inclus 
+    - choix du thème via l'option `-t`
+    - par défaut thème `ulille`
+- documentation
+    - intégrée
 
-    md2beamer -h
+            md2beamer -h
 
-Lire la section *Structuring the slide show* de `pandoc(1)` aide vraiment
+    - lire la section *Structuring the slide show* de `pandoc(1)` aide vraiment

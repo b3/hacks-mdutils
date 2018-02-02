@@ -877,6 +877,13 @@ $endif$
 $if(author)$
 \author{$for(author)$$author$$sep$ \and $endfor$}
 $endif$
+$if(logo)$
+$if(logo-width)$
+\titlegraphic{\includegraphics[width=$logo-width$\columnwidth]{$logo$}}
+$else$
+\titlegraphic{\includegraphics[width=.1\columnwidth]{$logo$}}
+$endif$
+$endif$
 \date{$date$}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
