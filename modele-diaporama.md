@@ -3,8 +3,14 @@ title: md2beamer
 author:
 - Bruno BEAUFILS
 date: 16 mars 2017
-logo: logo-markdown
-logo-width: .2
+logo:
+- file: logo-univ-lille
+  width: .2
+  nl: true
+- file: logo-markdown
+  width: .05
+- file: logo-beamer
+  width: .04
 ...
 
 # Introduction
@@ -149,29 +155,31 @@ Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
 ## `md2beamer` : réglages `pandoc` utilisés
 
 - les diapositives sont les élements de niveau 2
-    - modifiable avec l'option `-s`
     - niveaux supérieurs sont les sections du diaporama
     - niveaux inférieurs sont des blocs 
+    - modifiable avec l'option `-s`
 
     . . .
 
-- le document peut commencer par un bloc [YAML](http://yaml.org/)
-    - `title`, `subtitle`, `author`, `date`
-    - `logo` : le fichier du logo de la page de titre (sans extension)
-    - `logo-width` : largeur logo en pourcentage (<1) de largeur diapo
-
-    . . .
-	
 - affichage incrémental
 
-	> - pause via un paragraphe avec une ligne de trois points
+    > - pause via un paragraphe avec une ligne de trois points
     > 
     >         . . .
     > 
     > - des items de listes dans des blocs de citations
     > 
     >         > -
-	
+
+    . . .
+    
+- le document peut commencer par un bloc [YAML](http://yaml.org/)
+    - `title`, `subtitle`, `author`, `date`
+    - `logo` :  logos sur la page de titre 
+        - `file` : fichier sans extension
+        - `width` : largeur en pourcentage (<1) de largeur diapo (0.1 par défaut)
+        - `nl` : passage à la ligne après le logo
+
 
 ## `md2beamer` : utilisation
 
