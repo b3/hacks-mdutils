@@ -191,4 +191,4 @@ Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
 
             md2beamer -h
 
-    - lire la section *Structuring the slide show* de `pandoc(1)` aide vraiment
+    - lire la section [*Structuring the slide show*](http://pandoc.org/MANUAL.html#structuring-the-slide-show) de `pandoc(1)` aide aussi
