@@ -106,8 +106,10 @@ else
     _sed() { sed -E "$@" ; }    # (FreeBSD)
 fi
 
+err_p="${0##*/}: error:"
+
 doc () { sed -n '2,/^$/ { s/^ *#// ; s/^ //g ; t ok ; d ; :ok ; p }' <$0 ; }
-die () { echo "${0##*/}: error: $*" 1>&2 ; exit 1 ; }
+die () { echo "$err_p $*" 1>&2 ; exit 1 ; }
 log () { date "+%F %T ${0##*/} $*" | tee -a "$LOG" ; }
 abs () { echo $(cd $(dirname $1) ; pwd)/${1##*/} ; }
 mute () { 1>/dev/null 2>&1 $* ; }
@@ -154,7 +156,7 @@ list-themes ()
 
 ##############################################################################
 
-VERSION=1.1-
+VERSION=1.1
 LATEX_ONLY=false
 DEBUG=false
 THEME=ulille
@@ -199,6 +201,7 @@ check || die "needed tools missing"
 SRC=$(abs $1)
 dsttex=$(basename $1 .md).tex
 dstpdf=$(basename $1 .md).pdf
+dstlog=$(basename $1 .md).log
 shift
 
 # le répertoire de travail
@@ -225,16 +228,19 @@ pandoc -s \
        --slide-level=$SLIDELEVEL \
        $SRC > $dsttex
 
- _sed -i \
-      -e '/\\begin\{document\}/,$ s!\\includegraphics(\[[^]]*\]|)\{([^}]*).svg\}!\\includegraphics\1{\2.pdf}!g' \
-      -e '/\\begin\{document\}/,$ s!(\\includegraphics(\[[^]]*\]|)\{[^}]*\})!\\centerline{\1}!g' \
+# transformations ad-hoc
+_sed -i \
+     -e '/\\begin\{document\}/,$ s!\\includegraphics(\[[^]]*\]|)\{([^}]*).svg\}!\\includegraphics\1{\2.pdf}!g' \
+     -e '/\\begin\{document\}/,$ s!(\\includegraphics(\[[^]]*\]|)\{[^}]*\})!\\centerline{\1}!g' \
      $dsttex
 
+# compilation
 if ! $LATEX_ONLY ; then
-    trap "die $PWD/$dsttex: compilation failure" ERR
+    trap "grep Error *.log | sed 's!^!$err_p $PWD/$dstlog: !' 2>&1  ; 
+          die '$PWD/$dsttex: compilation failure ($PWD dir has been kept)'" ERR
     export TEXINPUTS=.//:
-    pdflatex -halt-on-error $dsttex 1>/dev/null 2>&1
-    pdflatex -halt-on-error $dsttex 1>/dev/null 2>&1
+    max_print_line=10000 pdflatex -halt-on-error $dsttex 1>/dev/null 2>&1
+    max_print_line=10000 pdflatex -halt-on-error $dsttex 1>/dev/null 2>&1
 
     mv $dstpdf $DESTDIR
 fi
