@@ -154,7 +154,7 @@ list-themes ()
 
 ##############################################################################
 
-VERSION=1.0
+VERSION=1.1-
 LATEX_ONLY=false
 DEBUG=false
 THEME=ulille
@@ -165,7 +165,7 @@ DESTDIR=$PWD
 cmd=$(abs $0)
 
 # gestion des options et arguments
-while [ ! -z "$1" ] ;
+while [ $(cut -c 1 <<< "$1") = "-" ] ;
 do
     case "$1" in
         "-h"|"--help") doc && exit ;;
@@ -186,7 +186,9 @@ do
             ;;
         "-L"|"--latex") LATEX_ONLY=true ;;
         "-d"|"--debug") DEBUG=true ;;
-        *) break;;
+        *)
+            die "unknown option: $1"
+            ;;
     esac
     shift
 done
