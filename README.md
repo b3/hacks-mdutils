@@ -34,6 +34,14 @@ make images
 bin/md2beamer modele-diaporama.md img
 ```
 
+### [`modele-page.html`](modele-page.html)
+
+C'est un modèle de page HTML dont le contenu rendu quand la page est servie
+par un serveur web est le contenu d'un fichier au format markdown de même nom
+de base.
+
+La documentation est dans le fichier [`modele-page.md`](modele-page.md).
+
 # Auteurs
 
 Copyright (C) 2016-2018 Bruno BEAUFILS
