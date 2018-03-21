@@ -33,3 +33,13 @@ clean:                          ## supprimer les fichiers inutiles
 
 dist-clean: clean               ## supprimer les fichiers regénérables
 	-rm -f $(IMG-PDF) $(IMG-PNG)
+
+##############################################################################
+
+pull:                           ## récupérer les modifications depuis les dépôts git
+	git pull boulgour master
+	git pull github master
+
+push: pull                      ## pousser les modifications vers les dépôts git
+	git push --all boulgour
+	git push --all github
