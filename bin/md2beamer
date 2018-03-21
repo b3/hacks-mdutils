@@ -45,13 +45,13 @@
 #
 #     md2beamer presentation.md image.pdf
 #
-# Convertir le fichier slides.md qui inclut des images du répertoire img
+# Convertir le fichier diapos.md qui inclut des images du répertoire img
 #
-#     md2beamer slides.md img/image1.pdf img/image2.png
+#     md2beamer diapos.md img/image1.pdf img/image2.png
 #
-# Convertir le fichier slides.md qui inclut des images du répertoire img
+# Convertir le fichier diapos.md qui inclut des images du répertoire img
 #
-#     md2beamer slides.md img
+#     md2beamer diapos.md img
 #
 # DEPENDANCES/LIMITATIONS
 #
