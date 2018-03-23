@@ -156,7 +156,7 @@ list-themes ()
 
 ##############################################################################
 
-VERSION=1.1
+VERSION=1.1.20180323
 LATEX_ONLY=false
 DEBUG=false
 THEME=ulille
@@ -170,9 +170,9 @@ cmd=$(abs $0)
 while [ $(cut -c 1 <<< "$1") = "-" ] ;
 do
     case "$1" in
-        "-h"|"--help") doc && exit ;;
-        "-V"|"--version") echo $VERSION && exit ;;
-        "-c"|"--check") check && exit ;;
+        "-h"|"--help") doc && exit 0 ;;
+        "-V"|"--version") echo $VERSION && exit 0 ;;
+        "-c"|"--check") check && exit 0 ;;
         "-l"|"--list-debian")
             egrep '\|\| need' $0 | _sed 's/^.* (.*)$/\1/'
             exit
