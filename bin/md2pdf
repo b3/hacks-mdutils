@@ -117,7 +117,6 @@
 # souvent différentes. Dans l'idéal il faudrait penser POSIX.
 
 # FreeBSD et GNU n'ont pas la même option pour activer les ERE dans sed
-# TODO: probleme si le sed disponible est strictement POSIX (aka ni GNU, ni FreeBSD)
 if sed v </dev/null >/dev/null 2>&1 ; then
     _sed() { sed -r "$@" ; }    # GNU
 else
@@ -128,15 +127,10 @@ err_p="${0##*/}: error:"
 
 doc () { sed -n '2,/^$/ { s/^ *#// ; s/^ //g ; t ok ; d ; :ok ; p }' <$0 ; }
 die () { echo "$err_p $*" 1>&2 ; exit 1 ; }
-log () { date "+%F %T ${0##*/} $*" | tee -a "$LOG" ; }
 abs () { echo $(cd $(dirname $1) ; pwd)/${1##*/} ; }
 mute () { 1>/dev/null 2>&1 $* ; }
 need () { die "$1 is unavailable" ; }
-
-# print debugging message
-debug() { sed 's/^/DEBUG: /' <<EOF 2>& 1; }
-$*
-EOF
+debug () { sed 's/^/DEBUG: /' <<<"$*" 2>& 1; }
 
 # réussit si les outils nécessaires sont accessibles
 check ()
