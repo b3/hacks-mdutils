@@ -176,17 +176,20 @@ list_themes ()
 ##############################################################################
 
 VERSION=1.1.20180328-2
-LATEX_ONLY=false
-DEBUG=false
-THEME=ulille
-TMPDIR=/tmp/md2pdf
-SLIDELEVEL=2
-DESTDIR=$PWD
+
 TYPE=none
+THEME=ulille
+SLIDELEVEL=2
+
+DEBUG=false
+LATEX_ONLY=false
+
+DESTDIR=$PWD
+TMPDIR=/tmp/md2pdf
 
 # type en fonction du nom du script
-[ ${0##*/} = "md2beamer" ] &&  TYPE=beamer
-[ ${0##*/} = "md2report" ] &&  TYPE=report
+[ ${0##*/} = "md2beamer" ] && TYPE=beamer
+[ ${0##*/} = "md2report" ] && TYPE=report
 
 cmd=$(abs $0)
 
@@ -250,8 +253,7 @@ done
 # fichiers sources et images
 [ $# -ne 0 ] && { tar -chf - "$@" | tar -C $TMPDIR -xf - ; }
 
-# transformations Markdwon ad-hoc
-## inclusions de fichiers
+# inclusions de fichiers dans le Markdwon
 prefix="^ *<!-- *include "
 suffix=" *--> *\$"
 for f in $(_sed -n "/$prefix/ { s/$prefix(.*)$suffix/\1/ ; p }" "$SRC")
@@ -261,12 +263,12 @@ do
     sed 's/^#/##/' $f > $TMPDIR/$f
 done
 if [ "$sedopts" ] ; then
-    eval _sed $sedopts "$SRC" > $TMPDIR/$dstmd
+    eval _sed $sedopts "$SRC" ">" $TMPDIR/$dstmd
 else
     cp "$SRC" $TMPDIR/$dstmd
 fi
 
-$LATEX_ONLY || cd $TMPDIR
+cd $TMPDIR
 
 # transformation en LaTeX de base
 if [ "$TYPE" = beamer ]; then
@@ -274,11 +276,11 @@ if [ "$TYPE" = beamer ]; then
        -f markdown_github+yaml_metadata_block-implicit_figures+link_attributes \
        --toc \
        -t beamer \
-       --template=$TMPDIR/beamer-pandoc.tex \
+       --template=beamer-pandoc.tex \
        --slide-level=$SLIDELEVEL \
        -V theme=$THEME \
        -V fontsize=10 \
-       $TMPDIR/$dstmd > $dsttex
+       $dstmd > $dsttex
 elif [ "$TYPE" = "report" ]; then
     chapteropts=--chapters
     if [ $(pandoc -v | head -1 | cut -d . -f 2) -ge 18 ] ; then
@@ -288,35 +290,37 @@ elif [ "$TYPE" = "report" ]; then
        -f markdown_github+yaml_metadata_block+implicit_figures+link_attributes+raw_tex \
        -t latex \
        $chapteropts \
-       --template=$TMPDIR/report-pandoc.tex \
+       --template=report-pandoc.tex \
        -V fontsize=10 \
-       $TMPDIR/$dstmd > $dsttex
+       $dstmd > $dsttex
 else
     die "unknown transformation type: $TYPE"
 fi
 
-# transformations LaTeX ad-hoc
-## .svg -> .pdf
+# transformations .svg -> .pdf
 _sed -i \
      -e '/\\begin\{document\}/,$ s!\\includegraphics(\[[^]]*\]|)\{([^}]*).svg\}!\\includegraphics\1{\2.pdf}!g' \
      $dsttex
 
-## un image seule sur une ligne est centrée sur la diapo
+# centrage des images seules sur une ligne sur la diapo
 if [ "$TYPE" = "beamer" ]; then
     _sed -i \
          -e '/\\begin\{document\}/,$ s!(^ *\\includegraphics(\[[^]]*\]|)\{[^}]*\} *$)!\\centerline{\1}!g' \
          $dsttex
 fi
 
-# compilation
+# compilation (ou pas)
 if ! $LATEX_ONLY ; then
     trap "grep Error *.log | sed 's!^!$err_p $PWD/$dstlog: !' 2>&1  ; 
           die '$PWD/$dsttex: compilation failure ($PWD dir has been kept)'" ERR
     export TEXINPUTS=.//:
-    max_print_line=10000 pdflatex -halt-on-error $dsttex 1>/dev/null 2>&1
-    max_print_line=10000 pdflatex -halt-on-error $dsttex 1>/dev/null 2>&1
+    export max_print_line=10000
+    mute pdflatex -halt-on-error -file-line-error $dsttex
+    mute pdflatex -halt-on-error -file-line-error $dsttex
 
     mv $dstpdf $DESTDIR
+else
+    mv $dsttex $DESTDIR
 fi
 
 $DEBUG || { cd .. ; rm -rf $TMPDIR ; }
