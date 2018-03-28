@@ -127,7 +127,7 @@ err_p="${0##*/}: error:"
 
 doc () { sed -n '2,/^$/ { s/^ *#// ; s/^ //g ; t ok ; d ; :ok ; p }' <$0 ; }
 die () { echo "$err_p $*" 1>&2 ; exit 1 ; }
-abs () { echo $(cd $(dirname $1) ; pwd)/${1##*/} ; }
+abs () { echo $(cd $(dirname -- $1) ; pwd)/${1##*/} ; }
 mute () { 1>/dev/null 2>&1 $* ; }
 need () { die "$1 is unavailable" ; }
 debug () { sed 's/^/DEBUG: /' <<<"$*" 2>& 1; }
@@ -151,7 +151,7 @@ extract_file ()
     f=$3
     shift 3
     e=cat && [ "x$1" = xbase64 ] && e="base64 -d"
-    _sed -n '/^# begin((-[^ ]+)*(-'$t')(-[^ ]+)*|-all) '$f'($| .*$)/,/^# end '$f'$/ p' $cmd \
+    _sed -n '/^# begin((-[^ ]+)*(-'$t')(-[^ ]+)*|-all) '$f'($| .*$)/,/^# end '$f'$/ p' -- $cmd \
         | sed '1d ; $d' \
         | $e >$d/$f
 }
@@ -160,7 +160,7 @@ extract_file ()
 # args: theme
 list_files ()
 {
-    grep '^# begin-' $cmd \
+    grep '^# begin-' -- $cmd \
         | grep -e "-$1[- ]" -e '# begin-all '\
         | _sed -e 's/^# begin-[^ ]+ (.*)$/\1/'
 }
@@ -168,7 +168,7 @@ list_files ()
 # liste les thèmes qui embarque des fichiers dans le script
 list_themes ()
 {
-    grep '^# begin-' $cmd \
+    grep '^# begin-' -- $cmd \
         | _sed -e 's/^# begin-([^ ]+) .*$/\1/' \
         | tr '-' '\n' | sort | uniq
 }
@@ -201,7 +201,7 @@ do
         "-V"|"--version") echo $VERSION && exit 0 ;;
         "-c"|"--check") check && exit 0 ;;
         "-l"|"--list-debian")
-            _sed -n '/\|\| need/ { s/^.* (.*)$/\1/ ; p }' $0
+            _sed -n '/\|\| need/ { s/^.* (.*)$/\1/ ; p }' -- $0
             exit
             ;;
         "-p"|"--presentation")
@@ -221,6 +221,7 @@ do
             ;;
         "-L"|"--latex") LATEX_ONLY=true ;;
         "-d"|"--debug") DEBUG=true ;;
+        "--") shift ; break ;;
         *)
             die "unknown option: $1"
             ;;
@@ -235,10 +236,10 @@ check || die "needed tools missing"
 
 # fichiers générés
 SRC=$(abs $1)
-dstmd=$(basename $1)
-dsttex=$(basename $1 .md).tex
-dstpdf=$(basename $1 .md).pdf
-dstlog=$(basename $1 .md).log
+dstmd=$(basename -- $1)
+dsttex=$(basename -- $1 .md).tex
+dstpdf=$(basename -- $1 .md).pdf
+dstlog=$(basename -- $1 .md).log
 shift
 
 # répertoire de travail
@@ -256,14 +257,14 @@ done
 # inclusions de fichiers dans le Markdwon
 prefix="^ *<!-- *include "
 suffix=" *--> *\$"
-for f in $(_sed -n "/$prefix/ { s/$prefix(.*)$suffix/\1/ ; p }" "$SRC")
+for f in $(_sed -n "/$prefix/ { s/$prefix(.*)$suffix/\1/ ; p }" -- "$SRC")
 do
     [ -z $f ] && die "unable to access file: $f"
     sedopts="$sedopts -e '/$prefix$f$suffix/ r $TMPDIR/$f' -e '/$prefix$f$suffix/ d'"
-    sed 's/^#/##/' $f > $TMPDIR/$f
+    sed 's/^#/##/' -- $f > $TMPDIR/$f
 done
 if [ "$sedopts" ] ; then
-    eval _sed $sedopts "$SRC" ">" $TMPDIR/$dstmd
+    eval _sed $sedopts "--" "$SRC" ">" $TMPDIR/$dstmd
 else
     cp "$SRC" $TMPDIR/$dstmd
 fi
@@ -280,7 +281,7 @@ if [ "$TYPE" = beamer ]; then
        --slide-level=$SLIDELEVEL \
        -V theme=$THEME \
        -V fontsize=10 \
-       $dstmd > $dsttex
+       -- $dstmd > $dsttex
 elif [ "$TYPE" = "report" ]; then
     chapteropts=--chapters
     if [ $(pandoc -v | head -1 | cut -d . -f 2) -ge 18 ] ; then
@@ -292,7 +293,7 @@ elif [ "$TYPE" = "report" ]; then
        $chapteropts \
        --template=report-pandoc.tex \
        -V fontsize=10 \
-       $dstmd > $dsttex
+       -- $dstmd > $dsttex
 else
     die "unknown transformation type: $TYPE"
 fi
@@ -300,13 +301,13 @@ fi
 # transformations .svg -> .pdf
 _sed -i \
      -e '/\\begin\{document\}/,$ s!\\includegraphics(\[[^]]*\]|)\{([^}]*).svg\}!\\includegraphics\1{\2.pdf}!g' \
-     $dsttex
+     -- $dsttex
 
 # centrage des images seules sur une ligne sur la diapo
 if [ "$TYPE" = "beamer" ]; then
     _sed -i \
          -e '/\\begin\{document\}/,$ s!(^ *\\includegraphics(\[[^]]*\]|)\{[^}]*\} *$)!\\centerline{\1}!g' \
-         $dsttex
+         -- $dsttex
 fi
 
 # compilation (ou pas)
@@ -315,12 +316,12 @@ if ! $LATEX_ONLY ; then
           die '$PWD/$dsttex: compilation failure ($PWD dir has been kept)'" ERR
     export TEXINPUTS=.//:
     export max_print_line=10000
-    mute pdflatex -halt-on-error -file-line-error $dsttex
-    mute pdflatex -halt-on-error -file-line-error $dsttex
+    mute pdflatex -halt-on-error -file-line-error -- $dsttex
+    mute pdflatex -halt-on-error -file-line-error -- $dsttex
 
-    mv $dstpdf $DESTDIR
+    mv -- $dstpdf $DESTDIR
 else
-    mv $dsttex $DESTDIR
+    mv -- $dsttex $DESTDIR
 fi
 
 $DEBUG || { cd .. ; rm -rf $TMPDIR ; }
