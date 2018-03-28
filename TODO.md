@@ -15,6 +15,8 @@
 - [ ] ajouter l'utilisation possible d'un fichier de configuration pour les
       paramètres à utiliser (cf script `iut-edt-static`)
 - [ ] prévoir option `-p` et `-r` en fonction du nom d'appel
+- [ ] changer les options pandoc en fonction de la version de pandoc (cf
+      salles de TP 4A10).
 
 ## Documentation
 
