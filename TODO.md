@@ -8,13 +8,14 @@
 
 - [ ] prévoir un mécanisme d'augmentation/extension
     - voir `--include-in-header`, `include-before-body` et `include-after-body`
-- [ ] régler l'ajout/modification/suppression de fichiers inclus dans md2pdf
+- [X] régler l'ajout/modification/suppression de fichiers inclus dans md2pdf
+    - via `shembed`
 - [ ] permettre l'affichage de la commande pandoc exécuté (`--verbose` ?)
 - [ ] ajouter support subtitle pour le type `report`
 - [ ] voir l'utilisation des filtres pandoc plutôt que le bricolage actuel
 - [ ] ajouter l'utilisation possible d'un fichier de configuration pour les
       paramètres à utiliser (cf script `iut-edt-static`)
-- [ ] prévoir option `-p` et `-r` en fonction du nom d'appel
+- [X] prévoir option `-p` et `-r` en fonction du nom d'appel
 - [ ] changer les options pandoc en fonction de la version de pandoc (cf
       salles de TP 4A10).
 - [ ] Autoriser `titleimg` dans le bloc de méta-données (image de fond de la
