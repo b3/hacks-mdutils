@@ -286,10 +286,14 @@ if [ "$TYPE" = beamer ]; then
        -V fontsize=10 \
        $TMPDIR/$dstmd > $dsttex
 elif [ "$TYPE" = "report" ]; then
+    chapteropts=--chapters
+    if [ $(pandoc -v | head -1 | cut -d . -f 2) -ge 18 ] ; then
+        chapteropts=--top-level-division=chapter
+    fi
     pandoc -s \
        -f markdown_github+yaml_metadata_block+implicit_figures+link_attributes+raw_tex \
        -t latex \
-       --top-level-division=chapter \
+       $chapteropts \
        --template=$TMPDIR/report-pandoc.tex \
        -V fontsize=10 \
        $TMPDIR/$dstmd > $dsttex
