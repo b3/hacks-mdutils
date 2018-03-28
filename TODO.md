@@ -25,6 +25,8 @@
 - [ ] documenter la limitation Beamer à 3 niveaux de profondeurs
 - [ ] documenter gestion des images centrées uniquement quand seul sur une
       ligne (faire référence à la documentation pandoc)
+- [ ] documenter possibilité utilisation \appendix en mode `report`
+- [ ] documenter utilisation image en mode référence 
 
 # `loadmd`
 
