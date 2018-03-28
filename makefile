@@ -15,14 +15,11 @@ help:                           ## liste les cibles disponibles
 img/%.pdf: img/%.svg
 	inkscape -z -d 2400 -A $@ -T $<
 
-%.pdf: %.md $(IMG-PDF) $(IMG-PNG)
-	bin/md2beamer $^ img
-
 images: $(IMG-PDF)              ## génère les images PDF à partir des SVG
 
 ##############################################################################
 
-.PHONY: build check clean dist dist-clean modeles
+.PHONY: check clean dist dist-clean test pull push
 
 check:                          ## vérifier la présence des outils nécessaires
 	@which pdflatex
@@ -34,7 +31,8 @@ clean:                          ## supprimer les fichiers inutiles
 dist-clean: clean               ## supprimer les fichiers regénérables
 	-rm -f $(IMG-PDF) $(IMG-PNG)
 
-##############################################################################
+test:                           ## faire les tests
+	test/test-md2pdf -f -v
 
 pull:                           ## récupérer les modifications depuis les dépôts git
 	git pull boulgour master
