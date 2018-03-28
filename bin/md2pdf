@@ -273,7 +273,7 @@ $LATEX_ONLY || cd $TMPDIR
 # transformation en LaTeX de base
 if [ "$TYPE" = beamer ]; then
     pandoc -s \
-       -f markdown+yaml_metadata_block+pipe_tables-implicit_figures+link_attributes \
+       -f markdown_github+yaml_metadata_block-implicit_figures+link_attributes \
        --toc \
        -t beamer \
        --template=$TMPDIR/beamer-pandoc.tex \
@@ -283,19 +283,28 @@ if [ "$TYPE" = beamer ]; then
        $TMPDIR/$dstmd > $dsttex
 elif [ "$TYPE" = "report" ]; then
     pandoc -s \
-       -f markdown_github+yaml_metadata_block+pipe_tables-implicit_figures+link_attributes+fenced_code_blocks \
+       -f markdown_github+yaml_metadata_block+implicit_figures+link_attributes+raw_tex \
        -t latex \
        --top-level-division=chapter \
        --template=$TMPDIR/report-pandoc.tex \
        -V fontsize=10 \
        $TMPDIR/$dstmd > $dsttex
+else
+    die "unknown transformation type: $TYPE"
 fi
 
 # transformations LaTeX ad-hoc
+## .svg -> .pdf
 _sed -i \
      -e '/\\begin\{document\}/,$ s!\\includegraphics(\[[^]]*\]|)\{([^}]*).svg\}!\\includegraphics\1{\2.pdf}!g' \
-     -e '/\\begin\{document\}/,$ s!(\\includegraphics(\[[^]]*\]|)\{[^}]*\})!\\centerline{\1}!g' \
      $dsttex
+
+## un image seule sur une ligne est centrée sur la diapo
+if [ "$TYPE" = "beamer" ]; then
+    _sed -i \
+         -e '/\\begin\{document\}/,$ s!(^ *\\includegraphics(\[[^]]*\]|)\{[^}]*\} *$)!\\centerline{\1}!g' \
+         $dsttex
+fi
 
 # compilation
 if ! $LATEX_ONLY ; then

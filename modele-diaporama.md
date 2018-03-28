@@ -123,14 +123,15 @@ Elle est décrite en détails ailleurs (cf liens de cette diapo)
 
 ## `md2beamer` : images
 
-- centre les images horizontalement 
-- ajuste la largeur automatiquement (attention à la hauteur, cf diapo précédente)
 - convertit automatiquement les références `.svg` en `.pdf` (qui doivent exister)
-- permet de spécifier une largeur ou une hauteur relative pour une image
+- centre les images horizontalement si elles sont seules sur une ligne
+- ajuste la largeur automatiquement (attention à la hauteur, cf diapo précédente)
+- permet de spécifier une largeur ou une hauteur
+    - relative à la largeur de la diapo
 
-  `![TeX Friendly Zone](img/tex-friendly-zone.svg){ width=30% }`
+      `![TeX Friendly Zone](img/tex-friendly-zone.svg){ width=30% }`
 
-  ![TeX Friendly Zone](img/tex-friendly-zone.svg){ width=30% }
+      ![TeX Friendly Zone](img/tex-friendly-zone.svg){ width=30% } 
 
 
 ## {.plain}
