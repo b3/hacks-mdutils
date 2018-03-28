@@ -17,6 +17,8 @@
 - [ ] prévoir option `-p` et `-r` en fonction du nom d'appel
 - [ ] changer les options pandoc en fonction de la version de pandoc (cf
       salles de TP 4A10).
+- [ ] Autoriser `titleimg` dans le bloc de méta-données (image de fond de la
+      page de titre)
 
 ## Documentation
 
