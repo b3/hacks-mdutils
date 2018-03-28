@@ -181,7 +181,7 @@ list_themes ()
 
 ##############################################################################
 
-VERSION=1.0.20180328-0
+VERSION=1.0.20180328-1
 LATEX_ONLY=false
 DEBUG=false
 THEME=ulille
@@ -283,7 +283,7 @@ if [ "$TYPE" = beamer ]; then
        $TMPDIR/$dstmd > $dsttex
 elif [ "$TYPE" = "report" ]; then
     pandoc -s \
-       -f markdown_github+yaml_metadata_block+pipe_tables-implicit_figures+link_attributes \
+       -f markdown_github+yaml_metadata_block+pipe_tables-implicit_figures+link_attributes+fenced_code_blocks \
        -t latex \
        --top-level-division=chapter \
        --template=$TMPDIR/report-pandoc.tex \
