@@ -204,7 +204,7 @@ do
         "-V"|"--version") echo $VERSION && exit 0 ;;
         "-c"|"--check") check && exit 0 ;;
         "-l"|"--list-debian")
-            egrep '\|\| need' $0 | _sed 's/^.* (.*)$/\1/'
+            _sed -n '/\|\| need/ { s/^.* (.*)$/\1/ ; p }' $0
             exit
             ;;
         "-p"|"--presentation")
