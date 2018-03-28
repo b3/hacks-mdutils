@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-testSomeKnownOptions() {
-	assertReturn "$($cmd -h)" 0
-	assertReturn "$($cmd --help)" 0
+test_some_known_options() {
+    assertReturn "$($cmd -h)" 0
+    assertReturn "$($cmd --help)" 0
 }
 
-testUnknownOptions() {
-	assertNotReturn "$(stderr $cmd -x)" 0
-	assertEqual "$(stderr $cmd -x)" "$errmsg unknown option: -x"
+test_unknown_options() {
+    assertNotReturn "$(stderr $cmd -x)" 0
+    assertEqual "$(stderr $cmd -x)" "$errmsg unknown option: -x"
 }

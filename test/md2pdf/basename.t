@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-testMD2Beamer() {
+test_md2beamer() {
     reset
     ln -s $cmd md2beamer
     assertReturn "$(./md2beamer -L simple.md)" 0
@@ -8,7 +8,7 @@ testMD2Beamer() {
     rm -f simple.tex md2beamer
 }
 
-testMD2Report() {
+test_md2report() {
     reset
     ln -s $cmd md2report
     assertReturn "$(./md2report -L simple.md)" 0
