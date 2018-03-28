@@ -181,7 +181,7 @@ list_themes ()
 
 ##############################################################################
 
-VERSION=1.0.20180328-1
+VERSION=1.1.20180328-2
 LATEX_ONLY=false
 DEBUG=false
 THEME=ulille
@@ -189,6 +189,10 @@ TMPDIR=/tmp/md2pdf
 SLIDELEVEL=2
 DESTDIR=$PWD
 TYPE=none
+
+# type en fonction du nom du script
+[ ${0##*/} = "md2beamer" ] &&  TYPE=beamer
+[ ${0##*/} = "md2report" ] &&  TYPE=report
 
 cmd=$(abs $0)
 
