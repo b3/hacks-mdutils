@@ -402,6 +402,9 @@ $endif$
 
 $if(theme)$\usetheme{$theme$}$endif$
 
+%% Image de fond pour la page de titre
+\newcommand{\titleimg}[1]{\def\inserttitleimg{#1}}
+
 % Méta-données du document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 $if(title)$
@@ -414,16 +417,20 @@ $if(author)$
 \author{$for(author)$$author$$sep$ \and $endfor$}
 $endif$
 $if(logo)$
-\titlegraphic{\rule{2em}{0cm}%
+\titlegraphic{%
+  \rule{2em}{0cm}%
 $for(logo)$
 $if(logo.width)$
-\includegraphics[width=$logo.width$\columnwidth]{$logo.file$}%
+  \includegraphics[width=$logo.width$\columnwidth]{$logo.file$}%
 $else$
-\includegraphics[width=.1\columnwidth]{$logo.file$}%
+  \includegraphics[width=.1\columnwidth]{$logo.file$}%
 $endif$
-\rule{2em}{0cm}$if(logo.nl)$\par\medskip\rule{2em}{0cm}$endif$%
+  \rule{2em}{0cm}$if(logo.nl)$\par\medskip\rule{2em}{0cm}$endif$%
 $endfor$
 }
+$endif$
+$if(img)$
+\titleimg{$img$}
 $endif$
 \date{$date$}
 
@@ -528,40 +535,55 @@ $endif$
 % Adaptation LaTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \makeatletter
 \newcommand{\subtitle}[1]{\gdef\insertsubtitle{#1}}
+\newcommand{\titlelogo}[1]{\def\inserttitlelogo{#1}}
+\newcommand{\titleimg}[1]{\def\inserttitleimg{#1}}
 \renewcommand{\and}{%
   \end{tabular}%
   \par%
   \begin{tabular}[t]{c}%
 }
 \renewcommand{\maketitle}{\begin{titlepage}%
-  \null\vfil
-  \vskip 60\p@
-  \begin{center}%
-    {\larger[5]\bfseries \@title \par}%
-$if(subtitle)$
-    \vskip 3em%
-    {\larger[3]\color[gray]{.25}\slshape \insertsubtitle \par}%
-    \vskip 10em%
-$else$
-    \vskip 14em
+$if(img)$
+  \tikz[remember picture,overlay]
+    \node[opacity=0.2,inner sep=0pt] at (current page.center){%
+      \includegraphics[width=\paperwidth,height=\paperheight]{\inserttitleimg}%
+    };%
 $endif$
-    {\larger[2]%
-      \begin{tabular}[t]{c}%
-        \@author
-      \end{tabular}%
-      \par%
-    }%
-    \vskip 5em%
-    {\larger[2] \@date \par}%
-    \vfill
-  \end{center}\par
-  \vfill
-  \centerline{\inserttitlelogo}
-  \vskip 60\p@
+  % Titre & Date
+  \tikz[remember picture,overlay]
+    \node[yshift=-6cm,inner sep=0pt] at (current page.north){%
+      \begin{minipage}{.99\columnwidth}
+        \centering%
+        {\larger[4]\bfseries \@title}\par%
+        \@ifundefined{insertsubtitle}{}{%
+        \bigskip%
+        {\larger[3]\color[gray]{.3}\slshape \insertsubtitle}\par}%
+        \@ifundefined{@date}{}{%
+        \bigskip%
+        {\larger[3] \@date \par}}%
+      \end{minipage}
+    };%
+  % Auteurs
+  \tikz[remember picture,overlay]
+    \node[yshift=-6cm,inner sep=0pt] at (current page.center){%
+      \begin{minipage}{.9\columnwidth}
+        \centering\larger[2]
+        \begin{tabular}[t]{c}%
+          \@author
+        \end{tabular}%
+      \end{minipage}
+    };%
+  % Logos
+  \@ifundefined{inserttitlelogo}{}{%
+  \tikz[remember picture,overlay]
+    \node[yshift=3cm,inner sep=0pt] at (current page.south){%
+      \begin{minipage}{.99\columnwidth}
+        \centering\larger[2]\inserttitlelogo
+      \end{minipage}
+    };%
+   }
 \end{titlepage}
 }
-\newcommand{\titlelogo}[1]{\def\inserttitlelogo{#1}}
-\newcommand{\titleimg}[1]{\def\inserttitleimg{#1}}
 \makeatother
 
 % Configuration document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -572,7 +594,7 @@ $endif$
   fg=»}
 \geometry{%
   a4paper,
-  top=1cm,bottom=1.5cm,
+  top=1cm,bottom=2cm,
   left=1.5cm,right=1cm}
 \hypersetup{%
   $if(title-meta)$
@@ -609,19 +631,22 @@ $if(author)$
 \author{$for(author)$$author$$sep$ \and $endfor$}
 $endif$
 $if(logo)$
-\titlelogo{\rule{2em}{0cm}%
+\titlelogo{%
+  \rule{4em}{0cm}%
 $for(logo)$
 $if(logo.width)$
-\includegraphics[width=$logo.width$\columnwidth]{$logo.file$}%
+  \begin{minipage}[c]{$logo.width$\textwidth}
 $else$
-\includegraphics[width=.1\columnwidth]{$logo.file$}%
+  \begin{minipage}[c]{.1\textwidth}
 $endif$
-\rule{2em}{0cm}$if(logo.nl)$\par\medskip\rule{2em}{0cm}$endif$%
+    \includegraphics[width=\textwidth]{$logo.file$}%
+  \end{minipage}
+  \rule{4em}{0cm}$if(logo.nl)$\par\bigskip\rule{4em}{0cm}$endif$%
 $endfor$
 }
 $endif$
-$if(titleimg)$
-\titleimg{$titleimg$}
+$if(img)$
+\titleimg{$img$}
 $endif$
 \date{$date$}
 
