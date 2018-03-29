@@ -290,8 +290,9 @@ elif [ "$TYPE" = "report" ]; then
     pandoc -s \
        -f markdown_github+yaml_metadata_block+implicit_figures+link_attributes+raw_tex \
        -t latex \
-       $chapteropts \
        --template=report-pandoc.tex \
+       $chapteropts \
+       -V theme=$THEME \
        -V fontsize=10 \
        -- $dstmd > $dsttex
 else
@@ -329,6 +330,8 @@ $DEBUG || { cd .. ; rm -rf $TMPDIR ; }
 ##############################################################################
 
 exit 0
+
+##############################################################################
 
 # begin-all beamer-pandoc.tex
 \documentclass[10pt,t]{beamer}
@@ -398,23 +401,6 @@ $endif$
 % Paramétrages Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 $if(theme)$\usetheme{$theme$}$endif$
-%\setbeameroption{show notes on second screen} % les notes sur le second écran
-
-%\AtBeginPart{
-%  \let\insertpartnumber\relax
-%  \let\partname\relax
-%  \frame{\partpage}
-%}
-%\AtBeginSection{
-%  \let\insertsectionnumber\relax
-%  \let\sectionname\relax
-%  \frame{\sectionpage}
-%}
-%\AtBeginSubsection{
-%  \let\insertsubsectionnumber\relax
-%  \let\subsectionname\relax
-%  \frame{\subsectionpage}
-%}
 
 % Méta-données du document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -539,15 +525,44 @@ $endif$
 %% Prevent overfull lines
 \setlength{\emergencystretch}{3em}
 
-%% Allow subtitle
+% Adaptation LaTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+\newcommand{\subtitle}[1]{\gdef\insertsubtitle{#1}}
+\renewcommand{\and}{%
+  \end{tabular}%
+  \par%
+  \begin{tabular}[t]{c}%
+}
+\renewcommand{\maketitle}{\begin{titlepage}%
+  \null\vfil
+  \vskip 60\p@
+  \begin{center}%
+    {\larger[5]\bfseries \@title \par}%
 $if(subtitle)$
-\providecommand{\subtitle}{$subtitle$}
+    \vskip 3em%
+    {\larger[3]\color[gray]{.25}\slshape \insertsubtitle \par}%
+    \vskip 10em%
+$else$
+    \vskip 14em
 $endif$
-
-%% Enable titlepage illustration
-$if(titleimg)$
-\providecommand{\titleimg}{$titleimg$}
-$endif$
+    {\larger[2]%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}%
+      \par%
+    }%
+    \vskip 5em%
+    {\larger[2] \@date \par}%
+    \vfill
+  \end{center}\par
+  \vfill
+  \centerline{\inserttitlelogo}
+  \vskip 60\p@
+\end{titlepage}
+}
+\newcommand{\titlelogo}[1]{\def\inserttitlelogo{#1}}
+\newcommand{\titleimg}[1]{\def\inserttitleimg{#1}}
+\makeatother
 
 % Configuration document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -576,6 +591,11 @@ $endif$
   pdfstartview=Fit}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt plus 2pt minus 1pt}
+$if(theme)$\usepackage{reporttheme$theme$}$endif$
+
+$for(header-includes)$
+$header-includes$
+$endfor$
 
 % Méta-données du document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -589,7 +609,7 @@ $if(author)$
 \author{$for(author)$$author$$sep$ \and $endfor$}
 $endif$
 $if(logo)$
-\newcommand{\titlegraphic}{\rule{2em}{0cm}%
+\titlelogo{\rule{2em}{0cm}%
 $for(logo)$
 $if(logo.width)$
 \includegraphics[width=$logo.width$\columnwidth]{$logo.file$}%
@@ -600,23 +620,31 @@ $endif$
 $endfor$
 }
 $endif$
+$if(titleimg)$
+\titleimg{$titleimg$}
+$endif$
 \date{$date$}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
-\input{titlepage}
+$for(include-before)$
+$include-before$
+$endfor$
+
+\maketitle
 
 \tableofcontents
 
 $body$
 
+$for(include-after)$
+$include-after$
+$endfor$
+
 \end{document}
 # end report-pandoc.tex
-
-##############################################################################
-
 
 ##############################################################################
 
@@ -755,68 +783,9 @@ $body$
 
 ##############################################################################
 
-# begin-ulille titlepage.tex
-\begin{titlepage}
-  \makeatletter
-  \null\vfil
-  \vskip 60\p@
-  \begin{center}%
-    {\larger[4]\bfseries \@title \par}%
-    \vskip 5em%
-    {\larger[3]%
-      \begin{tabular}[t]{c}%
-        \@author
-      \end{tabular}%
-      \par%
-    }%    
-    \vskip 5em%
-    {\larger[2] \@date \par}%
-    \vfill
-    {\ifx\titleimg\undefined\else
-     \includegraphics[width=.75\textwidth]{\titleimg}\fi}
-  \end{center}\par
-  \vfill
-  \centerline{\includegraphics[width=3cm]{logo-univ-lille}}
-  \vskip 60\p@
-  \makeatother
-\end{titlepage}
-# end titlepage.tex
-
-##############################################################################
-
-# begin-cgir titlepage.tex
-\begin{titlepage}
-  \makeatletter
-  \null\vfil
-  \vskip 60\p@
-  \begin{center}%
-    {\larger[4]\bfseries \@title \par}%
-    \vskip 5em%
-    {\larger[3]%
-      \begin{tabular}[t]{c}%
-        \@author
-      \end{tabular}%
-      \par%
-    }%    
-    \vskip 5em%
-    {\larger[2] \@date \par}%
-    \vfill
-    {\ifx\titleimg\undefined\else
-     \includegraphics[width=.75\textwidth]{\titleimg}\fi}
-  \end{center}\par
-  \vfill
-  \null\hspace{2em}%
-  \includegraphics[width=3cm]{logo-univ-lille}%
-  \hfill%
-  \includegraphics[width=5cm]{logo-cgir}%
-  \hspace{2em}\null
-  \vskip 60\p@
-  \makeatother
-\end{titlepage}
-# end titlepage.tex
-
-##############################################################################
-
+# begin-ulille reportthemeulille.sty
+\titlelogo{\includegraphics[width=3cm]{logo-univ-lille}}
+# end reportthemeulille.sty
 
 ##############################################################################
 
