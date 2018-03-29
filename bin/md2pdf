@@ -175,7 +175,7 @@ list_themes ()
 
 ##############################################################################
 
-VERSION=1.1.20180329-1
+VERSION=1.1.20180329-2
 
 TYPE=none
 THEME=ulille
@@ -304,12 +304,10 @@ _sed -i \
      -e '/\\begin\{document\}/,$ s!\\includegraphics(\[[^]]*\]|)\{([^}]*).svg\}!\\includegraphics\1{\2.pdf}!g' \
      -- $dsttex
 
-# centrage des images seules sur une ligne sur la diapo
-if [ "$TYPE" = "beamer" ]; then
-    _sed -i \
-         -e '/\\begin\{document\}/,$ s!(^ *\\includegraphics(\[[^]]*\]|)\{[^}]*\} *$)!\\centerline{\1}!g' \
-         -- $dsttex
-fi
+# centrage des images seules sur une ligne
+_sed -i \
+     -e '/\\begin\{document\}/,$ s!(^ *\\includegraphics(\[[^]]*\]|)\{[^}]*\} *$)!\\centerline{\1}!g' \
+     -- $dsttex
 
 # compilation (ou pas)
 if ! $LATEX_ONLY ; then
