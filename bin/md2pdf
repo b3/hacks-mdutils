@@ -175,7 +175,7 @@ list_themes ()
 
 ##############################################################################
 
-VERSION=1.1.20180329-3
+VERSION=1.1.20180329-4
 
 TYPE=none
 THEME=ulille
@@ -274,11 +274,12 @@ cd $TMPDIR
 # transformation en LaTeX de base
 if [ "$TYPE" = beamer ]; then
     pandoc -s \
-       -f markdown_github-hard_line_breaks+yaml_metadata_block-implicit_figures+link_attributes \
+       -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block-implicit_figures+link_attributes \
        --toc \
        -t beamer \
        --template=beamer-pandoc.tex \
        --slide-level=$SLIDELEVEL \
+       --wrap=preserve \
        -V theme=$THEME \
        -V fontsize=10 \
        -- $dstmd > $dsttex
@@ -288,10 +289,11 @@ elif [ "$TYPE" = "report" ]; then
         chapteropts=--top-level-division=chapter
     fi
     pandoc -s \
-       -f markdown_github-hard_line_breaks+yaml_metadata_block+implicit_figures+link_attributes+raw_tex \
+       -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block+implicit_figures+link_attributes+raw_tex \
        -t latex \
        --template=report-pandoc.tex \
        $chapteropts \
+       --wrap=preserve \
        -V theme=$THEME \
        -V fontsize=10 \
        -- $dstmd > $dsttex
