@@ -194,7 +194,8 @@ TMPDIR=/tmp/md2pdf
 cmd=$(abs $0)
 
 # gestion des options et arguments
-while [[ "x$1" =~ "x-.*" ]] ;
+
+while [[ x$1 =~ x-.* ]] ;
 do
     case "$1" in
         "-h"|"--help") doc && exit 0 ;;
@@ -285,7 +286,9 @@ if [ "$TYPE" = beamer ]; then
        -- $dstmd > $dsttex
 elif [ "$TYPE" = "report" ]; then
     chapteropts=--chapters
-    if [ $(pandoc -v | head -1 | cut -d . -f 2) -ge 18 ] ; then
+    major=$(pandoc -v | sed -rn '1 { s/.* ([0-9]+).*$/\1/g ; p }')
+    minor=$(pandoc -v | sed -rn '1 { s/.* [0-9]+\.([0-9]+).*$/\1/g ; p }')
+    if [  $major -ge 1 ] || [ $major = 1 -a $minor -ge 18 ] ; then
         chapteropts=--top-level-division=chapter
     fi
     pandoc -s \
