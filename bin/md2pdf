@@ -275,7 +275,7 @@ cd $TMPDIR
 # transformation en LaTeX de base
 if [ "$TYPE" = beamer ]; then
     pandoc -s \
-       -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block-implicit_figures+link_attributes \
+       -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block-implicit_figures+link_attributes+header_attributes \
        --toc \
        -t beamer \
        --template=beamer-pandoc.tex \

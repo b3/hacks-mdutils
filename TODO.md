@@ -2,7 +2,9 @@
 
 ## Bugs
 
-- [ ] `{.plain}` ne fonctionne pas en mode diaporama
+- [X] `{.plain}` ne fonctionne pas en mode diaporama
+
+    L'option `header_attributes` de `pandoc` n'était pas fixée.
 
 ## Thèmes
 
