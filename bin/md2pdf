@@ -194,7 +194,7 @@ TMPDIR=/tmp/md2pdf
 cmd=$(abs $0)
 
 # gestion des options et arguments
-while [ $(cut -c 1 <<< "$1") = "-" ] ;
+while [[ "x$1" =~ "x-.*" ]] ;
 do
     case "$1" in
         "-h"|"--help") doc && exit 0 ;;
@@ -231,7 +231,7 @@ done
 
 # vérifications de bases
 check || die "needed tools missing"
-[ -z $1 ] && die "missing source file"
+[ -z "$1" ] && die "missing source file"
 [ "$TYPE" = none ] && die "no transformation type specified"
 
 # fichiers générés
