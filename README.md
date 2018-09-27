@@ -8,8 +8,10 @@ notamment à ses versions [GitHub Flavored Markdown](https://github.github.com/g
 
 ## Scripts
 
-- [`md2beamer`](bin/md2beamer) permet de produire une présentation PDF à
-  partir d'un fichier markdown.
+- [`md2pdf`](bin/md2pdf) permet de produire une présentation ou un rapport PDF
+  à partir d'un fichier markdown. La commande est aussi nommée
+  [`md2beamer`](bin/md2beamer) ou [`md2report`](bin/md2report) pour produire
+  respectivement un diaporama et un rapport.
 
 
 ## Modèles
