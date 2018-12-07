@@ -30,6 +30,7 @@
       paramètre de `extract_file` et `list_files`
 - [ ] extraire/remettre tous les fichiers inclus simplement
 - [ ] trouver un moyen élégant de gérer les tables
+- [ ] cacher le bloc de méta-données dans un bloc de commentaires HTML
 
 ## Documentation
 
@@ -44,6 +45,12 @@
 
 # `loadmd`
 
-- [ ] ajouter un `.htaccess` qui renvoie (via réécriture) un contenu HTML
+- [X] ajouter un `.htaccess` qui renvoie (via réécriture) un contenu HTML
   correct du modèle (pour ne pas être obligé d'avoir plein de fichier `.html`
   identique et quasi-vide).
+- [ ] ajouter un traitement propre des fichiers inexistants (avec un modèle d'erreur)
+- [ ] ajouter la possibilté d'ajouter des entêtes (meta, css, etc.) dans le
+      fichier rendu à partir du source Markdown (par exemple en les mettant en
+      commentaire HTML en début du fichier `.md`)
+- [ ] ajouter le support de `<!-- include FICHIER -->`
+- [ ] ajouter le support de la colorisation syntaxique
