@@ -51,5 +51,5 @@ Copyright (C) 2016-2018 Bruno BEAUFILS
 Ces bricolages ont été écrit par Bruno BEAUFILS.
 
 Les scripts et modèles disponibles ici sont mis à dispostion sous les termes
-de la licence [WTFP](WFTPL) ou de leur propre licence quand ils ont été écrits
+de la licence [WTFPL](WFTPL) ou de leur propre licence quand ils ont été écrits
 par d'autres auteurs.
