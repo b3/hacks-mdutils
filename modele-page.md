@@ -86,7 +86,7 @@ Ce bricolage a été écrit par Bruno BEAUFILS en utilisant la librairie
 `commonmark.js` écrite par John MacFarlane et d'autres auteurs.
 
 Les fichiers `loadmd.js` et `bbb-md.css` sont distribués selon les termes de
-la [licence WTFP](WTFPL). La librairie `commonmark.js` est distribuée selon les
+la [licence WTFPL](WTFPL). La librairie `commonmark.js` est distribuée selon les
 termes de sa propre licence présente dans
 [`LICENSE-commonmark`](LICENSE-commonmark).
 
