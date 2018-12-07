@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Directory URLs are to be treated as HTML one
+RewriteRule "(.*)/$" "$1.html"
+
+# HTML URLs use the template
+RewriteRule "(.*)\.html$" "modele-page.html"
+
+# The needed libraries file stay at the top of the hierarchy
+RewriteRule "css/bbb-md\.css$" "css/bbb-md.css"
+RewriteRule "js/commonmark\.js$" "js/commonmark.js"
+RewriteRule "js/loadmd.js$" "js/loadmd.js"

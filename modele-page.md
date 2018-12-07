@@ -29,13 +29,18 @@ Markdown en une chaîne de caractères formatée en HTML.
 
 Le second se charge de :
 
-1. déterminer le nom du fichier qui contient les sources en Markdown (même URL
-   que le fichier HTML avec l'extension `.html` remplacée par `.md`,
+1. déterminer le nom du fichier qui contient les sources en Markdown,
 2. de récupérer son contenu,
 3. le formater en HTML,
 4. utiliser ce résultat HTML pour remplir le contenu de l'élément `body` du fichier HTML 
 5. et enfin de fixer le contenu de l'élément `title` de l'entête avec le
    contenu du premier élément `h1`.
+
+Pour déterminer le nom du fichier source on utilise son URL (ou son nom) dans
+laquelle on remplace par le suffixe `md` :
+
+- un slash (`/`) final,
+- un suffixe `.html`.
 
 ## Utilisation simple
 
@@ -50,7 +55,31 @@ Pour utiliser ce modèle il faut donc :
   corrects ;
 - créer un fichier de même nom de base que le fichier `.html` mais en
   utilisant une extension `.md`.
-  
+
+On peut également utiliser des règles de ré-écritures d'URL dans la
+configuration du serveur web, pour que le fichier
+[`modele-page.html`](modele-page.html) ne soit présent qu'une fois sur le
+système de fichier et qu'il soit quand même utilisé pour tous les fichiers de
+suffixe `.md`.
+
+Le fichier [`.htaccess`](.htaccess) est un exemple d'une telle configuration
+pour Apache quand le module `mod_rewrite` est activé.
+
+``` sh
+RewriteEngine On
+
+# Directory URLs are to be treated as HTML one
+RewriteRule "(.*)/$" "$1.html"
+
+# HTML URLs use the template
+RewriteRule "(.*)\.html$" "modele-page.html"
+
+# The needed libraries file stay at the top of the hierarchy
+RewriteRule "css/bbb-md\.css$" "css/bbb-md.css"
+RewriteRule "js/commonmark\.js$" "js/commonmark.js"
+RewriteRule "js/loadmd.js$" "js/loadmd.js"
+```
+
 # Auteurs
 
 Ce bricolage a été écrit par Bruno BEAUFILS en utilisant la librairie

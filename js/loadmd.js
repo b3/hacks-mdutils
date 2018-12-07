@@ -1,8 +1,7 @@
 // Copyright (C) 2018 Bruno BEAUFILS
 // Distributed under the terms of the WTFPL 2.0
 
-var nom = document.URL.split("/").pop();
-var nouveau = document.URL.replace(nom,nom.replace(/\.html$/,".md"));
+var nouveau = document.URL.replace(/\/$/,".html").replace(/\.html$/,".md");
 var xhr = new XMLHttpRequest();
 
 function remplir() {
