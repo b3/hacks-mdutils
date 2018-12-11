@@ -1,12 +1,22 @@
-RewriteEngine On
+#Options -Indexes
 
-# Directory URLs are to be treated as HTML one
-RewriteRule "(.*)/$" "$1.html"
+# path without any extension and no trailing slash 
+RedirectMatch "^([^.]+[^/])$" "$1/"
 
-# HTML URLs use the template
-RewriteRule "(.*)\.html$" "modele-page.html"
+# a2enmod rewrite
+RewriteEngine on
 
-# The needed libraries file stay at the top of the hierarchy
-RewriteRule "css/bbb-md\.css$" "css/bbb-md.css"
-RewriteRule "js/commonmark\.js$" "js/commonmark.js"
-RewriteRule "js/loadmd.js$" "js/loadmd.js"
+# needed libraries stay at the top of the hierarchy
+RewriteRule "(lib/.*)$" "$1" [END]
+
+# `.md` file served directly
+RewriteRule "^(.*\.md)$" "$1" [END]
+
+# root directory index
+RewriteRule  "^$" "index.html" [END]
+
+# path ending in `.html`
+RewriteRule "^.*\.html$" "index.html" [END]
+
+# path with trailing slash
+RewriteRule "^.*/$" "index.html" [END]
