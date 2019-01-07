@@ -12,8 +12,8 @@ Le principal avantage est que le contenu du document n'est présent qu'un seule
 fois dans le dépôt où il est utilisé. Le risque d'oublier de regénérer le
 fichier HTML est donc annulé.
 
-Un des inconvénients est que pour avoir le rendu HTML via le serveur web 5
-requêtes HTTP sont nécessaires :
+Un des inconvénients est que pour avoir le rendu HTML correct 5 requêtes
+HTTP sont nécessaires :
 
 - une pour la page [HTML](index.html),
 - 1 pour chaque script : [commonmark.js](lib/commonmark.js) et [loadmd.js](lib/loadmd.js)
