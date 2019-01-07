@@ -36,7 +36,7 @@ make images
 bin/md2beamer modele-diaporama.md img
 ```
 
-### [`index.html`](index.html.html)
+### [`index.html`](index.html)
 
 C'est un modèle de page HTML dont le contenu, rendu quand la page est servie
 par un serveur web, est le contenu d'un fichier au format markdown de même nom
