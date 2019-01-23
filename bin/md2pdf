@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Convertit un fichier markdown en un fichier PDF (présentation/rapport)
-# Copyright (C) 2016-2018 Bruno BEAUFILS
+# Copyright (C) 2016-2019 Bruno BEAUFILS
 #
 # usage: md2pdf [OPTIONS] SOURCE [FICHIERS-INCLUS...] 
 #
