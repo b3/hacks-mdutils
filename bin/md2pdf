@@ -5,7 +5,7 @@
 # usage: md2pdf [OPTIONS] SOURCE [FICHIERS-INCLUS...] 
 #
 # md2pdf est un wrapper autour de pandoc qui permet de convertir un fichier au
-# format Markdown au format PDF en diaporama (via LaTeX et Beamer) ou en
+# format Markdown vers un format PDF en diaporama (via LaTeX et Beamer) ou en
 # rapport (via LaTeX).
 #
 # SOURCE est le fichier au format Markdown. Il doit avoir comme suffixe '.md'.
@@ -82,6 +82,7 @@
 # complètement sous MacOS X car il utilise des options spécifiques aux
 # versions GNU des commandes UNIX classiques.
 
+# TODO: ajouter un mode article
 # TODO: expliciter extensions markdown supportées
 # TODO: documenter extension YAML et titleimg
 
@@ -175,7 +176,7 @@ list_themes ()
 
 ##############################################################################
 
-VERSION=1.1.20180927-2
+VERSION=1.1.20190123-1
 
 TYPE=none
 THEME=ulille
