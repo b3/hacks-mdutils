@@ -84,7 +84,9 @@
 
 # TODO: ajouter un mode article
 # TODO: expliciter extensions markdown supportées
+# TODO: documenter nom des modèles pandoc et LaTeX utilisé
 # TODO: documenter extension YAML et titleimg
+# TODO: permettre extensions (pandoc ou perso) via des commentaires HTML (particuliers)
 
 # DETAILS TECHNIQUES
 #
