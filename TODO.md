@@ -30,7 +30,7 @@
       paramètre de `extract_file` et `list_files`
 - [ ] extraire/remettre tous les fichiers inclus simplement
 - [ ] trouver un moyen élégant de gérer les tables
-- [ ] cacher le bloc de méta-données dans un bloc de commentaires HTML
+- [X] cacher le bloc de méta-données dans un bloc de commentaires HTML
 
 ## Documentation
 
