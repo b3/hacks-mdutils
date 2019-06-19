@@ -12,5 +12,5 @@
 - Modification options
     - `-d` devient `-D`
     - `-t` sans paramètres liste les thèmes disponibles
-- Réorganisation légère du code pour améliorer la lisibilté
+- Réorganisation légère du code pour améliorer la lisibilité
 - Ajout de la déprotection de certains commentaires avant le passage dans pandoc
