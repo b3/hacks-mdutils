@@ -5,6 +5,14 @@
 - [X] `{.plain}` ne fonctionne pas en mode diaporama
 
     L'option `header_attributes` de `pandoc` n'était pas fixée.
+    
+- [ ] on ne peut pas remplacer les modèles pandoc simplement (ils ne sont pris
+      en compte que quand ils sont à la racine à cause de l'option
+      `--template`
+      
+- [ ] les variables YAML `img` (documenté dans `modele-diaporama.md`) et
+      `titleimg` ne sont pas prises en compte de la même manière dans les
+      transformations (pas du tout dans la version Beamer).
 
 ## Thèmes
 
