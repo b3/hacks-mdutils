@@ -400,7 +400,7 @@ modifie_markdown
 case "$TYPE" in
     "beamer")
         PANDOC_ARGS="-s"
-        PANDOC_ARGS="$PANDOC_ARGS -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block-implicit_figures+link_attributes+fenced_code_attributes+header_attributes"
+        PANDOC_ARGS="$PANDOC_ARGS -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block-implicit_figures+link_attributes+fenced_code_attributes+fenced_divs+header_attributes"
         PANDOC_ARGS="$PANDOC_ARGS -V theme=$THEME"
         PANDOC_ARGS="$PANDOC_ARGS -V fontsize=10"
         PANDOC_ARGS="$PANDOC_ARGS --wrap=preserve"
@@ -419,7 +419,7 @@ case "$TYPE" in
         fi
 
         PANDOC_ARGS="-s"
-        PANDOC_ARGS="$PANDOC_ARGS -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block+implicit_figures+link_attributes+fenced_code_attributes+raw_tex"
+        PANDOC_ARGS="$PANDOC_ARGS -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block+implicit_figures+link_attributes+fenced_code_attributes+fenced_divs+raw_tex"
         PANDOC_ARGS="$PANDOC_ARGS -V theme=$THEME"
         PANDOC_ARGS="$PANDOC_ARGS -V fontsize=10"
         PANDOC_ARGS="$PANDOC_ARGS --wrap=preserve"
