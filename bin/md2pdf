@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Convertit un fichier markdown en un fichier PDF (présentation/rapport)
+# Convertit un fichier markdown en un fichier PDF via pandoc
 # Copyright (C) 2016-2019 Bruno BEAUFILS
 #
-# usage: md2pdf [OPTIONS] SOURCE [FICHIERS-INCLUS...] 
+# usage: md2pdf [OPTIONS] SOURCE [FICHIERS-INCLUS...]
 #
 # md2pdf est un wrapper autour de pandoc qui permet de convertir un fichier au
 # format Markdown vers un format PDF en diaporama (via LaTeX et Beamer) ou en
@@ -12,105 +12,153 @@
 #
 # OPTIONS
 #
-#     -h, --help           affiche ce message d'aide
-#     -r, --report         produit un rapport
-#     -p, --presentation   produit une présentation
-#     -t, --theme THEME    utilise THEME pour la forme du diaporama.
-#     -s, --slide-level N  utilise le niveau N, au lieu de 2, pour les diapos
-#     -L, --latex          produit le source LaTeX plutôt que le résultat PDF
-#     -c, --check          vérifie la présence des outils nécessaires
-#     -l, --list-debian    liste les paquets Debian nécessaires
-#     -d, --debug          conserve le répertoire de travail (/tmp/md2pdf)
-#     -V, --version        affiche la version du script
+#     -h, --help               affiche ce message d'aide
+#         --man                affiche la documentation
+#     -r, --report             produit un rapport
+#     -p, --presentation       produit une présentation
+#     -e, --examples           produit des fichiers exemples
+#     -c, --check              vérifie la présence des outils nécessaires
+#     -l, --list-debian        liste les paquets Debian nécessaires
+#     -t, --theme THEME        utilise THEME (au lieu de 'ulille') comme
+#                              personnalisation. THEME vide ou égal à 'list'
+#                              affiche ceux embarqués dans le script.
+#     -s, --slide-level N      utilise le niveau N (au lieu de 2) pour les diapos
+#     -D, --debug              conserve le répertoire de travail (/tmp/md2pdf)
+#     -L, --latex              produit le source LaTeX (au lieu du résultat PDF)
+#     -P, --pandoc-extra ARGS  ajoute ARGS à la ligne de commande pandoc
+#     -W, --workdir DIR        utilise DIR (au lieu de /tmp/md2pdf) comme
+#                              répertoire de travail
+#     -V, --version            affiche la version du script
 #
-# Si THEME vaut 'list' la liste des thèmes disponible est affichée.
+##
+# DESCRIPTION
 #
-# Si le document utilise d'autres fichiers on doit les spécifier à la
-# suite. On peut, par exemple, spécifier des fichiers images, des modèles
-# remplaçants ceux utilisés par le script (modèle pandoc, thème beamer, etc.)
-# ou des répertoires complets.
+#     Si le document utilise d'autres fichiers que le source Markdown on doit
+#     les spécifier à la suite de son chemin. On peut, par exemple, spécifier
+#     individuellement des fichiers images, des modèles remplaçants ceux
+#     utilisés par le script (modèle pandoc, thème beamer, etc.) ou des
+#     répertoires complets.
 #
-# Les formats d'images utilisables sont uniquement pdf (pour du vectoriel) et
-# png ou éventuellement jpg (pour du matriciel). Les extensions d'images
-# '.svg' dans SOURCE sont automatiquement remplacés en '.pdf'. La conversion
-# des fichiers eux-mêmes doit avoir été faite auparavant. Les images sont
-# alignées horizontalement en s'assurant qu'elles tiennent sur la largeur de
-# page.
+#     Les formats d'images utilisables sont uniquement pdf (pour du vectoriel)
+#     et png ou jpg (pour du matriciel). Les extensions d'images '.svg' dans
+#     SOURCE sont automatiquement remplacés en '.pdf'. La conversion des
+#     fichiers eux-mêmes doit avoir été faite auparavant. Les images sont
+#     alignées horizontalement en s'assurant qu'elles tiennent sur la largeur
+#     de page.
 #
-# Les lignes de la forme '<!-- include FICHIER -->' du fichier source sont
-# remplacées par le contenu de FICHIER dans lequel tous les titres (de type
-# ATX) sont abaissés d'un niveau.
+#     Les lignes de la forme '<!-- include FICHIER -->' du fichier source sont
+#     remplacées par le contenu de FICHIER dans lequel tous les titres (de
+#     type ATX) sont abaissés d'un niveau.
 #
-# PRESENTATION
+#     Pour permettre l'utilisation des extensions Markdown spécifiques à
+#     pandoc sans trop pertuber les autres moteurs de rendu (ceux
+#     Github/GitLab par exemple), les lignes entourées par '<!--p' et '-->'
+#     sont décommentées avant le passage dans pandoc.
 #
-# Pour une transformation en présentation, les diapositives sont les sections
-# de niveau 2, avec le titre de la section comme titre de diapositive.
+# PRÉSENTATIONS/DIAPORAMAS
+#
+#     Pour une transformation en présentation, les diapositives sont les
+#     sections de niveau 2, avec le titre de la section comme titre de
+#     diapositive. On peut changer le niveau via l'option '--slide-level'.
 #
 # EXEMPLES
 #
-# Vérifier que les outils nécessaires sont disponibles sur la machine :
+#     Vérifier que les outils nécessaires sont disponibles sur la machine :
+#     
+#         md2pdf -c
+#     
+#     Convertir le fichier presentation.md qui inclut l'image image.pdf en
+#     diaporama :
+#     
+#         md2pdf -p presentation.md image.pdf
+#     
+#     Convertir le fichier diapos.md qui inclut des images du répertoire img
+#     en diaporama :
+#     
+#         md2pdf -p diapos.md img/image1.pdf img/image2.png
+#     
+#     Convertir le fichier diapos.md qui inclut des images du répertoire img
+#     en diaporama
+#     
+#         md2pdf diapos.md img
 #
-#     md2pdf -c
+# DEPENDANCES
 #
-# Convertir le fichier presentation.md qui inclut l'image image.pdf en
-# diaporama
+#     Pour fonctionner md2pdf a besoin que 'pandoc' ainsi qu'une installation
+#     TeX (avec 'pdflatex' et la classe 'beamer.cls') soit accessible. Seule
+#     la distribution TeXLive disponible pour Unix (sous le nom MacTeX pour
+#     Mac OS X) a été testée.
 #
-#     md2pdf -p presentation.md image.pdf
+#     [pandoc]: http://pandoc.org
+#     [texlive]: http://tug.org/texlive
+#     [mactex]: http://tug.org/mactex
 #
-# Convertir le fichier diapos.md qui inclut des images du répertoire img en
-# diaporama
+# LIMITATIONS
 #
-#     md2pdf -p diapos.md img/image1.pdf img/image2.png
+#     Avec les dépendances spécifiées, en l'état ce script ne peut pas
+#     fonctionner complètement sous MacOS X car il utilise des options
+#     spécifiques aux versions GNU des commandes UNIX classiques.
 #
-# Convertir le fichier diapos.md qui inclut des images du répertoire img en
-# diaporama
+# DETAILS D'IMPLEMENTATIONS
 #
-#     md2pdf diapos.md img
+#     Le script fonctionne en plusieurs passes successives :
 #
-# DEPENDANCES/LIMITATIONS
+#     1. modification du source Markdown
+#     2. transformation du source Markdown en LaTeX via pandoc
+#     3. modification du source LaTeX généré par pandoc
+#     4. compilation du source LaTeX en pdf via pdflatex
 #
-# Pour fonctionner md2pdf a besoin que 'pandoc' ainsi qu'une installation
-# TeX (avec 'pdflatex' et la classe 'beamer.cls') soit accessible. Seule la
-# distribution TeXLive disponible pour Unix (sous le nom MacTeX pour Mac OS X)
-# a été testée.
+#     Toutes les transformations sont exécutés dans un répertoire de travail
+#     (par défaut '/tmp/md2pdf') pour ne pas modifier le fichier source
+#     original. Ce répertoire est supprimé (sauf si l'option '--debug' est
+#     utilisée) après la production du fichier PDF.
 #
-# [pandoc]: http://pandoc.org
-# [texlive]: http://tug.org/texlive
-# [mactex]: http://tug.org/mactex
+#     Des modèles ("templates") pandoc spécifiques sont utilisés pour les
+#     transformations. Ça permet d'utiliser des variables YAML pour la
+#     génération de la page de titre, par exemple. Le fichier
+#     'modele-diaporama.md' liste les variables prise en compte par les
+#     modèles fournis.
 #
-# Avec les dépendances spécifiées, en l'état ce script ne peut pas fonctionner
-# complètement sous MacOS X car il utilise des options spécifiques aux
-# versions GNU des commandes UNIX classiques.
+#     Pour les diaporamas on utilise un modèle nommé
+#     'beamer-pandoc.tex'. Celui fourni (et utilisé par défaut) importe un
+#     thème Beamer via la commande LaTeX '\usetheme'. Pour les rapports le
+#     modèle utilisé est nommé 'report-pandoc.tex'. Celui fourni et (utilisé
+#     par défaut) incorpore un paquet LaTeX 'reportthemeTHEME' via la commande
+#     '\usepackage'.
+#
+#     Des fichiers nécessaires autres que les sources (modèles pandoc, thèmes
+#     beamer, logos, exemples) sont embarqués en fin de script (pour pouvoir
+#     diffuser le script et rien d'autre). L'embarquement est fait entre deux
+#     lignes sous la forme :
+#
+#         # begin-THEMES FILENAME [ENCODAGE]
+#         ...
+#         # end FILENAME
+#
+#     THEMES correspond à une liste de thème pour lesquels le fichier est
+#     nécessaire et doit donc être extrait avant la conversion. Dans cette
+#     liste les thèmes sont séparés les uns des autres par un tiret (-). Si
+#     THEMES vaut juste 'all' le fichier est extrait pour tous les thèmes.
+#
+#     ENCODAGE peut être base64. Quand il est absent la commande à utiliser
+#     pour reconstruire le fichier est juste 'cat' (quand le contenu est
+#     textuel et qu'il faut juste l'extraire). Quand il vaut base64 (quand le
+#     contenu du fichier est binaire et qu'on l'a embarqué en base64) on
+#     utilise 'base64 -d'.
+#
+#     L'inclusion des fichiers est compatible (listage, extraction, etc.) avec
+#     ma commande shembed.
+#
+#     [shembed]: https://github.com/b3/util-shembed
+#
 
 # TODO: ajouter un mode article
 # TODO: expliciter extensions markdown supportées
 # TODO: documenter nom des modèles pandoc et LaTeX utilisé
 # TODO: documenter extension YAML et titleimg
 # TODO: permettre extensions (pandoc ou perso) via des commentaires HTML (particuliers)
-
-# DETAILS TECHNIQUES
-#
-# Les autres fichiers nécessaires (thèmes beamer, logos) sont embarqués en fin
-# de script (pour pouvoir diffuser le script et rien d'autre). L'embarquement
-# est fait entre deux lignes sous la forme :
-#
-# # begin-THEMES FILENAME [ENCODAGE]
-# ...
-# # end FILENAME
-#
-# THEMES correspond à une liste de thème pour lesquels le fichier est
-# nécessaire et doit donc être extrait avant la conversion. Dans cette liste
-# les thèmes sont séparés les uns des autres par un tiret (-). Si THEMES vaut
-# juste 'all' le fichier est extrait pour tous les thèmes.
-#
-# ENCODAGE peut être base64. Quand il est absent la commande à utiliser pour
-# reconstruire le fichier est juste 'cat' (quand le contenu est textuel et
-# qu'il faut juste l'extraire). Quand il vaut base64 (quand le contenu du
-# fichier est binaire et qu'on l'a embarqué en base64) on utilise 'base64 -d'.
-#
-# L'inclusion des fichier est compatible avec ma commande shembed.
-#
-# [shembed]: https://github.com/b3/util-shembed
+# TODO: inclure modele-diaporama.md et permettre son extraction
+# TODO: permettre le changement du répertoire temporaire
 
 # CONVENTIONS DE CODAGE
 #
@@ -128,9 +176,11 @@ fi
 
 err_p="${0##*/}: error:"
 
-doc () { sed -n '2,/^$/ { s/^ *#// ; s/^ //g ; t ok ; d ; :ok ; p }' <$0 ; }
+doc () { _sed -n '2,/^ *##$/ { s/^ *#([^#]|$)// ; s/^ //g ; t ok ; d ; :ok ; p }' <$0 ; }
+docx ()  { _sed -n '2,/^$/ { s/^ *#([^#]|$)// ; s/^ //g ; t ok ; d ; :ok ; p }' <$0 | pager ; }
 die () { echo "$err_p $*" 1>&2 ; exit 1 ; }
 abs () { echo $(cd $(dirname -- $1) ; pwd)/${1##*/} ; }
+isopt () { [[ x$1 =~ x-.* ]] ; }
 mute () { 1>/dev/null 2>&1 $* ; }
 need () { die "$1 is unavailable" ; }
 debug () { sed 's/^/DEBUG: /' <<<"$*" 2>& 1; }
@@ -176,9 +226,48 @@ list_themes ()
         | tr '-' '\n' | sort | uniq
 }
 
+# modifie le source Markdown
+modifie_markdown ()
+{
+    # inclusions de fichiers dans le Markdwon
+    prefix="^ *<!-- *include "
+    suffix=" *--> *\$"
+    for f in $(_sed -n "/$prefix/ { s/$prefix(.*)$suffix/\1/ ; p }" -- "$SRC")
+    do
+        [ -z $f ] && die "unable to access file: $f"
+        sedopts="$sedopts -e '/$prefix$f$suffix/ r $TMPDIR/$f' -e '/$prefix$f$suffix/ d'"
+        sed 's/^#/##/' -- "$f" > "$TMPDIR/$f"
+    done
+    if [ "$sedopts" ] ; then
+        eval _sed $sedopts "--" "$SRC" ">" "$TMPDIR/$dstmd"
+    else
+        cp "$SRC" "$TMPDIR/$dstmd"
+    fi
+
+    # suppression des commentaires spécifiques
+    _sed -i \
+         -e 's/<!--p(.*)-->/\1/g' \
+         -e '/<!--p/,/-->/ { s/<!--p// ; s/-->//; }' \
+         "$TMPDIR/$dstmd"
+}
+
+# modifie le source LaTeX généré par pandoc
+modifie_latex ()
+{
+    # transformations .svg -> .pdf
+    _sed -i \
+         -e '/\\begin\{document\}/,$ s!\\includegraphics(\[[^]]*\]|)\{([^}]*).svg\}!\\includegraphics\1{\2.pdf}!g' \
+         -- "$dsttex"
+
+    # centrage des images seules sur une ligne
+    _sed -i \
+         -e '/\\begin\{document\}/,$ s!(^ *\\includegraphics(\[[^]]*\]|)\{[^}]*\} *$)!\\centerline{\1}!g' \
+         -- "$dsttex"
+}
+
 ##############################################################################
 
-VERSION=1.1.20190123-1
+VERSION=1.2.20190619-1
 
 TYPE=none
 THEME=ulille
@@ -198,15 +287,14 @@ cmd=$(abs $0)
 
 # gestion des options et arguments
 
-while [[ x$1 =~ x-.* ]] ;
+while isopt $1
 do
     case "$1" in
-        "-h"|"--help") doc && exit 0 ;;
-        "-V"|"--version") echo $VERSION && exit 0 ;;
-        "-c"|"--check") check && exit 0 ;;
-        "-l"|"--list-debian")
-            _sed -n '/\|\| need/ { s/^.* (.*)$/\1/ ; p }' -- $0
-            exit
+        "-h"|"--help")
+            doc && exit 0
+            ;;
+        "--man")
+            docx && exit 0
             ;;
         "-p"|"--presentation")
             TYPE=beamer
@@ -214,18 +302,49 @@ do
         "-r"|"--report")
             TYPE=report
             ;;
+        "-e"|"--examples")
+            die "examples creation not implemented yet"
+            exit 1
+            ;;
+        "-c"|"--check")
+            check && exit 0
+            ;;
+        "-l"|"--list-debian")
+            _sed -n '/\|\| need/ { s/^.* (.*)$/\1/ ; p }' -- $0
+            exit
+            ;;
         "-t"|"--theme")
             shift
-            THEME=$1
-            [ "$1" = "list" ] && list_themes && exit 0
+            if [ -z "$1" ] || isopt "$1" || [ "$1" = "list" ] ; then
+                list_themes && exit 0
+            else
+                THEME=$1
+            fi
             ;;
         "-s"|"--slide-level")
             shift
             SLIDELEVEL=$1
             ;;
-        "-L"|"--latex") LATEX_ONLY=true ;;
-        "-d"|"--debug") DEBUG=true ;;
-        "--") shift ; break ;;
+        "-D"|"--debug")
+            DEBUG=true
+            ;;
+        "-L"|"--latex")
+            LATEX_ONLY=true
+            ;;
+        "-P"|"--pandoc-extra")
+            shift
+            PANDOC_EXTRA="$PANDOC_EXTRA $1"
+            ;;
+        "-W"|"--workdir")
+            shift
+            TMPDIR="$1"
+            ;;
+        "-V"|"--version")
+            echo $VERSION && exit 0
+            ;;
+        "--")
+            shift
+            break ;;
         *)
             die "unknown option: $1"
             ;;
@@ -234,8 +353,8 @@ do
 done
 
 # vérifications de bases
-check || die "needed tools missing"
-[ -z "$1" ] && die "missing source file"
+check || die "some needed tools missing"
+[ -z "$1" ] && die "no source file specified"
 [ "$TYPE" = none ] && die "no transformation type specified"
 
 # fichiers générés
@@ -247,91 +366,76 @@ dstlog=$(basename -- $1 .md).log
 shift
 
 # répertoire de travail
-mkdir -p $TMPDIR
+[ -d "$TMPDIR" ] || mkdir -p "$TMPDIR"
 
 # fichiers nécessaires au thème
 list_files $THEME | while read f
 do
-    extract_file $TMPDIR $THEME $f
+    extract_file "$TMPDIR" $THEME $f
 done
 
 # fichiers sources et images
-[ $# -ne 0 ] && { tar -chf - "$@" | tar -C $TMPDIR -xf - ; }
+[ $# -ne 0 ] && { tar -chf - "$@" | tar -C "$TMPDIR" -xf - ; }
 
-# inclusions de fichiers dans le Markdwon
-prefix="^ *<!-- *include "
-suffix=" *--> *\$"
-for f in $(_sed -n "/$prefix/ { s/$prefix(.*)$suffix/\1/ ; p }" -- "$SRC")
-do
-    [ -z $f ] && die "unable to access file: $f"
-    sedopts="$sedopts -e '/$prefix$f$suffix/ r $TMPDIR/$f' -e '/$prefix$f$suffix/ d'"
-    sed 's/^#/##/' -- $f > $TMPDIR/$f
-done
-if [ "$sedopts" ] ; then
-    eval _sed $sedopts "--" "$SRC" ">" $TMPDIR/$dstmd
-else
-    cp "$SRC" $TMPDIR/$dstmd
-fi
-
-cd $TMPDIR
+# modification du source Markdown
+modifie_markdown
 
 # transformation en LaTeX de base
-if [ "$TYPE" = beamer ]; then
-    pandoc -s \
-       -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block-implicit_figures+link_attributes+header_attributes \
-       --toc \
-       -t beamer \
-       --template=beamer-pandoc.tex \
-       --slide-level=$SLIDELEVEL \
-       --wrap=preserve \
-       -V theme=$THEME \
-       -V fontsize=10 \
-       -- $dstmd > $dsttex
-elif [ "$TYPE" = "report" ]; then
-    chapteropts=--chapters
-    major=$(pandoc -v | sed -rn '1 { s/.* ([0-9]+).*$/\1/g ; p }')
-    minor=$(pandoc -v | sed -rn '1 { s/.* [0-9]+\.([0-9]+).*$/\1/g ; p }')
-    if [  $major -ge 1 ] || [ $major = 1 -a $minor -ge 18 ] ; then
-        chapteropts=--top-level-division=chapter
-    fi
-    pandoc -s \
-       -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block+implicit_figures+link_attributes+raw_tex \
-       -t latex \
-       --template=report-pandoc.tex \
-       $chapteropts \
-       --wrap=preserve \
-       -V theme=$THEME \
-       -V fontsize=10 \
-       -- $dstmd > $dsttex
-else
-    die "unknown transformation type: $TYPE"
-fi
+case "$TYPE" in
+    "beamer")
+        PANDOC_ARGS="-s"
+        PANDOC_ARGS="$PANDOC_ARGS -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block-implicit_figures+link_attributes+fenced_code_attributes+header_attributes"
+        PANDOC_ARGS="$PANDOC_ARGS -V theme=$THEME"
+        PANDOC_ARGS="$PANDOC_ARGS -V fontsize=10"
+        PANDOC_ARGS="$PANDOC_ARGS --wrap=preserve"
+        PANDOC_ARGS="$PANDOC_ARGS -t beamer"
+        PANDOC_ARGS="$PANDOC_ARGS --template=beamer-pandoc.tex"
+        PANDOC_ARGS="$PANDOC_ARGS --toc"
+        PANDOC_ARGS="$PANDOC_ARGS --slide-level=$SLIDELEVEL"
+        ;;
+    "report")
+        # la gestion des chapitres a changé avec pandoc 1.18
+        chapteropts=--chapters
+        major=$(pandoc -v | sed -rn '1 { s/.* ([0-9]+).*$/\1/g ; p }')
+        minor=$(pandoc -v | sed -rn '1 { s/.* [0-9]+\.([0-9]+).*$/\1/g ; p }')
+        if [  $major -ge 1 ] || [ $major = 1 -a $minor -ge 18 ] ; then
+            chapteropts=--top-level-division=chapter
+        fi
 
-# transformations .svg -> .pdf
-_sed -i \
-     -e '/\\begin\{document\}/,$ s!\\includegraphics(\[[^]]*\]|)\{([^}]*).svg\}!\\includegraphics\1{\2.pdf}!g' \
-     -- $dsttex
+        PANDOC_ARGS="-s"
+        PANDOC_ARGS="$PANDOC_ARGS -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block+implicit_figures+link_attributes+fenced_code_attributes+raw_tex"
+        PANDOC_ARGS="$PANDOC_ARGS -V theme=$THEME"
+        PANDOC_ARGS="$PANDOC_ARGS -V fontsize=10"
+        PANDOC_ARGS="$PANDOC_ARGS --wrap=preserve"
+        PANDOC_ARGS="$PANDOC_ARGS -t latex"
+        PANDOC_ARGS="$PANDOC_ARGS --template=report-pandoc.tex"
+        PANDOC_ARGS="$PANDOC_ARGS $chapteropts"
+        ;;
+    *)
+        die "unknown transformation type: $TYPE"
+        ;;
+esac
+cd $TMPDIR
+pandoc $PANDOC_ARGS $PANDOC_EXTRA -- "$dstmd" > "$dsttex"
 
-# centrage des images seules sur une ligne
-_sed -i \
-     -e '/\\begin\{document\}/,$ s!(^ *\\includegraphics(\[[^]]*\]|)\{[^}]*\} *$)!\\centerline{\1}!g' \
-     -- $dsttex
+# modification du LaTeX généré
+modifie_latex
 
-# compilation (ou pas)
+# compilation LaTeX (ou pas)
 if ! $LATEX_ONLY ; then
     trap "grep Error *.log | sed 's!^!$err_p $PWD/$dstlog: !' 2>&1  ; 
           die '$PWD/$dsttex: compilation failure ($PWD dir has been kept)'" ERR
     export TEXINPUTS=.//:
     export max_print_line=10000
-    mute pdflatex -halt-on-error -file-line-error -- $dsttex
-    mute pdflatex -halt-on-error -file-line-error -- $dsttex
+    mute pdflatex -halt-on-error -file-line-error -- "$dsttex"
+    mute pdflatex -halt-on-error -file-line-error -- "$dsttex"
 
-    mv -- $dstpdf $DESTDIR
+    mv -- "$dstpdf" "$DESTDIR"
 else
-    mv -- $dsttex $DESTDIR
+    mv -- "$dsttex" "$DESTDIR"
 fi
 
-$DEBUG || { cd .. ; rm -rf $TMPDIR ; }
+$DEBUG || { cd .. ; rm -rf "$TMPDIR" ; }
 
 ##############################################################################
 

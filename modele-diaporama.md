@@ -1,5 +1,7 @@
+<!--p
 ---
 title: md2beamer
+subtitle: md2pdf -p
 author:
 - Bruno BEAUFILS
 date: 16 mars 2017
@@ -11,7 +13,8 @@ logo:
   width: .05
 - file: logo-beamer
   width: .04
-...
+---
+-->
 
 # Introduction
 
@@ -29,13 +32,17 @@ logo:
     2. y copier, renommer puis modifier le fichier `modele-diaporama.md`
     3. créer la présentation via la commande
 
-            md2beamer nom-du-fichier.md
-  
+        ```console
+        md2pdf -p nom-du-fichier.md
+        ```
+
     4. si le fichier inclus des images ajouter leur nom ou leur répertoire en fin de ligne
     
-            md2beamer nom-du-fichier.md image1.pdf image2.png
+        ```console
+        md2pdf -p nom-du-fichier.md image1.pdf image2.png
                               
-            md2beamer nom-du-fichier.md nom-du-repertoire-des-images
+        md2pdf -p nom-du-fichier.md nom-du-repertoire-des-images
+        ```
 
 
 # Faire une présentation avec `md2beamer`
@@ -60,6 +67,7 @@ logo:
     - utilise `pandoc` pour convertir le fichier en LaTeX avec la classe Beamer
     - utilise `pdflatex` pour convertir le fichier LaTeX en PDF
     - ajoute quelques extensions (et en active de `pandoc`)
+    - est en fait un appel de `md2pdf -p`
 
 
 ## Utiliser `md2beamer` pour faire une présentation
@@ -74,7 +82,7 @@ logo:
         - préférer les images vectoriels (SVG) aux matricielles
         - préférer le format PNG pour les images matricielles 
 
-. . .
+<!--p. . .-->
 
 - Avantages
     - construction **très rapide** de présentation propre
@@ -84,7 +92,7 @@ logo:
     - pas de constructions complexes (solution : LaTeX/Beamer directement)
     - pas d'utilisation simple de caractères unicode exotique 
     - difficile à débugger sans maîtriser la chaîne `pandoc`--`pdflatex`
-        - l'option `-d` peut aider (sources dans `/tmp/md2beamer`)
+        - l'option `--debug` peut aider (sources dans `/tmp/md2pdf`)
 
 
 # Une courte référence
@@ -160,7 +168,7 @@ Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
     - niveaux inférieurs sont des blocs 
     - modifiable avec l'option `-s`
 
-    . . .
+    <!--p. . .-->
 
 - affichage incrémental
 
@@ -172,7 +180,7 @@ Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
     > 
     >         > -
 
-    . . .
+    <!--p. . .-->
     
 - le document peut commencer par un bloc [YAML](http://yaml.org/)
     - `title`, `subtitle`, `author`, `date`
@@ -180,7 +188,7 @@ Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
         - `file` : fichier sans extension
         - `width` : largeur en pourcentage (<1) de largeur diapo (0.1 par défaut)
         - `nl` : passage à la ligne après le logo
-	- `img` :  image sur la page de titre
+    - `img` :  image sur la page de titre
         - `file` : fichier sans extension
         - `width` : largeur en pourcentage (<1) de largeur diapo (0.1 par défaut)
         - `bg` : fond de page ou sous le titre
@@ -195,5 +203,6 @@ Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
     - intégrée
 
             md2beamer -h
+            md2beamer --man
 
     - lire la section [*Structuring the slide show*](http://pandoc.org/MANUAL.html#structuring-the-slide-show) de `pandoc(1)` aide aussi
