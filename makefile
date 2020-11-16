@@ -2,8 +2,8 @@ IMG-SVG := $(wildcard img/*.svg)
 IMG-PDF := $(addsuffix .pdf,$(basename $(IMG-SVG)))
 IMG-JPG := $(wildcard img/*.jpg)
 
-# FreeBSD & GNU sed do not use the same option for ERE
-SED=sed$(shell { sed v </dev/null >/dev/null 2>&1 && echo " -r" ; } || echo " -E" ) 
+# Let's use a posix SED (at least for ERE)
+SED := sed $(shell sed v </dev/null >/dev/null 2>&1 && echo " --posix") -E 
 
 .RECIPEPREFIX := > 
 
@@ -12,14 +12,16 @@ help:                           ## liste les cibles disponibles
 
 ##############################################################################
 
+%.pdf: %.md
+
 img/%.pdf: img/%.svg
-> inkscape -z -d 2400 -A $@ -T $<
+> inkscape -d 2400 -o $@ -T $<
 
 images: $(IMG-PDF)              ## génère les images PDF à partir des SVG
 
 ##############################################################################
 
-.PHONY: check clean dist dist-clean test pull push
+.PHONY: check clean dist reset test pull push
 
 check:                          ## vérifier la présence des outils nécessaires
 > @which pdflatex
@@ -28,11 +30,12 @@ check:                          ## vérifier la présence des outils nécessaire
 clean:                          ## supprimer les fichiers inutiles
 > -rm -f $(shell find . -name "*~")
 
-dist-clean: clean               ## supprimer les fichiers regénérables
+reset: clean               ## supprimer les fichiers regénérables
 > -rm -f $(IMG-PDF) $(IMG-PNG)
+> cd test ; $(MAKE) reset
 
 test:                           ## faire les tests
-> test/test-md2pdf -f -v
+> cd test ; $(MAKE)
 
 pull:                           ## récupérer les modifications depuis les dépôts git
 > git pull boulgour master

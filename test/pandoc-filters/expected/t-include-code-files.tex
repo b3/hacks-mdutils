@@ -1,0 +1,106 @@
+\hypertarget{inclusion}{%
+\section{Inclusion}\label{inclusion}}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{{-}{-}{-} include{-}code{-}files.lua – filter to include code from source files}
+\CommentTok{{-}{-}{-}}
+\CommentTok{{-}{-}{-} Copyright: © 2020 Bruno BEAUFILS}
+\CommentTok{{-}{-}{-} License:   MIT – see LICENSE file for details}
+
+\CommentTok{{-}{-}{-} Dedent a line}
+\KeywordTok{local} \KeywordTok{function}\NormalTok{ dedent }\OperatorTok{(}\NormalTok{line}\OperatorTok{,}\NormalTok{ n}\OperatorTok{)}
+  \ControlFlowTok{return}\NormalTok{ line}\OperatorTok{:}\FunctionTok{sub}\OperatorTok{(}\DecValTok{1}\OperatorTok{,}\NormalTok{n}\OperatorTok{):}\FunctionTok{gsub}\OperatorTok{(}\StringTok{" "}\OperatorTok{,}\StringTok{""}\OperatorTok{)} \OperatorTok{..}\NormalTok{ line}\OperatorTok{:}\FunctionTok{sub}\OperatorTok{(}\NormalTok{n}\OperatorTok{+}\DecValTok{1}\OperatorTok{)}
+\KeywordTok{end}
+
+\CommentTok{{-}{-}{-} Filter function for code blocks}
+\KeywordTok{local} \KeywordTok{function}\NormalTok{ transclude }\OperatorTok{(}\NormalTok{cb}\OperatorTok{)}
+  \ControlFlowTok{if}\NormalTok{ cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{include }\ControlFlowTok{then}
+    \KeywordTok{local}\NormalTok{ content }\OperatorTok{=} \StringTok{""}
+    \KeywordTok{local}\NormalTok{ fh }\OperatorTok{=} \FunctionTok{io.open}\OperatorTok{(}\NormalTok{cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{include}\OperatorTok{)}
+    \ControlFlowTok{if} \KeywordTok{not}\NormalTok{ fh }\ControlFlowTok{then}
+      \FunctionTok{io.stderr}\OperatorTok{:}\FunctionTok{write}\OperatorTok{(}\StringTok{"Cannot open file "} \OperatorTok{..}\NormalTok{ cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{include }\OperatorTok{..} \StringTok{" | Skipping includes}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\OperatorTok{)}
+    \ControlFlowTok{else}
+      \KeywordTok{local}\NormalTok{ number }\OperatorTok{=} \DecValTok{1}
+      \KeywordTok{local}\NormalTok{ start }\OperatorTok{=} \DecValTok{1}
+
+      \CommentTok{{-}{-} change hyphenated attributes to PascalCase}
+      \ControlFlowTok{for}\NormalTok{ i}\OperatorTok{,}\NormalTok{pascal }\KeywordTok{in} \FunctionTok{pairs}\OperatorTok{(\{}\StringTok{"startLine"}\OperatorTok{,} \StringTok{"endLine"}\OperatorTok{\})}
+      \ControlFlowTok{do}
+         \KeywordTok{local}\NormalTok{ hyphen }\OperatorTok{=}\NormalTok{ pascal}\OperatorTok{:}\FunctionTok{gsub}\OperatorTok{(}\StringTok{"\%u"}\OperatorTok{,} \StringTok{"{-}\%0"}\OperatorTok{):}\FunctionTok{lower}\OperatorTok{()}
+         \ControlFlowTok{if}\NormalTok{ cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{[}\NormalTok{hyphen}\OperatorTok{]} \ControlFlowTok{then}
+\NormalTok{            cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{[}\NormalTok{pascal}\OperatorTok{]} \OperatorTok{=}\NormalTok{ cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{[}\NormalTok{hyphen}\OperatorTok{]}
+\NormalTok{            cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{[}\NormalTok{hyphen}\OperatorTok{]} \OperatorTok{=} \KeywordTok{nil}
+         \ControlFlowTok{end}
+      \ControlFlowTok{end}
+
+      \ControlFlowTok{if}\NormalTok{ cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{startLine }\ControlFlowTok{then}
+\NormalTok{        cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{startFrom }\OperatorTok{=}\NormalTok{ cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{startLine}
+\NormalTok{        start }\OperatorTok{=} \FunctionTok{tonumber}\OperatorTok{(}\NormalTok{cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{startLine}\OperatorTok{)}
+      \ControlFlowTok{end}
+      \ControlFlowTok{for}\NormalTok{ line }\KeywordTok{in}\NormalTok{ fh}\OperatorTok{:}\FunctionTok{lines} \OperatorTok{(}\StringTok{"L"}\OperatorTok{)}
+      \ControlFlowTok{do}
+        \ControlFlowTok{if}\NormalTok{ cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{dedent }\ControlFlowTok{then}
+\NormalTok{          line }\OperatorTok{=}\NormalTok{ dedent}\OperatorTok{(}\NormalTok{line}\OperatorTok{,}\NormalTok{ cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{dedent}\OperatorTok{)}
+        \ControlFlowTok{end}
+        \ControlFlowTok{if}\NormalTok{ number }\OperatorTok{\textgreater{}=}\NormalTok{ start }\ControlFlowTok{then}
+          \ControlFlowTok{if} \KeywordTok{not}\NormalTok{ cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{endLine }\KeywordTok{or}\NormalTok{ number }\OperatorTok{\textless{}=} \FunctionTok{tonumber}\OperatorTok{(}\NormalTok{cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{endLine}\OperatorTok{)} \ControlFlowTok{then}
+\NormalTok{            content }\OperatorTok{=}\NormalTok{ content }\OperatorTok{..}\NormalTok{ line}
+          \ControlFlowTok{end}
+        \ControlFlowTok{end}
+\NormalTok{        number }\OperatorTok{=}\NormalTok{ number }\OperatorTok{+} \DecValTok{1}
+      \ControlFlowTok{end} 
+\NormalTok{      fh}\OperatorTok{:}\FunctionTok{close}\OperatorTok{()}
+    \ControlFlowTok{end}     
+    \CommentTok{{-}{-} remove key{-}value pair for used keys}
+\NormalTok{    cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{include }\OperatorTok{=} \KeywordTok{nil}
+\NormalTok{    cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{startLine }\OperatorTok{=} \KeywordTok{nil}
+\NormalTok{    cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{endLine }\OperatorTok{=} \KeywordTok{nil}
+\NormalTok{    cb}\OperatorTok{.}\NormalTok{attributes}\OperatorTok{.}\NormalTok{dedent }\OperatorTok{=} \KeywordTok{nil}
+    \CommentTok{{-}{-} return final code block}
+    \ControlFlowTok{return}\NormalTok{ pandoc}\OperatorTok{.}\NormalTok{CodeBlock}\OperatorTok{(}\NormalTok{content}\OperatorTok{,}\NormalTok{ cb}\OperatorTok{.}\NormalTok{attr}\OperatorTok{)}
+  \ControlFlowTok{end}
+\KeywordTok{end}
+
+\ControlFlowTok{return} \OperatorTok{\{}
+  \OperatorTok{\{}\NormalTok{ CodeBlock }\OperatorTok{=}\NormalTok{ transclude }\OperatorTok{\}}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ranges}{%
+\section{Ranges}\label{ranges}}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,firstnumber=7,]
+\KeywordTok{local} \KeywordTok{function}\NormalTok{ dedent }\OperatorTok{(}\NormalTok{line}\OperatorTok{,}\NormalTok{ n}\OperatorTok{)}
+  \ControlFlowTok{return}\NormalTok{ line}\OperatorTok{:}\FunctionTok{sub}\OperatorTok{(}\DecValTok{1}\OperatorTok{,}\NormalTok{n}\OperatorTok{):}\FunctionTok{gsub}\OperatorTok{(}\StringTok{" "}\OperatorTok{,}\StringTok{""}\OperatorTok{)} \OperatorTok{..}\NormalTok{ line}\OperatorTok{:}\FunctionTok{sub}\OperatorTok{(}\NormalTok{n}\OperatorTok{+}\DecValTok{1}\OperatorTok{)}
+\KeywordTok{end}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,firstnumber=7,]
+\KeywordTok{local} \KeywordTok{function}\NormalTok{ dedent }\OperatorTok{(}\NormalTok{line}\OperatorTok{,}\NormalTok{ n}\OperatorTok{)}
+  \ControlFlowTok{return}\NormalTok{ line}\OperatorTok{:}\FunctionTok{sub}\OperatorTok{(}\DecValTok{1}\OperatorTok{,}\NormalTok{n}\OperatorTok{):}\FunctionTok{gsub}\OperatorTok{(}\StringTok{" "}\OperatorTok{,}\StringTok{""}\OperatorTok{)} \OperatorTok{..}\NormalTok{ line}\OperatorTok{:}\FunctionTok{sub}\OperatorTok{(}\NormalTok{n}\OperatorTok{+}\DecValTok{1}\OperatorTok{)}
+\KeywordTok{end}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{detent}{%
+\section{Detent}\label{detent}}
+
+\texttt{detent} removes specified number of whitespaces (and only
+whitespaces) from beginning of each line
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,firstnumber=8,]
+\ControlFlowTok{return}\NormalTok{ line}\OperatorTok{:}\FunctionTok{sub}\OperatorTok{(}\DecValTok{1}\OperatorTok{,}\NormalTok{n}\OperatorTok{):}\FunctionTok{gsub}\OperatorTok{(}\StringTok{" "}\OperatorTok{,}\StringTok{""}\OperatorTok{)} \OperatorTok{..}\NormalTok{ line}\OperatorTok{:}\FunctionTok{sub}\OperatorTok{(}\NormalTok{n}\OperatorTok{+}\DecValTok{1}\OperatorTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,firstnumber=61,]
+\OperatorTok{\{}\NormalTok{CodeBlock }\OperatorTok{=}\NormalTok{ transclude }\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
