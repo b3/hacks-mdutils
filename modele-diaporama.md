@@ -1,4 +1,3 @@
-<!--p
 ---
 title: md2beamer
 subtitle: md2pdf -p
@@ -14,7 +13,6 @@ logo:
 - file: logo-beamer
   width: .04
 ---
--->
 
 # Introduction
 
@@ -82,7 +80,7 @@ logo:
         - préférer les images vectoriels (SVG) aux matricielles
         - préférer le format PNG pour les images matricielles 
 
-<!--p. . .-->
+. . .
 
 - Avantages
     - construction **très rapide** de présentation propre
@@ -124,41 +122,43 @@ Elle est décrite en détails ailleurs (cf liens de cette diapo)
 
 ## Markdown : images
 
-`![Texte alternatif pour HTML](img/tex-friendly-zone.svg)`
+`![Texte alternatif](img/tex-friendly-zone.svg){.center width=70%}\ `
 
-![Texte alternatif pour HTML](img/tex-friendly-zone.svg)
+![Texte alternatif](img/tex-friendly-zone.svg){.center width=70%}\ 
 
 
 ## `md2beamer` : images
 
 - convertit automatiquement les références `.svg` en `.pdf` (qui doivent exister)
-- centre les images horizontalement si elles sont seules sur une ligne
-- ajuste la largeur automatiquement (attention à la hauteur, cf diapo précédente)
+- centre les images horizontalement si elles ont la classe `.center`
 - permet de spécifier une largeur ou une hauteur
     - relative à la largeur de la diapo
 
-      `![TeX Friendly Zone](img/tex-friendly-zone.svg){ width=30% }`
+      `![TeX Friendly Zone](img/tex-friendly-zone.svg){ width=30% .center }\ `
 
-      ![TeX Friendly Zone](img/tex-friendly-zone.svg){ width=30% } 
+      ![TeX Friendly Zone](img/tex-friendly-zone.svg){ width=30% .center }\ 
 
 
 ## {.plain}
 
-![Tux](img/tux.svg)
+![Tux](img/tux.svg){ .center }\ 
 
 Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
 
 
 ## `md2beamer` : tableaux
 
-- Un support très basique des tableaux est inclus
-    - utilisation de l'option `pipe_tables` de `pandoc`
+- Un support des tableaux est inclus
+    - par exemple utilisation de l'option `pipe_tables` de `pandoc`
     
 | **Outil**  | **Utilité**                                                 |
 |------------|-------------------------------------------------------------|
 | `pandoc`   | conversion de formats                                       |
 | `pdflatex` | composition de LaTeX en PDF                                 |
 | `beamer`   | jeux de balisage LaTeX pour la composition de présentation  |
+
+- [pandoc#tables](https://pandoc.org/MANUAL.html#tables) liste les
+  autres manières de saisir des tableaux
 
 
 ## `md2beamer` : réglages `pandoc` utilisés
@@ -168,7 +168,7 @@ Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
     - niveaux inférieurs sont des blocs 
     - modifiable avec l'option `-s`
 
-    <!--p. . .-->
+    . . .
 
 - affichage incrémental
 
@@ -180,7 +180,7 @@ Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
     > 
     >         > -
 
-    <!--p. . .-->
+    . . .
     
 - le document peut commencer par un bloc [YAML](http://yaml.org/)
     - `title`, `subtitle`, `author`, `date`
