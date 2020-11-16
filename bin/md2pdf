@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Convertit un fichier markdown en un fichier PDF via pandoc
-# Copyright (C) 2016-2019 Bruno BEAUFILS
+# Copyright (C) 2016-2020 Bruno BEAUFILS
 #
 # usage: md2pdf [OPTIONS] SOURCE [FICHIERS-INCLUS...]
 #
@@ -400,7 +400,7 @@ modifie_markdown
 case "$TYPE" in
     "beamer")
         PANDOC_ARGS="-s"
-        PANDOC_ARGS="$PANDOC_ARGS -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block-implicit_figures+link_attributes+fenced_code_attributes+fenced_divs+header_attributes"
+        PANDOC_ARGS="$PANDOC_ARGS -f markdown_github-hard_line_breaks+grid_tables+yaml_metadata_block-implicit_figures+link_attributes+fenced_code_attributes+fenced_divs+header_attributes+raw_tex+tex_math_dollars"
         PANDOC_ARGS="$PANDOC_ARGS -V theme=$THEME"
         PANDOC_ARGS="$PANDOC_ARGS -V fontsize=10"
         PANDOC_ARGS="$PANDOC_ARGS --wrap=preserve"
@@ -443,8 +443,8 @@ if ! $LATEX_ONLY ; then
           die '$PWD/$dsttex: compilation failure ($PWD dir has been kept)'" ERR
     export TEXINPUTS=.//:
     export max_print_line=10000
-    mute pdflatex -halt-on-error -file-line-error -- "$dsttex"
-    mute pdflatex -halt-on-error -file-line-error -- "$dsttex"
+    mute pdflatex -shell-escape -halt-on-error -file-line-error -- "$dsttex"
+    mute pdflatex -shell-escape -halt-on-error -file-line-error -- "$dsttex"
 
     mv -- "$dstpdf" "$DESTDIR"
 else
@@ -496,7 +496,7 @@ exit 0
 \usepackage{fixltx2e}           % provides \textsubscript
 \usepackage{graphicx,grffile}   % pour les images
 \usepackage{fancyvrb}
-\usepackage{listings}           % pour les programmes
+\usepackage{minted}             % pour les programmes
 
 % Configuration pandoc %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -619,7 +619,7 @@ $body$
 \usepackage{fixltx2e}           % provides \textsubscript
 \usepackage{graphicx,grffile}   % pour les images
 \usepackage{fancyvrb}
-\usepackage{listings}           % pour les programmes
+\usepackage{minted}             % pour les programmes
 \usepackage{hyperref}           % le plus tard possible d'après la doc
 
 % Configuration pandoc %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -669,7 +669,7 @@ $endif$
   \begin{tabular}[t]{c}%
 }
 \renewcommand{\maketitle}{\begin{titlepage}%
-$if(img)$
+$if(title-image)$
   \tikz[remember picture,overlay]
     \node[opacity=0.2,inner sep=0pt] at (current page.center){%
       \includegraphics[width=\paperwidth,height=\paperheight]{\inserttitleimg}%
@@ -771,8 +771,8 @@ $endif$
 $endfor$
 }
 $endif$
-$if(img)$
-\titleimg{$img$}
+$if(title-image)$
+\titleimg{$title-image$}
 $endif$
 \date{$date$}
 

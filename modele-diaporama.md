@@ -188,7 +188,7 @@ Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
         - `file` : fichier sans extension
         - `width` : largeur en pourcentage (<1) de largeur diapo (0.1 par défaut)
         - `nl` : passage à la ligne après le logo
-    - `img` :  image sur la page de titre
+    - `title-image` :  image sur la page de titre
         - `file` : fichier sans extension
         - `width` : largeur en pourcentage (<1) de largeur diapo (0.1 par défaut)
         - `bg` : fond de page ou sous le titre
