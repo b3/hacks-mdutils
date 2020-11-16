@@ -21,7 +21,13 @@ images: $(IMG-PDF)              ## génère les images PDF à partir des SVG
 
 ##############################################################################
 
-.PHONY: check clean dist reset test pull push
+.PHONY: build build-md2pdf check clean dist reset test pull push
+
+build: build-md2pdf				## générer les scripts
+
+build-md2pdf: $(IMG-PDF)
+> for f in $$(grep '^# begin-' bin/md2pdf | cut -d ' ' -f 3 | grep -v 'pdf$$') ; do shembed -u etc/$$f bin/md2pdf ; done
+> for f in $$(grep '^# begin-' bin/md2pdf | cut -d ' ' -f 3 | grep 'pdf$$') ; do shembed -b -u img/$$f bin/md2pdf ; done
 
 check:                          ## vérifier la présence des outils nécessaires
 > @which pdflatex
