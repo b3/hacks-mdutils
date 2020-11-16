@@ -1,10 +1,10 @@
 # Des bricoles pour manipuler des fichiers markdown.
 
-On trouve ici quelques scripts et modèles permettant de manipuler des fichiers
-textes au format [Markdown](https://daringfireball.net/projects/markdown) et
-notamment à ses versions [GitHub Flavored Markdown](https://github.github.com/gfm),
-[GitLab Flavored Markdown](https://docs.gitlab.com/ce/user/markdown.html) et
-[CommonMark](http://commonmark.org/).
+On trouve ici quelques scripts et modèles permettant de manipuler des
+fichiers textes au format
+[Markdown](https://daringfireball.net/projects/markdown) dans sa
+[version pandoc](https://pandoc.org/MANUAL.html#pandocs-markdown).
+
 
 ## Scripts
 
