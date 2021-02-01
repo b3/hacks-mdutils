@@ -1,0 +1,40 @@
+.PHONY: clean reset
+
+CONFDIR ?= $(dir $(MAKEFILE_LIST))etc
+
+beamer: $(FILE)
+beamer: TEMPLATE ?= $(CONFDIR)/pandoc-beamer.tex
+beamer: THEME ?= ulille
+beamer: SLIDELEVEL ?= 2
+beamer: ARGS += -t beamer
+beamer: ARGS += --slide-level=$(SLIDELEVEL)
+
+report: $(FILE)
+report: TEMPLATE ?= $(CONFDIR)/pandoc-report.tex
+report: THEME ?= cgir
+report: ARGS += -t latex
+report: ARGS += --top-level-division=chapter
+report: ARGS += -N
+
+ARGS = --standalone
+ARGS += --template=$(TEMPLATE)
+ARGS += -L $(CONFDIR)/include-files.lua
+ARGS += -L $(CONFDIR)/include-code-files.lua
+ARGS += -L $(CONFDIR)/center-image.lua
+ARGS += -L $(CONFDIR)/svg-image-to-pdf.lua
+ARGS += -V theme=$(THEME)
+ARGS += --pdf-engine-opt=-shell-escape
+ARGS += --toc
+ARGS += --highlight-style=tango
+
+%.pdf: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
+	TEXINPUTS=.//:$(CONFDIR): pandoc $(ARGS) $(EXTRAS) -o $@ $< 
+
+%.tex: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
+	pandoc $(ARGS) $(EXTRAS) -o $@ $< 
+
+clean:
+	-rm -rf *~ _minted*
+
+reset: clean
+	-test -z $(FILE) || rm $(FILE)
