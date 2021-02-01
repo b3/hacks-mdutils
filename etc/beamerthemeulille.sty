@@ -2,24 +2,24 @@
 % Copyright (C) 2018-2019 Bruno BEAUFILS
 % This file is distributed under the terms of the WTFPL license.
 
-\def\filedate{2019/06/20}
+\def\filedate{2021/01/26}
 
 % Paramétrages génériques %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Les couleurs de l'Université de Lille 1
-\definecolor{Lille1Pourpre}{RGB}{174,37,115}      % en HTML : ae2573
-\definecolor{Lille1NeutreNoir}{RGB}{56,47,45}     % en HTML : 382f2d
-\definecolor{Lille1NeutreBleu}{RGB}{127,160,172}  % en HTML : 7fa0ac
-\definecolor{Lille1NeutreRose}{RGB}{216,200,209}  % en HTML : d8c8d1
-\definecolor{Lille1FroideBleu}{RGB}{29,66,138}    % en HTML : 1d428a
-\definecolor{Lille1FroideVert}{RGB}{0,179,152}    % en HTML : 00b398
-\definecolor{Lille1FroideCyan}{RGB}{141,200,232}  % en HTML : 8dc8e8
-\definecolor{Lille1ChaudeViolet}{RGB}{114,0,98}   % en HTML : 720062
-\definecolor{Lille1ChaudeMarron}{RGB}{211,130,53} % en HTML : d38235
-\definecolor{Lille1ChaudeTaupe}{RGB}{213,203,159} % en HTML : d5cb9f
-\definecolor{Lille1ViveRouge}{RGB}{249,66,58}     % en HTML : f9423a
-\definecolor{Lille1ViveVert}{RGB}{120,190,32}     % en HTML : 78be20
-\definecolor{Lille1ViveJaune}{RGB}{252,227,0}     % en HTML : fce300
+\definecolor{Lille1Pourpre}{HTML}{ae2573}
+\definecolor{Lille1NeutreNoir}{HTML}{382f2d}
+\definecolor{Lille1NeutreBleu}{HTML}{7fa0ac}
+\definecolor{Lille1NeutreRose}{HTML}{d8c8d1}
+\definecolor{Lille1FroideBleu}{HTML}{1d428a}
+\definecolor{Lille1FroideVert}{HTML}{00b398}
+\definecolor{Lille1FroideCyan}{HTML}{8dc8e8}
+\definecolor{Lille1ChaudeViolet}{HTML}{720062}
+\definecolor{Lille1ChaudeMarron}{HTML}{d38235}
+\definecolor{Lille1ChaudeTaupe}{HTML}{d5cb9f}
+\definecolor{Lille1ViveRouge}{HTML}{f9423a}
+\definecolor{Lille1ViveVert}{HTML}{78be20}
+\definecolor{Lille1ViveJaune}{HTML}{fce300}
 
 %% Des "jolies" polices de caractères
 \usepackage{lmodern}            % pour sf et tt
@@ -37,13 +37,39 @@
   
 % Paramétrage Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\mode<presentation>             % pour le mode présentation seulement
+%% Options du thème
 
-%% Logos
-\titlegraphic{%
-  \raisebox{-0.5\height}{\includegraphics[width=6em]{logo-univ-lille}}
-}
-\logo{\includegraphics[height=1.5em]{logo-univ-lille}}
+%%% page en début de chaque partie ou non
+\newif\ifpartpage\partpagetrue
+\DeclareOptionBeamer{partpage}{\partpagetrue}
+\DeclareOptionBeamer{nopartpage}{\partpagefalse}
+
+%%% page en début de chaque section ou non
+\newif\ifsectionpage\sectionpagetrue
+\DeclareOptionBeamer{sectionpage}{\sectionpagetrue}
+\DeclareOptionBeamer{nosectionpage}{\sectionpagefalse}
+
+%%% page en début de chaque subsection ou non
+\newif\ifsubsectionpage\subsectionpagetrue
+\DeclareOptionBeamer{subsectionpage}{\subsectionpagetrue}
+\DeclareOptionBeamer{nosubsectionpage}{\subsectionpagefalse}
+
+%%% la section dans le pied de page
+\newif\ifsectioninfoot\sectioninfoottrue
+\DeclareOptionBeamer{sectioninfoot}{\sectioninfoottrue}
+\DeclareOptionBeamer{nosectioninfoot}{\sectioninfootfalse}
+
+%%% type de présentation
+\DeclareOptionBeamer{long}{%
+  \partpagetrue\sectionpagetrue\subsectionpagetrue%
+  \sectioninfoottrue}
+\DeclareOptionBeamer{court}{%
+  \partpagefalse\sectionpagefalse\subsectionpagefalse%
+  \sectioninfootfalse}
+
+\ProcessOptionsBeamer
+
+\mode<presentation>             % pour le mode présentation seulement
 
 %% Couleurs
 \usecolortheme{spruce}
@@ -75,6 +101,12 @@
 
 %% Adaptation des modèles
 
+%%% Logos
+\titlegraphic{%
+  \raisebox{-0.5\height}{\includegraphics[width=6em]{logo-univ-lille}}
+}
+\logo{\includegraphics[height=1.5em]{logo-univ-lille}}
+
 %%% La page de titre
 \renewcommand{\maketitle}[1][]{%
   \addtocounter{framenumber}{-1}\frame[plain,#1]{\titlepage}}
@@ -82,38 +114,27 @@
 %%% Sections dans la table des matières
 \setbeamertemplate{sections/subsections in toc}[sections numbered]
 
-%%% Une page en début de chaque cours
-\newif\ifnewlecture\newlecturetrue
-\AtBeginLecture{%
-  \ifbeamer@inlecture
-  \ifnewlecture
-  \begin{frame}
-    \begin{centering}
-      \begin{beamercolorbox}[sep=16pt,center]{part title}
-        \usebeamerfont{part title}\insertlecture
-      \end{beamercolorbox}
-    \end{centering}
-  \end{frame}
-  \newlecturefalse
-  \fi
-  \fi
-}
-
 %%% Une page simple devant chaque partie
+\ifpartpage
 \AtBeginPart{\frame{\partpage}}
 \setbeamertemplate{part page}{%
   \begin{center}
     \usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertpart
   \end{center}
 }
+\fi
 
 %%% Une page simple (avec table des matières) devant chaque section
+\ifsectionpage
 \setbeamertemplate{section page}{\tableofcontents[currentsection]}
 \AtBeginSection[]{\frame{\sectionpage}}
+\fi
 
 %%% Une page simple (avec table des matières) devant chaque sous-section
+\ifsubsectionpage
 \setbeamertemplate{subsection page}{\tableofcontents[currentsubsection]}
 \AtBeginSubsection[]{\frame{\subsectionpage}}
+\fi
 
 %%% Styles des blocs
 \setbeamertemplate{blocks}[rounded][shadow=true]
@@ -133,7 +154,8 @@
     \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{footline}
       \usebeamerfont{date in head/foot}
       \hspace*{1.25ex}
-      \inserttitle{} \hspace*{3ex} \emph{\textmd{\insertsection}}
+      \inserttitle{}%
+      \ifsectioninfoot \hspace*{3ex} \emph{\textmd{\insertsection}\fi}
       \hfill
       \insertframenumber{} / \inserttotalframenumber
       \hspace*{1.25ex}
