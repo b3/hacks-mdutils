@@ -1,14 +1,18 @@
-.PHONY: tests md2pdf pandoc-filters clean reset
+TESTS := pandoc-filters md2pdf
 
-tests: md2pdf pandoc-filters
+.PHONY: tests reset $(TESTS)
+
+tests: $(TESTS)
 
 md2pdf:
-	./test-md2pdf -f -v
+	cd $@ ; $(MAKE)
 
 pandoc-filters:
 	cd $@ ; $(MAKE)
 
 reset:
-	cd pandoc-filters ; $(MAKE) reset
+	for d in $(TESTS) ; do ( cd $$d ; $(MAKE) reset ) ; done
 
 # TODO: ajouter le support du test de conversion Beamer
+#./test-md2pdf -f -v
+

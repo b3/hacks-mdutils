@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # helpers
-cmd="$(cd $(dirname $0)/.. ; pwd)/bin/md2pdf"
+cmd="$(cd $(dirname $0)/../.. ; pwd)/bin/md2pdf"
 dir="$(cd $(dirname $0) ; pwd)"
 errmsg="${cmd##*/}: error:"
 stderr() { $* 2>&1 1>/dev/null ; }
@@ -10,7 +10,7 @@ mute() { $* 1>/dev/null 2>&1 ; }
 
 # test cases definition
 cd $dir
-for testfile in md2pdf/*.t
+for testfile in *.t
 do
     source $testfile
 done
