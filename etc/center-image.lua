@@ -1,7 +1,7 @@
 --- center-image.lua – filter to center image on their line
 ---
 --- ideas from https://pandoc.org/lua-filters.html#center-images-in-latex-and-html-output
---- TODO : rendre ça automatique pour les images seules sur leur ligne (sans être obligé d'ajouter \ 
+--- TODO : automatize that for images alone on a line (without the need to add a final backslash)
 
 if FORMAT:match 'latex' or FORMAT:match 'beamer' then
   function Image (elem)
