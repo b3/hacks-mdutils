@@ -14,11 +14,15 @@ clean () {
     do
         rm -f "$f" "${f%%.orig}"
     done
+    rm -rf etc _minted*
 }
 
 # create files needed for tests
 init () {
-	cat <<EOF > simple.md.orig
+    cat <<EOF > simple.md.orig
+---
+title: Un titre
+---
 # Un titre
 EOF
     echo > diapo.md.orig
