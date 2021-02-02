@@ -22,7 +22,6 @@ build: bin/md2pdf               ## générer les scripts
 images: $(IMG-PDF)              ## génère les images PDF à partir des SVG
 
 bin/md2pdf: images              ## mets à jour les fichiers inclus de md2pdf
-	cp $@ $@.old
 	shembed -u makefile-pandoc $@
 	shembed -u etc/include-files.lua $@
 	shembed -u etc/include-code-files.lua $@

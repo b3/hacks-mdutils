@@ -28,10 +28,10 @@ ARGS += --toc
 ARGS += --highlight-style=tango
 
 %.pdf: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
-	TEXINPUTS=.//:$(CONFDIR): pandoc $(ARGS) $(EXTRAS) -o $@ $< 
+	TEXINPUTS=.//:$(CONFDIR): pandoc $(ARGS) $(EXTRAS) -o $@ -- $<
 
 %.tex: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
-	pandoc $(ARGS) $(EXTRAS) -o $@ $< 
+	pandoc $(ARGS) $(EXTRAS) -o $@ -- $<
 
 clean:
 	-rm -rf *~ _minted*
