@@ -46,7 +46,7 @@ La documentation est dans le fichier [`index.md`](index.md).
 
 # Auteurs
 
-Copyright (C) 2016-2019 Bruno BEAUFILS
+Copyright (C) 2016-2021 Bruno BEAUFILS
 
 Ces bricolages ont été écrit par Bruno BEAUFILS.
 
