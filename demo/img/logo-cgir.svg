@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="1000"
+   height="232.24611"
+   id="svg3045"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="logo-cgir-2015.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2782"
+     inkscape:window-height="1764"
+     id="namedview15"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="0.76472351"
+     inkscape:cx="902.28684"
+     inkscape:cy="51.628959"
+     inkscape:window-x="98"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3045" />
+  <defs
+     id="defs3047" />
+  <metadata
+     id="metadata3050">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="g3000">
+    <g
+       transform="matrix(2.8114835,0,0,-2.8114835,-362.96384,1990.9298)"
+       id="g22">
+      <text
+         transform="matrix(1,0,0,-0.99883137,126.6,683)"
+         id="text24">
+        <tspan
+           x="0 17.479628 27.346058 44.347725 63.227089 81.901611 98.971558 117.7485 128.02461 145.33354 158.61397 177.01537 189.68127 208.45821 222.18245 235.80428 245.56828 263.9697 282.74661 301.52356 320.30051 330.47421 340.64789"
+           y="0"
+           id="tspan26"
+           style="font-size:34.13989639px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Trebuchet MS;-inkscape-font-specification:TrebuchetMS">Licence Professionnelle</tspan>
+      </text>
+    </g>
+    <g
+       transform="matrix(2.8114835,0,0,-2.8114835,-362.96384,1990.9298)"
+       id="g28">
+      <text
+         transform="matrix(1,0,0,-0.99883137,333,626.3)"
+         id="text30">
+        <tspan
+           x="0 38.230679 80.347099 97.770256"
+           y="0"
+           id="tspan32"
+           style="font-size:62.67324066px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#00a9e0;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Trebuchet MS;-inkscape-font-specification:TrebuchetMS-Bold">CGIR</tspan>
+      </text>
+    </g>
+  </g>
+</svg>

@@ -1,10 +1,12 @@
 ---
-title: md2beamer
+title: Préparer une présentation simplement
 subtitle: md2pdf -p
 author:
 - Bruno BEAUFILS
-date: 16 mars 2017
-logo:
+- John MAC FARLANE
+- Leslie LAMPORT
+date: février 2021
+titlegraphic:
 - file: logo-univ-lille
   width: .2
   nl: true
@@ -12,7 +14,9 @@ logo:
   width: .05
 - file: logo-beamer
   width: .04
+titlebackground: tux
 ---
+
 
 # Introduction
 
@@ -20,31 +24,22 @@ logo:
 
 ### Un exemple
 
-- Cette présentation est produite à partir de `modele-diaporama.md`
+- Cette présentation est produite à partir de `modele-presentation.md`
 - Elle est conçue pour des présentations simples
 
 ### Un modèle
 
-- Elle constitue un *modèle* pour faire d'autre présentations :
+- Elle peut constituer un *modèle* pour faire d'autre présentations :
     1. créer un nouveau dossier
     2. y copier, renommer puis modifier le fichier `modele-diaporama.md`
     3. créer la présentation via la commande
 
         ```console
-        md2pdf -p nom-du-fichier.md
-        ```
-
-    4. si le fichier inclus des images ajouter leur nom ou leur répertoire en fin de ligne
-    
-        ```console
-        md2pdf -p nom-du-fichier.md image1.pdf image2.png
-                              
-        md2pdf -p nom-du-fichier.md nom-du-repertoire-des-images
+        md2pdf nom-du-fichier.md
         ```
 
 
 # Faire une présentation avec `md2beamer`
-
 
 ## Introduction
 
@@ -60,41 +55,38 @@ logo:
 
 - [Beamer](https://github.com/josephwright/beamer) est un paquet LaTeX pour préparer des présentations
 
-- **`md2beamer`** est un simple script shell qui
-    - *enveloppe* la conversion d'un fichier Markdown vers un un fichier PDF
-    - utilise `pandoc` pour convertir le fichier en LaTeX avec la classe Beamer
-    - utilise `pdflatex` pour convertir le fichier LaTeX en PDF
-    - ajoute quelques extensions (et en active de `pandoc`)
-    - est en fait un appel de `md2pdf -p`
+- **`md2pdf`** est un simple script shell qui *enveloppe* un appel à `pandoc`
+    - permet la conversion d'un fichier Markdown en PDF 
+    - paramètre `pandoc` pour personnaliser la conversion
 
-
-## Utiliser `md2beamer` pour faire une présentation
+## Utiliser `md2pdf` pour faire une présentation
 
 - Conseils
     1. construire la structure (plan) de la présentation en premier
     2. remplir le contenu ensuite sans trop surcharger le texte
-    3. ne pas s'occuper de la mise en forme (`md2beamer` s'en occupe) 
+    3. ne pas s'occuper de la mise en forme (`md2pdf` s'en occupe) 
     4. avoir un peu de discipline
         - être attentif aux indentations des lignes
         - espacer les sections de diapositives 
-        - préférer les images vectoriels (SVG) aux matricielles
+        - préférer les images vectorielles (SVG) aux matricielles
         - préférer le format PNG pour les images matricielles 
 
 . . .
 
 - Avantages
     - construction **très rapide** de présentation propre
-    - forme déportée vers le thème
+    - style (*forme*) déporté vers le thème
+    - rapide à prendre en main
+    - sources réutilisables ailleurs
 
 - Inconvénients
     - pas de constructions complexes (solution : LaTeX/Beamer directement)
     - pas d'utilisation simple de caractères unicode exotique 
     - difficile à débugger sans maîtriser la chaîne `pandoc`--`pdflatex`
-        - l'option `--debug` peut aider (sources dans `/tmp/md2pdf`)
+        - passer par LaTeX via `-L` peut aider
 
 
 # Une courte référence
-
 
 ## Markdown
 
@@ -106,7 +98,7 @@ La syntaxe de Markdown permet
     - **listes libres** : indentation de paragraphe avec lignes débutant par des `-` ou des `*`
     - **listes ordonnées** : indentation avec lignes débutant par des `1.`
     - **blocs de citations** : paragraphes préfixés par "`> `"
-    - **blocs de codes** : paragraphes indentés par 4 espaces
+    - **blocs de codes** : paragraphes indentés par 4 espaces ou encadrés par \`\`\`
 
 - d'inclure des éléments de mise en forme logique 
 
@@ -114,30 +106,28 @@ La syntaxe de Markdown permet
 
 - d'inclure des liens vers des URL
     - <https://daringfireball.net/projects/markdown>
+    - [Pandoc Markdown](https://pandoc.org/MANUAL.html#pandocs-markdown)
+    - [CommonMark](https://commonmark.org)
+    - [Markdown à la sauce GitLab](https://gitlab.com/help/user/markdown.md)
     - [Markdown à la sauce Github](https://guides.github.com/features/mastering-markdown)
 
     
 Elle est décrite en détails ailleurs (cf liens de cette diapo)
 
+## Images
 
-## Markdown : images
+- format Markdown :
 
-`![Texte alternatif](img/tex-friendly-zone.svg){.center width=70%}\ `
+    `![TeX Zone](img/tex-friendly-zone.svg){ width=30% .center }\ `
 
-![Texte alternatif](img/tex-friendly-zone.svg){.center width=70%}\ 
+    ![TeX Zone](img/tex-friendly-zone.svg){ width=30% .center }\ 
+    
+    La séquence `\ ` en fin de ligne est utilisée pour éviter le traitement en figure
 
-
-## `md2beamer` : images
-
-- convertit automatiquement les références `.svg` en `.pdf` (qui doivent exister)
-- centre les images horizontalement si elles ont la classe `.center`
 - permet de spécifier une largeur ou une hauteur
     - relative à la largeur de la diapo
-
-      `![TeX Friendly Zone](img/tex-friendly-zone.svg){ width=30% .center }\ `
-
-      ![TeX Friendly Zone](img/tex-friendly-zone.svg){ width=30% .center }\ 
-
+- conversion automatique des références `.svg` en `.pdf` (qui doivent exister)
+- centrage horizontal des images si elles ont la classe `.center`
 
 ## {.plain}
 
@@ -145,11 +135,10 @@ Elle est décrite en détails ailleurs (cf liens de cette diapo)
 
 Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
 
+## Tableaux
 
-## `md2beamer` : tableaux
-
-- Un support des tableaux est inclus
-    - par exemple utilisation de l'option `pipe_tables` de `pandoc`
+- Plusieurs types de support des tableaux
+    - exemple avec le mode `pipe_tables` de `pandoc`
     
 | **Outil**  | **Utilité**                                                 |
 |------------|-------------------------------------------------------------|
@@ -160,49 +149,78 @@ Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
 - [pandoc#tables](https://pandoc.org/MANUAL.html#tables) liste les
   autres manières de saisir des tableaux
 
+## Code source
 
-## `md2beamer` : réglages `pandoc` utilisés
+Le code source peut être coloré en fonction de la syntaxe du language
+
+```c
+#include <stdio.h>
+int main(int argc, char ** argv) {
+    printf("Hello world !\n");
+}
+```
+
+Il peut être inclus depuis un fichier
+([filtre `include-code-files`](https://github.com/pandoc/lua-filters/tree/master/include-code-files))
+
+``` {include="code-bash" .bash .numberLines}
+```
+
+## Spécificité des présentations
+
+**Affichage incrémental**
+
+> - affichage incrémental
+> 
+>     - pause via un paragraphe avec une ligne de trois points
+>
+>             . . .
+>
+>     - des items de listes dans des blocs de citations
+>
+>             > -
+> 
+> - ne pas trop en abuser !
+
+. . .
+
+**Listes**
+
+- imbrication de listes limitée à une profondeur de 3
+
+## Réglages `pandoc` utilisés par `md2pdf`
+
+- les réglages sont visibles dans `makefile-pandoc`
 
 - les diapositives sont les élements de niveau 2
     - niveaux supérieurs sont les sections du diaporama
     - niveaux inférieurs sont des blocs 
-    - modifiable avec l'option `-s`
+    - modifiable via la variable d'environnement `SLIDELEVEL`
 
-    . . .
+- transformation avec un [*template*](https://pandoc.org/MANUAL.html#templates) ad-hoc
+    - variables pour la page de titre
+    - fixables dans un bloc [YAML](http://yaml.org/) (en début de fichier)
 
-- affichage incrémental
-
-    > - pause via un paragraphe avec une ligne de trois points
-    > 
-    >         . . .
-    > 
-    > - des items de listes dans des blocs de citations
-    > 
-    >         > -
-
-    . . .
-    
-- le document peut commencer par un bloc [YAML](http://yaml.org/)
+- variables prises en charge
     - `title`, `subtitle`, `author`, `date`
-    - `logo` :  logos sur la page de titre 
+    - `titlegraphic` : images (type logos) sur la page de titre 
         - `file` : fichier sans extension
         - `width` : largeur en pourcentage (<1) de largeur diapo (0.1 par défaut)
         - `nl` : passage à la ligne après le logo
-    - `title-image` :  image sur la page de titre
-        - `file` : fichier sans extension
-        - `width` : largeur en pourcentage (<1) de largeur diapo (0.1 par défaut)
-        - `bg` : fond de page ou sous le titre
+    - `titlebackground` : image de fond de la page de titre (fichier sans extension)
 
+## Documentation 
 
-## `md2beamer` : utilisation
-
-- plusieurs thèmes inclus 
-    - choix du thème via l'option `-t`
-    - par défaut thème `ulille`
+- `md2pdf`
+    - plusieurs thèmes inclus 
+        - choix du thème via l'option `-t` ou la variable d'environnement `$THEME`
+        - par défaut thème `ulille`
 - documentation
     - intégrée
 
-            md2beamer -h
-            md2beamer --man
+        ```console
+        md2pdf -h
+        md2pdf --man
+        ```
 
     - lire la section [*Structuring the slide show*](http://pandoc.org/MANUAL.html#structuring-the-slide-show) de `pandoc(1)` aide aussi

@@ -1,0 +1,171 @@
+Pour bien comprendre le fonctionnement de la transformation il est
+intéressante de lire le contenu du fichier source et de regarder en même temps
+le résultat en PDF.
+
+# Markdown
+
+Markdown est un format texte permettant de définir des documents. La syntaxe de Markdown permet 
+
+- de donner une **structure** au document
+    - **paragraphes** : séparation par des lignes vides
+    - **titres de différents niveaux** : lignes débutant par des `#`
+    - **listes libres** : indentation de paragraphe avec lignes débutant par des `-` ou des `*`
+    - **listes ordonnées** : indentation avec lignes débutant par des `1.`
+    - **blocs de citations** : paragraphes préfixés par "`> `"
+    - **blocs de codes** : paragraphes indentés par 4 espaces ou encadrés par \`\`\`
+
+- d'inclure des éléments de mise en forme logique 
+
+    *emphase*, **accentuation forte** et `code`
+
+- d'inclure des liens vers des URL
+    - <https://daringfireball.net/projects/markdown>
+    - [Pandoc Markdown](https://pandoc.org/MANUAL.html#pandocs-markdown)
+    - [CommonMark](https://commonmark.org)
+    - [Markdown à la sauce GitLab](https://gitlab.com/help/user/markdown.md)
+    - [Markdown à la sauce Github](https://guides.github.com/features/mastering-markdown)
+
+- d'inclure des images via des liens spécifiques : `![Texte alternatif pour
+  HTML](img/tex-friendly-zone.svg)`
+
+Il existe beaucoup d'autres détails (cf liens présent dans la page) et de
+nombreuses variantes et extensions du format de base.
+
+# Extensions pandoc
+
+[Pandoc](https://pandoc.org) est un outil permettant de convertir un grand
+nombre de format de documents les uns vers les autres. Par ailleurs il existe
+une extension [Markdown spécifique à
+Pandoc](https://pandoc.org/MANUAL.html#pandocs-markdown) particulièrement
+adapté à l'outil et aux différentes conversions qu'il est capable de
+faire. Toutes les fonctionnalités standards de cette extension sont
+accessibles lors de la création de document via la commande `md2pdf` et
+peuvent donc être incluses dans les fichiers Markdown utilisé.
+
+En voici quelques exemples.
+
+## Images
+
+On peut insérer des images dans le rapport. 
+
+Si elles sont seules dans leur paragraphe, elles seront traités comme des
+figures et placées automatiquement à l'endroit le plus adéquat. Dans ce cas La
+légende de la figure est spécifié dans la zone texte du lien. C'est le cas du
+pingouin.
+
+![Un joli pingouin](img/tux.pdf){ width=30% }
+
+Quand elle ne sont pas seules dans leur paragraphe (par exemple en
+ajoutant un blanc protégé (`\\ `) juste avant ou juste après elles),
+elles sont placées exactement à l'endroit choisi sans être considérées
+comme des figures. C'est le cas de la TeX Friendly Zone ci dessous.
+
+Grâce au filtre `center-image.lua`, si elles ont la classe `.center`,
+elles sont, en plus, centrées sur la largeur de la page.
+
+![TeX Friendly Zone](img/tex-friendly-zone.pdf){ width=30% .center }\ 
+
+Par ailleurs, grâce au filtre `svg-image-to-pdf.lua`, quand on inclut
+une image dont le nom se termine par `.svg`, `md2pdf` remplace cette
+extension par `.pdf` de sorte que `pdflatex` puisse l'inclure
+correctement. Le fichier pdf doit donc exister, i.e. `md2pdf` ne se
+charge pas de la transformation du fichier lui même.
+
+
+## Code source
+
+On peut insérer du code source en spécifiant le language utilisé de
+façon à ce qu'il soit présenté avec une colorisation syntaxique
+adaptée.
+
+```sh
+for i in $(ls /etc/*)
+do
+    echo "$i"
+done
+```
+
+Grâce au filtre
+[`include-code-files`](https://github.com/pandoc/lua-filters/tree/master/include-code-files),
+on peut insérer du code directement depuis un fichier.
+
+``` {include="code-bash" .bash .numberLines}
+```
+
+## Tableaux
+
+On peut insérer des tableaux de plusieurs manières. Les tableaux sont
+considérés comme des tables au sens LaTeX. Ils sont donc flottant et leur
+position final dans le PDF peut surprendre.
+
+| **Outil**  | **Utilité**                                                 |
+|------------|-------------------------------------------------------------|
+| `pandoc`   | conversion de formats                                       |
+| `pdflatex` | composition de LaTeX en PDF                                 |
+| `beamer`   | jeux de balisage LaTeX pour la composition de présentation  |
+
+La section [**tables** du manuel de
+pandoc](https://pandoc.org/MANUAL.html#tables) liste et illustre les
+différentes manières de saisir des tableaux.
+
+
+## Fichiers séparées
+
+Grâce au filtre
+[`include-files`](https://github.com/pandoc/lua-filters/tree/master/include-files),
+on peut insérer le contenu d'un fichier Markdown dans le fichier
+principal. Pour inclure le contenu d'un fichier il suffit d'utiliser
+un bloc de code qui a la classe `.include`. Chaque ligne du bloc de
+code contient alors un fichier à inclure.
+
+~~~markdown
+```{.include}
+FICHIER
+```
+~~~
+
+`FICHIER` doit être un chemin vers le fichier à inclure.
+
+Les entêtes du fichier inclus peuvent être décalées pour s'apparier
+correctement à la structure du document. On peut spécifier ce décalage
+en fixant une valeur au paramètre `shift-heading-level-by` entre
+accolades dans les attributes du bloc de code. On peut aussi laisser
+`pandoc` gérer automatiquement ce décalage en fixant `include-auto` à
+`true` dans un bloc YAML.
+
+# Modèle `pandoc`
+
+`md2pdf` utilise un modèle pandoc ad-hoc
+([*template*](https://pandoc.org/MANUAL.html#templates)) pour la
+transformation en LaTeX. Pour les présentations c'est le fichier
+`pandoc-beamer.tex`, pour les rapports c'est le fichier
+`pandoc-report.tex`.
+
+Ces modèles gèrent par exemple des variables pour personnaliser la
+page de titre.
+
+### Titre
+
+La page de titre du document est généré à partir de paramètres extrait
+de blocs [YAML](https://yaml.org) qui doivent être présent dans le
+fichier principal. Généralement on le place en début de fichier. Le
+bloc est en YAML et est donc encadré par des lignes ne contenant que 3
+tirets (`---`) chacune.
+
+Les paramètres suivants sont utilisés pour générer la page de titre.
+
+- `title`, `subtitle`, `author`, `date`
+- `titlegraphics` : images (type logos) sur la page de titre. Chaque
+  logo doit contenir les variables
+    - `file` : le nom du fichier sans extension
+    - `width` : largeur en pourcentage (<1) de largeur diapo (0.1 par défaut)
+    - `nl` : passage à la ligne après le logo ou pas
+- `titlebackground` : nom du fichier image supplémentaire sur la page
+  de titre (fond de page)
+
+
+# Autres aspects non encore documenté ici
+
+- gestion des numérotation des annexes
+- fonctionnement détaillé de `md2pdf` (modèle pandoc et LaTeX)
+- documentation utilisateur de `md2pdf`
