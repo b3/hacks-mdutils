@@ -1,6 +1,5 @@
-IMG-SVG := $(wildcard img/*.svg etc/*.svg)
+IMG-SVG := $(wildcard demo/img/*.svg etc/*.svg)
 IMG-PDF := $(addsuffix .pdf,$(basename $(IMG-SVG)))
-IMG-JPG := $(wildcard img/*.jpg)
 
 # POSIX shell for all for ERE
 SED := sed $(shell sed v </dev/null >/dev/null 2>&1 && echo " --posix") -E
