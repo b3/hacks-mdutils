@@ -272,12 +272,12 @@ do
 done
 
 # vérifications source
-[ -z "$1" ] && _die "no source file given"
+[ -z "$1" ] && _die "missing source file"
 [ -r "$1" ] || _die "$1: unable to read"
 FILE="${1%.*}$_ext"
 
 # extraction des fichiers
-if ! test -d $CONFDIR ; then
+if ! test -d "$CONFDIR" ; then
     mkdir -p "$CONFDIR" || _die "$CONFDIR: unable to create directory"
 fi
 extract_files "$CONFDIR" all
@@ -324,10 +324,10 @@ ARGS += --toc
 ARGS += --highlight-style=tango
 
 %.pdf: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
-	TEXINPUTS=.//:$(CONFDIR): pandoc $(ARGS) $(EXTRAS) -o $@ $< 
+	TEXINPUTS=.//:$(CONFDIR): pandoc $(ARGS) $(EXTRAS) -o $@ -- $<
 
 %.tex: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
-	pandoc $(ARGS) $(EXTRAS) -o $@ $< 
+	pandoc $(ARGS) $(EXTRAS) -o $@ -- $<
 
 clean:
 	-rm -rf *~ _minted*
