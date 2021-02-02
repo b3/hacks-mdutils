@@ -65,9 +65,7 @@ $endif$
 % Paramétrages Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 $if(theme)$\usetheme{$theme$}$endif$
-
-%% Image de fond pour la page de titre
-\newcommand{\titleimg}[1]{\def\inserttitleimg{#1}}
+\providecommand{\titlebackground}[1]{\def\inserttitlebackground{#1}}
 
 % Méta-données du document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -80,21 +78,21 @@ $endif$
 $if(author)$
 \author{$for(author)$$author$$sep$ \and $endfor$}
 $endif$
-$if(logo)$
+$if(titlegraphic)$
 \titlegraphic{%
   \rule{2em}{0cm}%
-$for(logo)$
-$if(logo.width)$
-  \includegraphics[width=$logo.width$\columnwidth]{$logo.file$}%
+$for(titlegraphic)$
+$if(titlegraphic.width)$
+  \includegraphics[width=$titlegraphic.width$\columnwidth]{$titlegraphic.file$}%
 $else$
-  \includegraphics[width=.1\columnwidth]{$logo.file$}%
+  \includegraphics[width=.1\columnwidth]{$titlegraphic.file$}%
 $endif$
-  \rule{2em}{0cm}$if(logo.nl)$\par\medskip\rule{2em}{0cm}$endif$%
+  \rule{2em}{0cm}$if(titlegraphic.nl)$\par\medskip\rule{2em}{0cm}$endif$%
 $endfor$
 }
 $endif$
-$if(img)$
-\titleimg{$img$}
+$if(titlebackground)$
+\titlebackground{$titlebackground$}
 $endif$
 \date{$date$}
 

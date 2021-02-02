@@ -76,56 +76,64 @@ $endif$
 \setlength{\emergencystretch}{3em}
 
 % Adaptation LaTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \makeatletter
 \newcommand{\subtitle}[1]{\gdef\insertsubtitle{#1}}
-\newcommand{\titlelogo}[1]{\def\inserttitlelogo{#1}}
-\newcommand{\titleimg}[1]{\def\inserttitleimg{#1}}
-\renewcommand{\and}{%
-  \end{tabular}%
-  \par%
-  \begin{tabular}[t]{c}%
-}
-\renewcommand{\maketitle}{\begin{titlepage}%
-$if(title-image)$
-  \tikz[remember picture,overlay]
-    \node[opacity=0.2,inner sep=0pt] at (current page.center){%
-      \includegraphics[width=\paperwidth,height=\paperheight]{\inserttitleimg}%
-    };%
-$endif$
-  % Titre & Date
-  \tikz[remember picture,overlay]
-    \node[yshift=-6cm,inner sep=0pt] at (current page.north){%
-      \begin{minipage}{.99\columnwidth}
-        \centering%
-        {\larger[4]\bfseries \@title}\par%
-        \@ifundefined{insertsubtitle}{}{%
-        \bigskip%
-        {\larger[3]\color[gray]{.3}\slshape \insertsubtitle}\par}%
-        \@ifundefined{@date}{}{%
-        \bigskip%
-        {\larger[3] \@date \par}}%
-      \end{minipage}
-    };%
-  % Auteurs
-  \tikz[remember picture,overlay]
-    \node[yshift=-6cm,inner sep=0pt] at (current page.center){%
-      \begin{minipage}{.9\columnwidth}
-        \centering\larger[2]
-        \begin{tabular}[t]{c}%
-          \@author
-        \end{tabular}%
-      \end{minipage}
-    };%
-  % Logos
-  \@ifundefined{inserttitlelogo}{}{%
-  \tikz[remember picture,overlay]
-    \node[yshift=3cm,inner sep=0pt] at (current page.south){%
-      \begin{minipage}{.99\columnwidth}
-        \centering\larger[2]\inserttitlelogo
-      \end{minipage}
-    };%
-   }
-\end{titlepage}
+\newif\iftitlegraphic\titlegraphicfalse
+\newcommand{\titlegraphic}[1]{\titlegraphictrue\def\inserttitlegraphic{#1}}
+
+\newif\iftitlebackground\titlebackgroundfalse
+\newcommand{\titlebackground}[1]{\titlebackgroundtrue\def\inserttitlebackground{#1}}
+
+\renewcommand{\and}{\end{tabular}\par\begin{tabular}[t]{c}}
+
+\renewcommand{\maketitle}{
+  \begin{titlepage}%
+    % Fond de page
+    \iftitlebackground
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[opacity=0.15,inner sep=0pt] at (current page.center){%
+        \includegraphics[width=\paperwidth,height=\paperheight]{\inserttitlebackground}%
+      };
+    \end{tikzpicture}
+    \fi
+    % Titre & Date
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[yshift=-6cm,inner sep=0pt] at (current page.north){%
+        \begin{minipage}{.99\columnwidth}
+          \centering%
+          {\larger[4]\bfseries \@title}\par%
+          \@ifundefined{insertsubtitle}{}{%
+            \bigskip%
+            {\larger[3]\color[gray]{.3}\slshape \insertsubtitle}\par}%
+          \@ifundefined{@date}{}{%
+            \bigskip%
+            {\larger[3] \@date \par}}%
+        \end{minipage}
+      };%
+    \end{tikzpicture}
+    % Auteurs
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[yshift=-6cm,inner sep=0pt] at (current page.center){%
+        \begin{minipage}{.9\columnwidth}
+          \centering\larger[2]
+          \begin{tabular}[t]{c}%
+            \@author
+          \end{tabular}%
+        \end{minipage}
+      };%
+    \end{tikzpicture}
+    % Logos
+    \iftitlegraphic
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[yshift=3cm,inner sep=0pt] at (current page.south){%
+        \begin{minipage}{.99\columnwidth}
+          \centering\larger[2]\inserttitlegraphic
+        \end{minipage}
+      };%
+    \end{tikzpicture}
+    \fi
+  \end{titlepage}
 }
 \makeatother
 
@@ -173,23 +181,23 @@ $endif$
 $if(author)$
 \author{$for(author)$$author$$sep$ \and $endfor$}
 $endif$
-$if(logo)$
-\titlelogo{%
+$if(titlegraphic)$
+\titlegraphic{%
   \rule{4em}{0cm}%
-$for(logo)$
-$if(logo.width)$
-  \begin{minipage}[c]{$logo.width$\textwidth}
+$for(titlegraphic)$
+$if(titlegraphic.width)$
+  \begin{minipage}[c]{$titlegraphic.width$\textwidth}
 $else$
   \begin{minipage}[c]{.1\textwidth}
 $endif$
-    \includegraphics[width=\textwidth]{$logo.file$}%
+    \includegraphics[width=\textwidth]{$titlegraphic.file$}%
   \end{minipage}
-  \rule{4em}{0cm}$if(logo.nl)$\par\bigskip\rule{4em}{0cm}$endif$%
+  \rule{4em}{0cm}$if(titlegraphic.nl)$\par\bigskip\rule{4em}{0cm}$endif$%
 $endfor$
 }
 $endif$
-$if(title-image)$
-\titleimg{$title-image$}
+$if(titlebackground)$
+\titlebackground{$titlebackground$}
 $endif$
 \date{$date$}
 

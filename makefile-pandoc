@@ -33,6 +33,9 @@ ARGS += --highlight-style=tango
 %.tex: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
 	pandoc $(ARGS) $(EXTRAS) -o $@ -- $<
 
+%.pdf: %.svg
+	inkscape -d 2400 -o $@ -T $<
+
 clean:
 	-rm -rf *~ _minted*
 
