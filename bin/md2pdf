@@ -178,7 +178,7 @@
 # précautionneux avec les options de commandes Unix classiques qui sont
 # souvent différentes. Dans l'idéal il faudrait penser POSIX.
 
-VERSION=2.1.202100205-1
+VERSION=2.1.202100205-2
 
 _CMD=$(realpath $0)
 
@@ -317,20 +317,18 @@ report: ARGS += -N
 
 ARGS = --standalone
 ARGS += --template=$(TEMPLATE)
+ARGS += --pdf-engine-opt=-shell-escape
 ARGS += -L $(CONFDIR)/include-files.lua
 ARGS += -L $(CONFDIR)/include-code-files.lua
 ARGS += -L $(CONFDIR)/center-image.lua
 ARGS += -L $(CONFDIR)/svg-image-to-pdf.lua
 ARGS += -V theme=$(THEME)
-ARGS += --pdf-engine-opt=-shell-escape
+ARGS += -V themeoptions=$(THEMEOPTIONS)
 ARGS += --toc
 ARGS += --highlight-style=tango
 
-%.pdf: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
+%.pdf %.tex: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
 	TEXINPUTS=.//:$(CONFDIR): pandoc $(ARGS) $(EXTRAS) -o $@ -- $<
-
-%.tex: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
-	pandoc $(ARGS) $(EXTRAS) -o $@ -- $<
 
 %.pdf: %.svg
 	inkscape -d 2400 -o $@ -T $<
@@ -1188,7 +1186,7 @@ IChjYWlybyAxLjE2LjAgKGh0dHBzOi8vY2Fpcm9ncmFwaGljcy5vcmcpKQogICAvQ3JlYXRvciA8
 RkVGRjAwNDkwMDZFMDA2QjAwNzMwMDYzMDA2MTAwNzAwMDY1MDAyMDAwMzEwMDJFMDAzMDAwMkUw
 MDMyMDAyMDAwMjgwMDY4MDA3NDAwNzQwMDcwMDA3MzAwM0EwMDJGMDAyRjAwNjkwMDZFMDA2QjAw
 NzMwMDYzMDA2MTAwNzAwMDY1MDAyRTAwNkYwMDcyMDA2NzAwMjk+CiAgIC9DcmVhdGlvbkRhdGUg
-KEQ6MjAyMTAyMDIwNDAzMzArMDEnMDApCj4+CmVuZG9iagoxMCAwIG9iago8PCAvVHlwZSAvQ2F0
+KEQ6MjAyMTAyMDUxNjUyMjMrMDEnMDApCj4+CmVuZG9iagoxMCAwIG9iago8PCAvVHlwZSAvQ2F0
 YWxvZwogICAvUGFnZXMgMSAwIFIKPj4KZW5kb2JqCnhyZWYKMCAxMQowMDAwMDAwMDAwIDY1NTM1
 IGYgCjAwMDAwMDQ3MDMgMDAwMDAgbiAKMDAwMDAwMzA4MSAwMDAwMCBuIAowMDAwMDAyOTgxIDAw
 MDAwIG4gCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMjk1OCAwMDAwMCBuIAowMDAwMDAzMzA2

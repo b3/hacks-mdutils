@@ -18,20 +18,18 @@ report: ARGS += -N
 
 ARGS = --standalone
 ARGS += --template=$(TEMPLATE)
+ARGS += --pdf-engine-opt=-shell-escape
 ARGS += -L $(CONFDIR)/include-files.lua
 ARGS += -L $(CONFDIR)/include-code-files.lua
 ARGS += -L $(CONFDIR)/center-image.lua
 ARGS += -L $(CONFDIR)/svg-image-to-pdf.lua
 ARGS += -V theme=$(THEME)
-ARGS += --pdf-engine-opt=-shell-escape
+ARGS += -V themeoptions=$(THEMEOPTIONS)
 ARGS += --toc
 ARGS += --highlight-style=tango
 
-%.pdf: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
+%.pdf %.tex: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
 	TEXINPUTS=.//:$(CONFDIR): pandoc $(ARGS) $(EXTRAS) -o $@ -- $<
-
-%.tex: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
-	pandoc $(ARGS) $(EXTRAS) -o $@ -- $<
 
 %.pdf: %.svg
 	inkscape -d 2400 -o $@ -T $<
