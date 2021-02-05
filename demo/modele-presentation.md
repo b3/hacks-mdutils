@@ -14,7 +14,7 @@ titlegraphic:
   width: .05
 - file: logo-beamer
   width: .04
-titlebackground: tux
+titlebackground: gnu
 ---
 
 
@@ -114,10 +114,12 @@ La syntaxe de Markdown permet
     - <https://daringfireball.net/projects/markdown>
     - [Pandoc Markdown](https://pandoc.org/MANUAL.html#pandocs-markdown)
 
-    
+- d'inclure des images via des liens spécifiques : `![Texte alternatif](img/tex-friendly-zone.svg)`
+
+
 Elle est décrite en détails ailleurs (cf liens de cette diapo)
 
-## Pandoc's Markdown
+## Extensions Pandoc à Markdown
 
 Pandoc ajoute des fonctionnalités à la syntaxe Markdown
 
@@ -180,7 +182,7 @@ int main(int argc, char ** argv) {
 Il peut être inclus depuis un fichier
 (grâce au filtre [`include-code-files`](https://github.com/pandoc/lua-filters/tree/master/include-code-files))
 
-``` {include="rapport-exemple-code" .bash .numberLines}
+``` {include="md2pdf-exemple-code" .bash .numberLines}
 ```
 
 

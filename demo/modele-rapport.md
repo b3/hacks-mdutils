@@ -5,7 +5,7 @@ author:
 - "**Bruno BEAUFILS**"
 - John MAC FARLANE
 - Leslie LAMPORT
-date: février 2021
+date: Février 2021
 titlegraphic:
 - file: logo-univ-lille
   width: .2
@@ -14,65 +14,51 @@ titlegraphic:
   width: .25
 - file: logo-cgir
   width: .25
-titlebackground: tux
+titlebackground: gnu
 include-auto: true
 ---
 
 # Introduction
 
-```{.include}
-rapport-introduction.md
-```
+Ce court document permet de comprendre comment produire rapidement un
+rapport propre au format PDF à partir de fichiers au format
+Markdown. Son contenu est donc volontairement simple. Pour le rendre
+*crédible* en terme de volume, dans la fin de cette introduction pour
+les 4 paragraphes suivants, on fait appel à du [faux
+texte](https://fr.wikipedia.org/wiki/Lorem_ipsum).
 
+------------------------------------------------------------------------------
 
 # Fonctionnement
 
-## Guide rapide
-
-Ce rapport est produit à partir de `modele-rapport.md`. Il est conçu
-pour faire un rapport simple d'un projet ou d'un stage.
-
-Il peut être utilisée comme modèle pour faire un rapport. Dans ce cas il faut :
-
-1. créer un nouveau dossier
-2. y copier, renommer puis modifier le fichier `modele-rapport.md`
-3. créer la présentation via la commande
-
-    ```
-    md2pdf -r nom-du-fichier.md
-    ```
-
 ```{.include shift-heading-level-by=1}
-rapport-fonctionnement.md
+md2pdf-fonctionnement.md
 ```
-
 
 # Une courte référence
 
 ```{.include}
-rapport-reference.md
+md2pdf-reference.md
 ```
 
-\appendix
 
-<!--
-```{.include}
-projet-conventions.md
-projet-regles.md
-```
--->
+\appendixes
 
-# `makefile-pandoc`
+# Réglages
+
+## `makefile-pandoc`
 
 ```{include=etc/makefile-pandoc .makefile}
 ```
 
-# `pandoc-beamer.tex`
+# Templates 
+
+## `pandoc-beamer.tex`
 
 ```{include=etc/pandoc-beamer.tex .latex}
 ```
 
-# `pandoc-report.tex`
+## `pandoc-report.tex`
 
 ```{include=etc/pandoc-report.tex .latex}
 ```
