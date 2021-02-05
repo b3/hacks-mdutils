@@ -178,7 +178,7 @@
 # précautionneux avec les options de commandes Unix classiques qui sont
 # souvent différentes. Dans l'idéal il faudrait penser POSIX.
 
-VERSION=2.1.202100201-1
+VERSION=2.1.202100205-1
 
 _CMD=$(realpath $0)
 
@@ -612,7 +612,24 @@ $endif$
 % Paramétrages Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 $if(theme)$\usetheme{$theme$}$endif$
+$if(titlebackground)$
+\makeatletter
+\@ifundefined{titlebackground}
+{
+  \newcommand{\addtitlebackground}{%
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[opacity=0.15,inner sep=0pt] at (current page.center){%
+        \includegraphics[width=\paperwidth,height=\paperheight]{\inserttitlebackground}%
+      };
+    \end{tikzpicture}
+  }
+}
+{
+  \newcommand{\addtitlebackground}{}
+}
 \providecommand{\titlebackground}[1]{\def\inserttitlebackground{#1}}
+\makeatother
+$endif$
 
 % Méta-données du document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -648,6 +665,7 @@ $endif$
 \begin{document}
 
 \begin{frame}[plain]
+  $if(titlebackground)$\addtitlebackground$endif$
   \titlepage
 \end{frame}
 
