@@ -28,6 +28,7 @@
 \usepackage{geometry}
 
 %% Quelques paquets utiles
+\usepackage{appendix}           % pour la gestion des annexes
 \usepackage{array}              % pour faciliter les styles de tableaux
 \usepackage{longtable,booktabs} % pour les longues tables générées par pandoc
 \usepackage{relsize}            % pour le changement de taille des polices
@@ -35,7 +36,7 @@
 \usepackage{tikz}               % pour les dessins portables
 \usepackage{fixltx2e}           % provides \textsubscript
 \usepackage{graphicx,grffile}   % pour les images
-\usepackage{fancyvrb}
+\usepackage{fancyvrb}           % pour le code en verbatim
 \usepackage{minted}             % pour les programmes
 \usepackage{hyperref}           % le plus tard possible d'après la doc
 
@@ -78,16 +79,23 @@ $endif$
 % Adaptation LaTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \makeatletter
+
+%% pour séparer les auteurs
+\renewcommand{\and}{\endtabular\par\tabular[t]{c}}
+
+%% sous-titre
 \newcommand{\subtitle}[1]{\gdef\insertsubtitle{#1}}
+
+%% images (logos) sur la page de titre
 \newif\iftitlegraphic\titlegraphicfalse
 \newcommand{\titlegraphic}[1]{\titlegraphictrue\def\inserttitlegraphic{#1}}
 
+%% fond de la page de titre
 \newif\iftitlebackground\titlebackgroundfalse
 \newcommand{\titlebackground}[1]{\titlebackgroundtrue\def\inserttitlebackground{#1}}
 
-\renewcommand{\and}{\end{tabular}\par\begin{tabular}[t]{c}}
-
-\renewcommand{\maketitle}{
+%% la page de titre
+\renewcommand{\maketitle}{%
   \begin{titlepage}%
     % Fond de page
     \iftitlebackground
@@ -135,6 +143,13 @@ $endif$
     \fi
   \end{titlepage}
 }
+
+%% pour débuter les annexes
+\newcommand{\appendixes}{\appendix\appendixpage\addappheadtotoc}
+\renewcommand{\appendixname}{Annexes}
+\renewcommand{\appendixtocname}{Annexes}
+\renewcommand{\appendixpagename}{Annexes}
+
 \makeatother
 
 % Configuration document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -212,6 +227,12 @@ $endfor$
 \maketitle
 
 \tableofcontents
+$if(lot)$
+\listoftables
+$endif$
+$if(lof)$
+\listoffigures
+$endif$
 
 $body$
 
