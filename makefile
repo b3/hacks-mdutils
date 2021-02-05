@@ -1,4 +1,4 @@
-IMG-SVG := $(wildcard demo/img/*.svg etc/*.svg)
+IMG-SVG := $(wildcard md2pdf/etc/*.svg modeles-pdf/img/*.svg)
 IMG-PDF := $(addsuffix .pdf,$(basename $(IMG-SVG)))
 
 # POSIX shell for all for ERE
@@ -16,21 +16,22 @@ help:                           ## liste les cibles disponibles
 
 .PHONY: build check clean reset test pull push
 
-build: bin/md2pdf               ## générer les scripts
+build: md2pdf/md2pdf            ## générer les scripts et modeles-pdf
+	cd modeles-pdf ; $(MAKE)
 
 images: $(IMG-PDF)              ## génère les images PDF à partir des SVG
 
-bin/md2pdf: images              ## mets à jour les fichiers inclus de md2pdf
-	shembed -u makefile-pandoc $@
-	shembed -u etc/include-files.lua $@
-	shembed -u etc/include-code-files.lua $@
-	shembed -u etc/center-image.lua $@
-	shembed -u etc/svg-image-to-pdf.lua $@
-	shembed -u etc/pandoc-beamer.tex $@
-	shembed -u etc/pandoc-report.tex $@
-	shembed -u etc/beamerthemeulille.sty $@
-	shembed -u etc/logo-univ-lille.pdf $@
-	shembed -u etc/reportthemeulille.sty $@
+md2pdf/md2pdf: images           ## mets à jour les fichiers inclus de md2pdf
+	shembed -u md2pdf/makefile-pandoc $@
+	shembed -u md2pdf/etc/include-files.lua $@
+	shembed -u md2pdf/etc/include-code-files.lua $@
+	shembed -u md2pdf/etc/center-image.lua $@
+	shembed -u md2pdf/etc/svg-image-to-pdf.lua $@
+	shembed -u md2pdf/etc/pandoc-beamer.tex $@
+	shembed -u md2pdf/etc/pandoc-report.tex $@
+	shembed -u md2pdf/etc/beamerthemeulille.sty $@
+	shembed -u md2pdf/etc/logo-univ-lille.pdf $@
+	shembed -u md2pdf/etc/reportthemeulille.sty $@
 
 check:                          ## vérifier la présence des outils nécessaires
 	@which pdflatex
@@ -42,6 +43,7 @@ clean:                          ## supprimer les fichiers inutiles
 reset: clean                    ## supprimer les fichiers regénérables
 	-rm -f $(IMG-PDF) $(IMG-PNG)
 	cd test ; $(MAKE) reset
+	cd modeles-pdf ; $(MAKE) reset
 
 test:                           ## faire les tests
 	cd test ; $(MAKE)

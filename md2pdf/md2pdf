@@ -165,10 +165,8 @@
 #
 #  
 
-# TODO: lister et documenter les variables de chaque template
 # TODO: transformer la documentation en markdown (pour exporter en HTML, PDF, man)
 # TODO: ajouter un mode article
-# TODO: documenter extension YAML et titleimg
 # TODO: inclure modele-diaporama.md et permettre son extraction
 
 # CONVENTIONS DE CODAGE
@@ -178,7 +176,7 @@
 # précautionneux avec les options de commandes Unix classiques qui sont
 # souvent différentes. Dans l'idéal il faudrait penser POSIX.
 
-VERSION=2.1.202100205-2
+VERSION=2.0.202100206-1
 
 _CMD=$(realpath $0)
 
@@ -1207,7 +1205,7 @@ IChjYWlybyAxLjE2LjAgKGh0dHBzOi8vY2Fpcm9ncmFwaGljcy5vcmcpKQogICAvQ3JlYXRvciA8
 RkVGRjAwNDkwMDZFMDA2QjAwNzMwMDYzMDA2MTAwNzAwMDY1MDAyMDAwMzEwMDJFMDAzMDAwMkUw
 MDMyMDAyMDAwMjgwMDY4MDA3NDAwNzQwMDcwMDA3MzAwM0EwMDJGMDAyRjAwNjkwMDZFMDA2QjAw
 NzMwMDYzMDA2MTAwNzAwMDY1MDAyRTAwNkYwMDcyMDA2NzAwMjk+CiAgIC9DcmVhdGlvbkRhdGUg
-KEQ6MjAyMTAyMDUxNjUyMjMrMDEnMDApCj4+CmVuZG9iagoxMCAwIG9iago8PCAvVHlwZSAvQ2F0
+KEQ6MjAyMTAyMDUyMzU0MzQrMDEnMDApCj4+CmVuZG9iagoxMCAwIG9iago8PCAvVHlwZSAvQ2F0
 YWxvZwogICAvUGFnZXMgMSAwIFIKPj4KZW5kb2JqCnhyZWYKMCAxMQowMDAwMDAwMDAwIDY1NTM1
 IGYgCjAwMDAwMDQ3MDMgMDAwMDAgbiAKMDAwMDAwMzA4MSAwMDAwMCBuIAowMDAwMDAyOTgxIDAw
 MDAwIG4gCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMjk1OCAwMDAwMCBuIAowMDAwMDAzMzA2

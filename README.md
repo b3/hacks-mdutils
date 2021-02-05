@@ -8,41 +8,53 @@ fichiers textes au format
 
 ## Scripts
 
-- [`md2pdf`](bin/md2pdf) permet de produire une présentation ou un rapport PDF
-  à partir d'un fichier markdown. La commande est aussi nommée
-  [`md2beamer`](bin/md2beamer) ou [`md2report`](bin/md2report) pour produire
-  respectivement un diaporama et un rapport.
+- [`md2pdf`](md2pdf/md2pdf) permet de produire une présentation ou un
+  rapport PDF à partir d'un fichier markdown. La commande est aussi
+  nommée [`md2beamer`](md2pdf/md2beamer) ou
+  [`md2report`](md2pdf/md2report) pour produire respectivement un
+  diaporama et un rapport.
 
 
 ## Modèles
 
-### [`modele-diaporama.md`](modele-diaporama.md)
+### [`modele-diaporama.md`](modeles-pdf/modele-diaporama.md)
 
-C'est un modèle de diaporama utilisable avec `md2beamer`. Il utilise des
-images présentes dans le répertoire `img`. Il contient une référence sur
-l'utilisation de `md2beamer`.
+C'est un modèle de diaporama utilisable avec `md2beamer`. Il utilise
+des images présentes dans le répertoire `modeles-pdf/img`. Il contient une
+référence sur l'utilisation de `md2beamer`.
 
-Pour obtenir la version [`modele-diaporama.pdf`](modele-diaporama.pdf), il
-suffit d'utiliser les lignes de commandes :
+Pour obtenir la version
+[`modele-diaporama.pdf`](modeles-pdf/modele-diaporama.pdf), il suffit
+d'utiliser la ligne de commande :
   
 ```shell
-# Vérifier que pandoc et pdflatex sont accessibles
-bin/md2beamer -c
-
-# Générer les images utilisées dans le diaporama en PDF si nécessaire
-make images
-
-# Faire la conversion effective
-bin/md2beamer modele-diaporama.md img
+cd modeles-pdf
+make modele-diaporama.pdf
 ```
 
-### [`index.html`](index.html)
+### [`modele-rapport.md`](modeles-pdf/modele-rapport.md)
 
-C'est un modèle de page HTML dont le contenu, rendu quand la page est servie
-par un serveur web, est le contenu d'un fichier au format markdown de même nom
-de base.
+C'est un modèle de rapport utilisable avec `md2beamer`. Il utilise
+des images présentes dans le répertoire `modeles-pdf/img`. Il contient une
+référence sur l'utilisation de `md2report`.
 
-La documentation est dans le fichier [`index.md`](index.md).
+Pour obtenir la version
+[`modele-rapport.pdf`](modeles-pdf/modele-rapport.pdf), il suffit
+d'utiliser la ligne de commande :
+  
+```shell
+cd modeles-pdf
+make modele-rapport.pdf
+```
+
+### [`index.html`](modele-web/index.html)
+
+C'est un modèle de page web dont le contenu, rendu quand la page est
+servie par un serveur web, est le contenu d'un fichier au format
+markdown de même nom de base.
+
+La documentation est dans le fichier
+[`index.md`](modele-web/index.md).
 
 # Auteurs
 
