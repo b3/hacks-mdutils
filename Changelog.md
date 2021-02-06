@@ -14,3 +14,30 @@
     - `-t` sans paramètres liste les thèmes disponibles
 - Réorganisation légère du code pour améliorer la lisibilité
 - Ajout de la déprotection de certains commentaires avant le passage dans pandoc
+
+## v2.0
+
+### 2021-02-06-1
+
+- Ré-écriture complète du code
+    - simplification générale
+    - on utilise désormais un makefile générique
+        - paramètrage du comportement de pandoc
+        - utilisation de variables d'environnement
+    - on reporte le plus de truc possible vers `pandoc`
+        - utilisation de filtres lua
+    - ré-écriture des templates pandoc
+        - prise en charge de l'image de fond de la page de titre
+        - support des annexes possibles
+    - inclusion des exemples et extraction possibles
+    - ré-écriture exemple de diaporama et rapport
+- Réorganisation des options
+    - suppession de `-c`, `-l`, `-D`, `-W`
+    - ajout de `-C` pour les configurations
+    - remplacement de `-e` par `-d`
+- Ajout de fonctionnalités
+    - prise en charge de tout le markdown de Pandoc
+    - ajout de l'inclusion de code directement via des fichiers
+- Mise à jour de la documentation
+    - raccourcicement de l'affichage par `-h`
+    - affichage documentation complète par `--man`

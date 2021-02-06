@@ -176,7 +176,7 @@
 # précautionneux avec les options de commandes Unix classiques qui sont
 # souvent différentes. Dans l'idéal il faudrait penser POSIX.
 
-VERSION=2.0.202100206-1
+VERSION=2.0.2021-02-06-1
 
 _CMD=$(realpath $0)
 
