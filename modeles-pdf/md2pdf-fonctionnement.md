@@ -27,7 +27,7 @@ Pour produire un rapport au format PDF on utilise différents format et outils :
   ou PDF *automatiquement*. Il a été initialement construit uniquement
   pour la conversion vers HTML. Il en existe aujourd'hui plusieurs
   [variantes](https://flavoredmarkdown.com/).
-  
+
 - [\LaTeX{}](https://www.latex-project.org) est un outil de
   composition de texte de haute qualité typographique.
 
@@ -64,7 +64,7 @@ faut par exemple :
 - être attentif aux **indentations** des lignes
 - espacer les sections (avec des lignes vides par exemple)
 - préférer les images vectorielles (SVG) aux matricielles
-- préférer le format PNG pour les images matricielles 
+- préférer le format PNG pour les images matricielles
 
 
 Parmi les avantages on peut citer la construction **très rapide** de rapport,

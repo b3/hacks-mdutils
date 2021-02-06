@@ -16,7 +16,7 @@ Markdown est un format texte permettant de définir des documents. La syntaxe de
         - **indentés** par 4 espaces
         - ou **encadrés** par des lignes avec 3 accent graves (*backquotes*) `` ``` `` ou tildes `~~~`
 
-- d'inclure des éléments de mise en forme logique 
+- d'inclure des éléments de mise en forme logique
 
     *emphase*, **accentuation forte** et `code`
 
@@ -64,7 +64,7 @@ En voici quelques autres exemples.
 
 ## Images
 
-On peut insérer des images dans le rapport. 
+On peut insérer des images dans le rapport.
 
 Si elles sont seules dans leur paragraphe, elles seront traités comme
 des figures et placées automatiquement à l'endroit le plus

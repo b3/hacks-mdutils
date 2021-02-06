@@ -49,7 +49,7 @@ titlebackground: gnu
     - qui permet de transformer un fichier balisé vers HTML ou PDF *automatiquement*
         - initialement pensé uniquement pour la transformation vers HTML
     - dont il existe plusieurs [variantes](https://flavoredmarkdown.com/)
-    
+
 - [\LaTeX{}](https://www.latex-project.org) est un outil de composition de texte
 
 - [Beamer](https://github.com/josephwright/beamer) est un paquet \LaTeX{} pour préparer des présentations
@@ -68,12 +68,12 @@ titlebackground: gnu
 - Conseils
     1. construire la structure (plan) de la présentation en premier
     2. remplir le contenu ensuite sans trop surcharger le texte
-    3. ne pas s'occuper de la mise en forme (`md2pdf` s'en occupe) 
+    3. ne pas s'occuper de la mise en forme (`md2pdf` s'en occupe)
     4. avoir un peu de **discipline**
         - être attentif aux **indentations** des lignes
-        - espacer les sections de diapositives 
+        - espacer les sections de diapositives
         - préférer les images vectorielles (SVG) aux matricielles
-        - préférer le format PNG pour les images matricielles 
+        - préférer le format PNG pour les images matricielles
 
 . . .
 
@@ -85,7 +85,7 @@ titlebackground: gnu
 
 - Inconvénients
     - pas de constructions complexes (solution : utiliser \LaTeX{}/Beamer directement)
-    - pas d'utilisation simple de caractères unicode exotique 
+    - pas d'utilisation simple de caractères unicode exotique
     - difficile à débugger sans maîtriser la chaîne `pandoc`/`pdflatex`
         - passer par \LaTeX{} via peut aider (`md2pdf -L`)
 
@@ -94,7 +94,7 @@ titlebackground: gnu
 
 ## Markdown
 
-La syntaxe de Markdown permet 
+La syntaxe de Markdown permet
 
 - de donner une **structure** au document
     - **paragraphes** : séparation par des lignes vides
@@ -106,7 +106,7 @@ La syntaxe de Markdown permet
         - **indentés** par 4 espaces
         - ou **encadrés** par des lignes avec 3 accent graves (*backquotes*) `` ``` `` ou tildes `~~~`
 
-- d'inclure des éléments de mise en forme logique 
+- d'inclure des éléments de mise en forme logique
 
     *emphase*, **accentuation forte** et `code`
 
@@ -140,7 +140,7 @@ Pandoc ajoute des fonctionnalités à la syntaxe Markdown
     `![TeX Zone](img/tex-friendly-zone.svg){ width=30% .center }\ `
 
     ![TeX Zone](img/tex-friendly-zone.svg){ width=30% .center }\ 
-    
+
     La séquence `\ ` en fin de ligne est utilisée pour éviter le traitement en figure
 
 - on peut spécifier une largeur ou une hauteur avec l'attribut `width` ou `height`
@@ -158,7 +158,7 @@ Une diapo nommé `{.plain}` n'a ni titre, ni pied de page
 
 - Plusieurs types de support des tableaux
     - exemple avec le mode `pipe_tables` de `pandoc`
-    
+
 | **Outil**  | **Utilité**                                                    |
 |------------|----------------------------------------------------------------|
 | `pandoc`   | conversion de formats                                          |
@@ -197,7 +197,7 @@ Il peut être inclus depuis un fichier
 **Affichage incrémental**
 
 > - affichage incrémental
-> 
+>
 >     - pause via un paragraphe avec une ligne de trois points
 >
 >             . . .
@@ -205,7 +205,7 @@ Il peut être inclus depuis un fichier
 >     - des items de listes dans des blocs de citations
 >
 >             > -
-> 
+>
 > - ne pas trop en abuser !
 
 
@@ -215,7 +215,7 @@ Il peut être inclus depuis un fichier
 
 - les diapositives sont les élements de niveau 2
     - niveaux supérieurs sont les sections du diaporama
-    - niveaux inférieurs sont des blocs 
+    - niveaux inférieurs sont des blocs
     - modifiable via la variable d'environnement `$SLIDELEVEL`
 
 - transformation avec un [*template*](https://pandoc.org/MANUAL.html#templates) ad-hoc
@@ -224,7 +224,7 @@ Il peut être inclus depuis un fichier
 
 - variables prises en charge
     - `title`, `subtitle`, `author`, `date`
-    - `titlegraphic` : images (type logos) sur la page de titre 
+    - `titlegraphic` : images (type logos) sur la page de titre
         - `file` : fichier sans extension
         - `width` : largeur en pourcentage (<1) de largeur diapo (0.1 par défaut)
         - `nl` : passage à la ligne après le logo

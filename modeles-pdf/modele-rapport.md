@@ -51,7 +51,7 @@ md2pdf-reference.md
 ```{include=etc/makefile-pandoc .makefile}
 ```
 
-# Templates 
+# Templates
 
 ## `pandoc-beamer.tex`
 

@@ -32,6 +32,18 @@ md2pdf/md2pdf: images           ## mets à jour les fichiers inclus de md2pdf
 	shembed -u md2pdf/etc/beamerthemeulille.sty $@
 	shembed -u md2pdf/etc/logo-univ-lille.pdf $@
 	shembed -u md2pdf/etc/reportthemeulille.sty $@
+	shembed -u modeles-pdf/modele-diaporama.md $@
+	shembed -u modeles-pdf/modele-rapport.md $@
+	shembed -u modeles-pdf/md2pdf-exemple-code $@
+	shembed -u modeles-pdf/md2pdf-fonctionnement.md $@
+	shembed -u modeles-pdf/md2pdf-reference.md $@
+	shembed -u modeles-pdf/img/logo-beamer.pdf $@
+	shembed -u modeles-pdf/img/logo-cgir.pdf $@
+	shembed -u modeles-pdf/img/logo-da2i.pdf $@
+	shembed -u modeles-pdf/img/logo-markdown.pdf $@
+	shembed -u modeles-pdf/img/tex-friendly-zone.pdf $@
+	shembed -u modeles-pdf/img/gnu.pdf $@
+	shembed -u modeles-pdf/img/tux.pdf $@
 
 check:                          ## vérifier la présence des outils nécessaires
 	@which pdflatex
