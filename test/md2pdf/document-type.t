@@ -9,7 +9,7 @@ test_md2pdf_beamer() {
 
 test_md2pdf_report() {
     reset
-	assertReturn "$($cmd -r -L simple.md)" 0
+    assertReturn "$($cmd -r -L simple.md)" 0
     assertReturn "$(head -1 simple.tex | grep -q report)" 0
     rm -f simple.tex
 }
