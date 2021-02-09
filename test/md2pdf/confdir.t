@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-test_absolute_confdir() {
+test_confdir_absolute() {
     reset
     mute $cmd simple.tex && rm simple.pdf &&
     mv etc /tmp/cte
@@ -9,7 +9,7 @@ test_absolute_confdir() {
     rm -rf simple.tex /tmp/cte
 }
 
-test_relative_confdir() {
+test_confdir_relative() {
     reset
     mute $cmd simple.tex && rm simple.pdf &&
     mkdir dir && mv etc dir/cte
