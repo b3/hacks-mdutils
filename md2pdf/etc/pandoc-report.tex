@@ -226,13 +226,9 @@ $endfor$
 
 \maketitle
 
-\tableofcontents
-$if(lot)$
-\listoftables
-$endif$
-$if(lof)$
-\listoffigures
-$endif$
+$if(toc)$\tableofcontents$endif$
+$if(lot)$\listoftables$endif$
+$if(lof)$\listoffigures$endif$
 
 $body$
 

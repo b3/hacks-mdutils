@@ -2,7 +2,7 @@
 # Convertit un fichier markdown en un fichier PDF via pandoc
 # Copyright (C) 2016-2021 Bruno BEAUFILS
 #
-# usage: md2pdf [OPTIONS] SOURCE
+# usage: md2pdf [OPTIONS] [--] SOURCE
 #
 # md2pdf est un emballage de pandoc qui permet de convertir un fichier
 # au format Markdown vers un fichier au format PDF en tant que
@@ -916,13 +916,9 @@ $endfor$
 
 \maketitle
 
-\tableofcontents
-$if(lot)$
-\listoftables
-$endif$
-$if(lof)$
-\listoffigures
-$endif$
+$if(toc)$\tableofcontents$endif$
+$if(lot)$\listoftables$endif$
+$if(lof)$\listoffigures$endif$
 
 $body$
 
