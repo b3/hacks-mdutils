@@ -187,7 +187,7 @@ _die () { echo "${0##*/}: error: $*" 1>&2 ; exit 1 ; }
 _dbg () { _sed 's/^/DEBUG: /' <<<"$@" 2>&1 ; }
 _doc () { _sed -n '2,/^ *##$/ { s/^ *#([^#]|$)// ; s/^ //g ; t e ; d ; :e ; p }' <$_CMD ; }
 _man () { _sed -n '2,/^$/ { s/^ *#([^#]|$)// ; s/^ //g ; t ok ; d ; :ok ; p }' <$_CMD | pager ; }
-_opt () { [[ x$1 =~ x-.* ]] ; }
+_opt () { test "x$(echo x$1 | cut -c 2)" = "x-" ; }
 _mute () { 1>/dev/null 2>&1 "$@" ; }
 
 # liste les fichiers pour un thème donné (avec leur encodage)
