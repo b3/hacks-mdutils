@@ -344,7 +344,6 @@ clean:
 
 reset: clean
 	-test -z $(FILE) || rm $(FILE)
-# end+tmp
 # end makefile-pandoc
 
 ##############################################################################
