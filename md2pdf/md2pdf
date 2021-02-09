@@ -615,7 +615,7 @@ $endif$
 
 % Paramétrages Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-$if(theme)$\usetheme{$theme$}$endif$
+$if(theme)$\usetheme[$for(themeoptions)$$themeoptions$$sep$,$endfor$]{$theme$}$endif$
 $if(titlebackground)$
 \makeatletter
 \@ifundefined{titlebackground}
