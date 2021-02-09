@@ -669,14 +669,16 @@ $endif$
 \begin{document}
 
 \begin{frame}[plain]
-  $if(titlebackground)$\addtitlebackground$endif$
-  \titlepage
+  $if(titlebackground)$\addtitlebackground
+  $endif$\titlepage
 \end{frame}
+$if(toc)$
 
 \begin{frame}
   \frametitle{Plan}
   \tableofcontents % il faut compiler deux fois pour mettre à jour la TDM
 \end{frame}
+$endif$
 
 $body$
 
