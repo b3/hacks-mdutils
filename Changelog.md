@@ -41,3 +41,7 @@
 - Mise à jour de la documentation
     - raccourcicement de l'affichage par `-h`
     - affichage documentation complète par `--man`
+
+### 2021-02-09-1
+
+- Ajout thème SIF

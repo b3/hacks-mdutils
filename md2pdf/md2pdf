@@ -176,7 +176,7 @@
 # précautionneux avec les options de commandes Unix classiques qui sont
 # souvent différentes. Dans l'idéal il faudrait penser POSIX.
 
-VERSION=2.0.2021-02-06-1
+VERSION=2.0.2021-02-09-1
 
 _CMD=$(realpath $0)
 
@@ -344,6 +344,7 @@ clean:
 
 reset: clean
 	-test -z $(FILE) || rm $(FILE)
+# end+tmp
 # end makefile-pandoc
 
 ##############################################################################
@@ -5047,3 +5048,754 @@ MTMzNiAwMDAwMCBuIAowMDAwMDIxNzkyIDAwMDAwIG4gCjAwMDAwMjE4MTQgMDAwMDAgbiAKMDAw
 MDAyMjAzMiAwMDAwMCBuIAowMDAwMDIyMzE2IDAwMDAwIG4gCnRyYWlsZXIKPDwgL1NpemUgOTcK
 ICAgL1Jvb3QgOTYgMCBSCiAgIC9JbmZvIDk1IDAgUgo+PgpzdGFydHhyZWYKMjIzNjkKJSVFT0YK
 # end tux.pdf
+
+##############################################################################
+
+# begin-sif beamerthemesif.sty
+% Un thème Beamer pour la SIF
+% Copyright (C) 2021 Bruno BEAUFILS
+% This file is distributed under the terms of the WTFPL license.
+
+\def\filedate{2021/02/09}
+
+% Paramétrages génériques %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Les couleurs de la SIF
+\definecolor{BleuSIF}{HTML}{6b91c6}
+\definecolor{NoirSIF}{HTML}{2f3033}
+\definecolor{VertSIF}{HTML}{97be0d}
+\definecolor{BleuLogoSIF}{HTML}{3aaadc}        % en HTML : 3aaadc
+\definecolor{NoirLogoSIF}{HTML}{221920}        % en HTML : 1a17b1
+\definecolor{VertLogoSIF}{HTML}{97be0d}        % en HTML : 97be0d
+\definecolor{BleuBandeauSIF}{HTML}{26abe3}     % en HTML : 26abe3
+\definecolor{NoirBandeauSIF}{HTML}{221920}     % en HTML : 221920
+\definecolor{VertBandeauSIF}{HTML}{8bc636}     % en HTML : 8bc636
+\definecolor{BleuWebSIF}{HTML}{6b91c6}         % en HTML : 6b91c6
+\definecolor{NoirWebSIF}{HTML}{2f3033}         % en HTML : 2f3033
+\definecolor{VertWebSIF}{HTML}{8dc89d}         % en HTML : 8dc89d
+
+%% Les polices de caractères
+\usepackage{lmodern}            % pour sf et tt
+\usepackage{fourier}            % pour rm
+\usepackage{bbm}                % pour les mathbbm
+\usepackage[scaled=.92]{helvet} % pour sf on prend la même police que le web
+
+%% Pour les dessins portables et fond de diapo
+\usepackage{tikz}
+\usepackage{pgfpages}
+
+%% Pour les espacements dans le logo
+\usepackage{microtype}
+
+%% Paramétrage hyperref
+\hypersetup{%
+  colorlinks,%
+  linkcolor=,%
+  urlcolor=BleuSIF}
+
+% Paramétrage Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Options du thème
+
+%%% page en début de chaque partie ou non
+\newif\ifpartpage\partpagetrue
+\DeclareOptionBeamer{partpage}{\partpagetrue}
+\DeclareOptionBeamer{nopartpage}{\partpagefalse}
+
+%%% page en début de chaque section ou non
+\newif\ifsectionpage\sectionpagetrue
+\DeclareOptionBeamer{sectionpage}{\sectionpagetrue}
+\DeclareOptionBeamer{nosectionpage}{\sectionpagefalse}
+
+%%% page en début de chaque subsection ou non
+\newif\ifsubsectionpage\subsectionpagefalse
+\DeclareOptionBeamer{subsectionpage}{\subsectionpagetrue}
+\DeclareOptionBeamer{nosubsectionpage}{\subsectionpagefalse}
+
+%%% la section dans le pied de page
+\newif\ifsectioninfoot\sectioninfoottrue
+\DeclareOptionBeamer{sectioninfoot}{\sectioninfoottrue}
+\DeclareOptionBeamer{nosectioninfoot}{\sectioninfootfalse}
+
+%%% type de présentation
+\DeclareOptionBeamer{long}{%
+  \partpagetrue\sectionpagetrue\subsectionpagetrue%
+  \sectioninfoottrue}
+\DeclareOptionBeamer{court}{%
+  \partpagefalse\sectionpagefalse\subsectionpagefalse%
+  \sectioninfootfalse}
+
+\ProcessOptionsBeamer
+
+\mode<presentation>             % pour le mode présentation seulement
+
+%% Couleurs
+\usecolortheme{orchid}
+\setbeamercolor{background canvas}{bg=}
+\setbeamercolor{normal text}{fg=NoirSIF}
+\setbeamercolor{structure}{fg=BleuSIF}
+\setbeamercolor{frametitle}{fg=BleuSIF,bg=white}
+\setbeamercolor{footline}{fg=BleuSIF}
+\setbeamercolor{block title}{fg=white,bg=BleuSIF}
+\setbeamercolor{block title example}{fg=white,bg=VertSIF}
+\setbeamercolor{alerted text}{fg=VertSIF}
+
+\setbeamercolor{title}{fg=BleuSIF}
+\setbeamercolor{subtitle}{fg=VertSIF}
+\setbeamercolor{author}{fg=NoirSIF}
+\setbeamercolor{institute}{fg=NoirSIF}
+\setbeamercolor{date}{fg=VertSIF}
+
+%% Polices de caractères
+%\usefonttheme[stillsansseriflarge]{serif}
+\usefonttheme[onlylarge]{structurebold}
+\setbeamerfont{date in head/foot}{series=\bfseries}
+\setbeamerfont{date}{series=\bfseries}
+\setbeamerfont{alerted text}{series=\bfseries}
+
+%% Traduction en français
+\uselanguage{french}
+\languagepath{french}
+\deftranslation[to=french]{Definition}{Définition}
+\deftranslation[to=french]{Example}{Exemple}
+\deftranslation[to=french]{Theorem}{Théorème}
+
+%% Adaptation des modèles
+
+%%% Image de fond pour la page de titre
+\newif\iftitlebackground\titlebackgroundfalse
+\providecommand{\titlebackground}[1]{\titlebackgroundtrue\def\inserttitlebackground{#1}}
+
+%%% Images sur la page de titre à la place du logo SIF
+\newif\iftitlegraphic\titlegraphicfalse
+\renewcommand\titlegraphic[1]{\titlegraphictrue\def\inserttitlegraphic{#1}}
+
+%%% Page de titre
+\defbeamertemplate*{title page}{bdefault}[1][]{%
+  % image de fond
+  \iftitlebackground
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[opacity=0.15,inner sep=0pt] at (current page.center){%
+      \includegraphics[width=\paperwidth,height=\paperheight]{\inserttitlebackground}%
+    };
+  \end{tikzpicture}
+  \fi
+  % logo normal
+  \iftitlegraphic\else
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=south west] at (current page.south west){%
+      \begin{tabular}{l}
+        \raisebox{-.5\height}{\includegraphics[width=.3\textwidth]{logo-sif}}%
+        ~
+        \raisebox{-\height}{\includegraphics[width=.6\textwidth]{bandeau-sif}}\\
+        \hspace{2em}{\textls[100]{\small\textbf{SOCIÉTÉ~~INFORMATIQUE~~DE~~FRANCE}}}
+      \end{tabular}
+    };
+  \end{tikzpicture}
+  \fi
+  % titre/sous-titre/auteur/institution/date
+  \vbox{}
+  \vfill
+  \begin{centering}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty\else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%
+    \end{beamercolorbox}%
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center,#1]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}
+    \vskip0.5em
+    {\vfill\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+    \vfill\vfill
+  \end{centering}
+}
+\setbeamertemplate{title page}[bdefault]
+\renewcommand{\maketitle}[1][]{ % pas de numéro sur la page de titre
+  \addtocounter{framenumber}{-1}\frame[plain,#1]{\titlepage}}
+
+%%% Sections dans la table des matières
+\setbeamertemplate{sections/subsections in toc}[sections numbered]
+
+%%% Une page simple devant chaque partie
+\ifpartpage
+\AtBeginPart{\frame{\partpage}}
+\setbeamertemplate{part page}{%
+  \begin{center}
+    \usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertpart
+  \end{center}
+}
+\fi
+
+%%% Une page simple (avec table des matières) devant chaque section
+\ifsectionpage
+\setbeamertemplate{section page}{\tableofcontents[currentsection]}
+\AtBeginSection[]{\frame{\sectionpage}}
+\fi
+
+%%% Une page simple (avec table des matières) devant chaque sous-section
+\ifsubsectionpage
+\setbeamertemplate{subsection page}{\tableofcontents[currentsubsection]}
+\AtBeginSubsection[]{\frame{\subsectionpage}}
+\fi
+
+%%% Type des continuations
+\setbeamertemplate{frametitle continuation}[from second][(suite)]
+
+%%% Styles des blocs
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamerfont{block title}{size={}}
+
+%%% Style des listes
+\setbeamertemplate{itemize item}[triangle]
+\setbeamercolor{itemize item}{fg=BleuSIF}
+\setbeamertemplate{itemize subitem}[square]
+\setbeamercolor{itemize subitem}{fg=BleuSIF}
+\setbeamertemplate{itemize subsubitem}[triangle]
+\setbeamercolor{itemize subsubitem}{fg=NoirSIF}
+
+\setbeamertemplate{enumerate item}[circle]
+\setbeamercolor{enumerate item}{fg=BleuSIF}
+\setbeamertemplate{enumerate subitem}[square]
+\setbeamercolor{enumerate item}{fg=BleuSIF}
+
+\setbeamercolor{item projected}{fg=white,bg=BleuSIF}
+
+%%% Des pieds de diapo simples
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{footline}
+      \usebeamerfont{date in head/foot}
+      \raisebox{-.1em}{\includegraphics[height=1em]{bandeau-sif}}
+      \hspace*{1ex}
+      \insertshorttitle{}%
+      \ifsectioninfoot \hspace*{3ex} \emph{\textmd{\insertsection}}\fi
+      \hfill
+      \insertframenumber{} / \inserttotalframenumber
+      \hspace*{1.25ex}
+    \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\setbeamertemplate{navigation symbols}{} % pas de navigation affichée
+\setbeamertemplate{sidebar right}{}      % pas de logo
+
+%% D'autres paramètres Beamer en vrac
+
+%%% On découvre lentement les trucs cachés
+\setbeamercovered{dynamic}
+
+%%% Marges
+\setbeamersize{text margin left=1em,text margin right=1em}
+
+% Local Variables:
+% time-stamp-active: t
+% time-stamp-pattern: "5/\\filedate{%:y/%02m/%02d}$"
+% End:
+# end beamerthemesif.sty
+
+##############################################################################
+
+# begin-sif reportthemesif.sty
+% On s'assure de la présence des paquets utilisés
+\usepackage{xcolor}             % gestion des couleurs
+\usepackage{fancyhdr}           % gestion des entêtes et pieds de pages
+\usepackage{microtype}          % utilisé pour les espacements dans le logo
+\usepackage{tikz}               % pour avoir des dessins portables
+\usepackage{pgfpages}           % pour les fond de pages
+
+% Paramétrages génériques
+
+%% Les couleurs de la SIF
+\definecolor{BleuSIF}{HTML}{6b91c6}
+\definecolor{NoirSIF}{HTML}{2f3033}
+\definecolor{VertSIF}{HTML}{97be0d}
+\definecolor{BleuLogoSIF}{HTML}{3aaadc}        % en HTML : 3aaadc
+\definecolor{NoirLogoSIF}{HTML}{221920}        % en HTML : 1a17b1
+\definecolor{VertLogoSIF}{HTML}{97be0d}        % en HTML : 97be0d
+\definecolor{BleuBandeauSIF}{HTML}{26abe3}     % en HTML : 26abe3
+\definecolor{NoirBandeauSIF}{HTML}{221920}     % en HTML : 221920
+\definecolor{VertBandeauSIF}{HTML}{8bc636}     % en HTML : 8bc636
+\definecolor{BleuWebSIF}{HTML}{6b91c6}         % en HTML : 6b91c6
+\definecolor{NoirWebSIF}{HTML}{2f3033}         % en HTML : 2f3033
+\definecolor{VertWebSIF}{HTML}{8dc89d}         % en HTML : 8dc89d
+
+%% Les polices de caractères
+\usepackage{lmodern}            % pour sf et tt
+\usepackage{fourier}            % pour rm
+\usepackage{bbm}                % pour les mathbbm
+\usepackage[scaled=.92]{helvet} % pour sf on prend la même police que le web
+
+% Adaptation LaTeX
+\makeatletter
+
+%% Les pieds de page
+\geometry{includehead,includefoot,bottom=1cm}
+\pagestyle{fancy}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot{}
+\fancyfoot[LE]{\thepage\quad\raisebox{-.2em}{\includegraphics[height=1em]{bandeau-sif}}}
+\fancyfoot[RO]{\raisebox{-.2em}{\includegraphics[height=1em]{bandeau-sif}}\quad\thepage}
+\fancypagestyle{plain}{}
+\renewcommand{\chaptermark}[1]{\markboth{\@title}{}}
+\renewcommand{\sectionmark}[1]{\markboth{\@title}{}}
+
+%% la page de titre
+\renewcommand{\maketitle}{%
+  \thispagestyle{empty}
+  \begin{titlepage}%
+    % Fond de page
+    \iftitlebackground
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[opacity=0.15,inner sep=0pt] at (current page.center){%
+        \includegraphics[width=\paperwidth,height=\paperheight]{\inserttitlebackground}%
+      };
+    \end{tikzpicture}
+    \fi
+    % Logo normal
+    \iftitlegraphic\else
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[anchor=south west] at (current page.south west){%
+        \begin{tabular}{l}
+          \raisebox{-.5\height}{\includegraphics[width=.3\textwidth]{logo-sif}}%
+          ~
+          \raisebox{-\height}{\includegraphics[width=.7\textwidth]{bandeau-sif}}\\
+          \hspace{2em}{\textls[100]{\small\textbf{SOCIÉTÉ~~INFORMATIQUE~~DE~~FRANCE}}}
+        \end{tabular}
+      };
+    \end{tikzpicture}
+    \fi
+    % Titre & Date
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[yshift=-6cm,inner sep=0pt] at (current page.north){%
+        \begin{minipage}{.99\columnwidth}
+          \centering%
+          {\larger[4]\bfseries \@title}\par%
+          \@ifundefined{insertsubtitle}{}{%
+            \bigskip%
+            {\larger[3]\color[gray]{.3}\slshape \insertsubtitle}\par}%
+          \@ifundefined{@date}{}{%
+            \bigskip%
+            {\larger[3] \@date \par}}%
+        \end{minipage}
+      };%
+    \end{tikzpicture}
+    % Auteurs
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[yshift=-6cm,inner sep=0pt] at (current page.center){%
+        \begin{minipage}{.9\columnwidth}
+          \centering\larger[2]
+          \begin{tabular}[t]{c}%
+            \@author
+          \end{tabular}%
+        \end{minipage}
+      };%
+    \end{tikzpicture}
+    % Logos
+    \iftitlegraphic
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[yshift=3cm,inner sep=0pt] at (current page.south){%
+        \begin{minipage}{.99\columnwidth}
+          \centering\larger[2]\inserttitlegraphic
+        \end{minipage}
+      };%
+    \end{tikzpicture}
+    \fi
+  \end{titlepage}
+}
+
+\makeatother
+# end reportthemesif.sty
+
+##############################################################################
+
+# begin-sif logo-sif.pdf base64
+JVBERi0xLjUKJbXtrvsKNCAwIG9iago8PCAvTGVuZ3RoIDUgMCBSCiAgIC9GaWx0ZXIgL0ZsYXRl
+RGVjb2RlCj4+CnN0cmVhbQp4nI2aW47kSo5E/2MV2kCr3envZcwSBglMf9XH9OwfGDtG5a26kUAj
++gJdKYYkd+fDaCRVr6L//lH1f3WdefdTVrTr69frf1/lHifqWFe5Vx/lbP1R+Lf069//uv753+X6
+1/+9apR+7zGutto9aly/rlp6uUOvaTvu1fq1ut6899VLu9ce15z9bnNdY817xPV1aaE7+nxdK/Yd
+41p733u2a5elJc+1T7m3NrDnums5euKcdvd6nVh3n+Oqtex7raa1i9bs8ZKoaZVT9Ydu2oOnal1x
+H25rdd4xQ/fXo1frDX2du04tMe/adT2G1pr7pcdmG/fRanXqjGetq83qA+h3Hb7obi1fdqRgjc4O
+dSs7+5a8EAwtvcq85zm/n/kWfF29Dyl9p2jp4ahaaLPQ2Pl0HUfvPZxvVD0/fSwpvPV+HfasN50m
+/TUdZqW+1hlSxZZepfBROZIenlGvqV+kt5fOWH3LWPXuMrqsLJtdfeuybs4THOhcXQoLa1q67DFl
+1bj30nkeT3hdTS/t2uwXB9j+sZ1+T9nagrO73EV2ko/88J+v63/kethlVjzufP9Vy9hSl1yv6ox6
+idRVrVpcTiZqer8clV+Wfpl1XV2rFFl1Smv9xDW7jDHtcnvdbWmz6fYh3eh8ctK99CaZdEtXRRs8
+z5ulAXnlQILOKo4lf8YtpQpW3Rgljk4x2aIeT5+bW3vX0Zs8gZV0tuFX19GXXXTLn6zTGQO3fn3Z
+HmXqRXLmO6o0ONgngtHu0vCfdkdZCMIq/VKcaM3+W8L1Yltr9fvU/cczjwCfU3zHt2hjkJlHkNTe
+JE8b9jQFu4yPcjiW9NIn22DPipjTcBDFpJy4hWygoEVde0jnZ+F03V69FP4yinwuiP+ls557laYn
+zj319tH173QQ1TxRl7XwniIAGHKWLi+tMb494XX12e5pHWiPen2Rd8zIyLbA7lIyJN/cJz0uQiiH
+n03+B+rtiSgdTkDUBEhN5p2S/dIpE9saoabbZ8dEem+Z1xCG4PSjhZ1eSj6AgPYJGrTdFHcV95Mu
+mnRcdXThmR7dirLoYVsKdCLkhy0xoQgLYku/g5CS58qYU+uhFnz38JQ2KmtIEQK9kG/JLBF+c+0y
+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
+j5dzzIe5Jz/+kYATsSPr4ZUyyIcZYTwfu5CMCa+ag+RtU/Bp38nvARFti7aHBDV718z4YHJgE4z1
+uQPzfeUHnPT/aM+4CUR/1cd+JjrvgtTe+00UcOReWvfueL2rAu391+v/AdZLW/YKZW5kc3RyZWFt
+CmVuZG9iago1IDAgb2JqCiAgIDQ1OTAKZW5kb2JqCjMgMCBvYmoKPDwKICAgL0V4dEdTdGF0ZSA8
+PAogICAgICAvYTAgPDwgL0NBIDEgL2NhIDEgPj4KICAgPj4KPj4KZW5kb2JqCjIgMCBvYmoKPDwg
+L1R5cGUgL1BhZ2UgJSAxCiAgIC9QYXJlbnQgMSAwIFIKICAgL01lZGlhQm94IFsgMCAwIDI4MzQu
+NjQ0MDQzIDE3OTYuNDkwNzIzIF0KICAgL0NvbnRlbnRzIDQgMCBSCiAgIC9Hcm91cCA8PAogICAg
+ICAvVHlwZSAvR3JvdXAKICAgICAgL1MgL1RyYW5zcGFyZW5jeQogICAgICAvSSB0cnVlCiAgICAg
+IC9DUyAvRGV2aWNlUkdCCiAgID4+CiAgIC9SZXNvdXJjZXMgMyAwIFIKPj4KZW5kb2JqCjEgMCBv
+YmoKPDwgL1R5cGUgL1BhZ2VzCiAgIC9LaWRzIFsgMiAwIFIgXQogICAvQ291bnQgMQo+PgplbmRv
+YmoKNiAwIG9iago8PCAvUHJvZHVjZXIgKGNhaXJvIDEuMTYuMCAoaHR0cHM6Ly9jYWlyb2dyYXBo
+aWNzLm9yZykpCiAgIC9DcmVhdG9yIDxGRUZGMDA0OTAwNkUwMDZCMDA3MzAwNjMwMDYxMDA3MDAw
+NjUwMDIwMDAzMTAwMkUwMDMwMDAyRTAwMzIwMDIwMDAyODAwNjgwMDc0MDA3NDAwNzAwMDczMDAz
+QTAwMkYwMDJGMDA2OTAwNkUwMDZCMDA3MzAwNjMwMDYxMDA3MDAwNjUwMDJFMDA2RjAwNzIwMDY3
+MDAyOT4KICAgL0NyZWF0aW9uRGF0ZSAoRDoyMDIxMDIwOTEwMjczMSswMScwMCkKPj4KZW5kb2Jq
+CjcgMCBvYmoKPDwgL1R5cGUgL0NhdGFsb2cKICAgL1BhZ2VzIDEgMCBSCj4+CmVuZG9iagp4cmVm
+CjAgOAowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDUwMTEgMDAwMDAgbiAKMDAwMDAwNDc3NyAw
+MDAwMCBuIAowMDAwMDA0NzA1IDAwMDAwIG4gCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwNDY4
+MiAwMDAwMCBuIAowMDAwMDA1MDc2IDAwMDAwIG4gCjAwMDAwMDUzNTkgMDAwMDAgbiAKdHJhaWxl
+cgo8PCAvU2l6ZSA4CiAgIC9Sb290IDcgMCBSCiAgIC9JbmZvIDYgMCBSCj4+CnN0YXJ0eHJlZgo1
+NDExCiUlRU9GCg==
+# end logo-sif.pdf
+
+##############################################################################
+
+# begin-sif bandeau-sif.pdf base64
+JVBERi0xLjUKJbXtrvsKNCAwIG9iago8PCAvTGVuZ3RoIDUgMCBSCiAgIC9GaWx0ZXIgL0ZsYXRl
+RGVjb2RlCj4+CnN0cmVhbQp4nJWVS27bMBRF51oFN9AXvi/JeTbgUcdF0WbUFkknXX4vKVlOVICV
+bMCAbR3e+77klPH+xPgIp8LNWk1ffyyvyy29Ll4pzPGftUwcliLS27f0Of3EAzzQ9RPE05ecXn6n
+pz+Rnn8tt8FncvOMEzOVElbwMAlzCU9vL2klFvCUraRC6i2FUm3eVb4DZwgL/o+SvfZjasvcotNs
+xNI2tlGtJYVRLnVntb/6A61mbf0YFrfWYWXSqhuspLAIWOXOzmwbU2PbTbPLR3bi2YOsbiTXznwk
+J46rwNTDcWkjXNU4k6ocA1thp2h8gGfxMpJlpezS1Y7KE9ushbzGLq0cF3xHoTbOu/eHX5GuNopz
+lzY7Rj2TbkrM+pCWCxkThm+JR8ZKu+BbxGFkb5OAwrHWU3ELfBuDgXRBPK/iUk+ELcGEgza4EWc5
+wjPn1dd9sTep9q0S5dRcSRPSfKeh3ev1gZ4YVyTN412xg8/PlrqS1O4Gx7NQsTVqO5My7ZO5lkt6
+tarGAZ4vE8bPutJlJPqgPPFtihwrVhFy7aKDjHLCsxlGAz9BsTAfuZkiboTeUPsKw41xevsZ2gMH
+7e1hfGHreobYuwL3FJ0usCsuiHgsQL+y793qWLdbzEJNj9KTjY8lFG0kDDfTNhKGbmtnfEcWHF43
+Gs2FQA74zHmgP3TkGxcrBmpb+7mdMB54svjOCv/Dzny3QtVH1Cz9wqkjY4ZG/79yEaQ4eINh29eB
+qnom5oL1Z7Z2qPa58NW4b9W6LX8BN9DTzgplbmRzdHJlYW0KZW5kb2JqCjUgMCBvYmoKICAgNTc4
+CmVuZG9iagozIDAgb2JqCjw8CiAgIC9FeHRHU3RhdGUgPDwKICAgICAgL2EwIDw8IC9DQSAxIC9j
+YSAxID4+CiAgID4+CiAgIC9YT2JqZWN0IDw8IC94NiA2IDAgUiA+Pgo+PgplbmRvYmoKMiAwIG9i
+ago8PCAvVHlwZSAvUGFnZSAlIDEKICAgL1BhcmVudCAxIDAgUgogICAvTWVkaWFCb3ggWyAwIDAg
+NzUwLjAwMTE2IDY1LjcxOTQ5OCBdCiAgIC9Db250ZW50cyA0IDAgUgogICAvR3JvdXAgPDwKICAg
+ICAgL1R5cGUgL0dyb3VwCiAgICAgIC9TIC9UcmFuc3BhcmVuY3kKICAgICAgL0kgdHJ1ZQogICAg
+ICAvQ1MgL0RldmljZVJHQgogICA+PgogICAvUmVzb3VyY2VzIDMgMCBSCj4+CmVuZG9iago2IDAg
+b2JqCjw8IC9MZW5ndGggOCAwIFIKICAgL0ZpbHRlciAvRmxhdGVEZWNvZGUKICAgL1R5cGUgL1hP
+YmplY3QKICAgL1N1YnR5cGUgL0Zvcm0KICAgL0JCb3ggWyAwIDAgNzUxIDY2IF0KICAgL0dyb3Vw
+IDw8CiAgICAgIC9UeXBlIC9Hcm91cAogICAgICAvUyAvVHJhbnNwYXJlbmN5CiAgICAgIC9JIHRy
+dWUKICAgICAgL0NTIC9EZXZpY2VSR0IKICAgPj4KICAgL1Jlc291cmNlcyA3IDAgUgo+PgpzdHJl
+YW0KeJwr5ApUKOQytdAzMzFVMFAwsTTQMzQzUTAzUyhKVQhXyOMq5DIEihsoQMjkXC79RAOF9GIF
+/QpLBZd8rkAgBADu6Q6OCmVuZHN0cmVhbQplbmRvYmoKOCAwIG9iagogICA2OQplbmRvYmoKNyAw
+IG9iago8PAogICAvRXh0R1N0YXRlIDw8CiAgICAgIC9hMCA8PCAvQ0EgMSAvY2EgMSA+PgogICA+
+PgogICAvWE9iamVjdCA8PCAveDkgOSAwIFIgPj4KPj4KZW5kb2JqCjkgMCBvYmoKPDwgL0xlbmd0
+aCAxMSAwIFIKICAgL0ZpbHRlciAvRmxhdGVEZWNvZGUKICAgL1R5cGUgL1hPYmplY3QKICAgL1N1
+YnR5cGUgL0Zvcm0KICAgL0JCb3ggWyAwIDAgNzUxIDY2IF0KICAgL0dyb3VwIDw8CiAgICAgIC9U
+eXBlIC9Hcm91cAogICAgICAvUyAvVHJhbnNwYXJlbmN5CiAgICAgIC9JIHRydWUKICAgICAgL0NT
+IC9EZXZpY2VSR0IKICAgPj4KICAgL1Jlc291cmNlcyAxMCAwIFIKPj4Kc3RyZWFtCnicK+QqVNAv
+NjRSSC9W0K8wNFZwyVcI5ArkAgBODQXgCmVuZHN0cmVhbQplbmRvYmoKMTEgMCBvYmoKICAgMzIK
+ZW5kb2JqCjEwIDAgb2JqCjw8CiAgIC9FeHRHU3RhdGUgPDwKICAgICAgL3MxMiAxMiAwIFIKICAg
+Pj4KICAgL1hPYmplY3QgPDwgL3gxMyAxMyAwIFIgPj4KPj4KZW5kb2JqCjE0IDAgb2JqCjw8IC9U
+eXBlIC9YT2JqZWN0CiAgIC9MZW5ndGggNzUKICAgL0ZpbHRlciAvRmxhdGVEZWNvZGUKICAgL1N1
+YnR5cGUgL0Zvcm0KICAgL0JCb3ggWyAwIDEwIDc1MSA2NiBdCiAgIC9Hcm91cCA8PAogICAgICAv
+VHlwZSAvR3JvdXAKICAgICAgL1MgL1RyYW5zcGFyZW5jeQogICAgICAvSSB0cnVlCiAgICAgIC9D
+UyAvRGV2aWNlUkdCCiAgID4+CiAgIC9SZXNvdXJjZXMKPDwKICAgL0V4dEdTdGF0ZSA8PAogICAg
+ICAvYTAgPDwgL0NBIDEgL2NhIDEgPj4KICAgPj4KICAgL1hPYmplY3QgPDwgL3gxNSAxNSAwIFIg
+Pj4KPj4KPj4Kc3RyZWFtCnicDcKxDYAwDATA3lP8Ajj+JCZ2zwKMgCioEEI0jA+6u4UjQq2Zw370
+oYzs2TG1YZpekzNoOtegO/ZTymY4HpSXjuWSVT7kUQ5wCmVuZHN0cmVhbQplbmRvYmoKMTMgMCBv
+YmoKPDwgL1R5cGUgL1hPYmplY3QKICAgL0xlbmd0aCAzNwogICAvRmlsdGVyIC9GbGF0ZURlY29k
+ZQogICAvU3VidHlwZSAvRm9ybQogICAvQkJveCBbIDAgMTAgNzUxIDY2IF0KICAgL0dyb3VwIDw8
+CiAgICAgIC9UeXBlIC9Hcm91cAogICAgICAvUyAvVHJhbnNwYXJlbmN5CiAgICAgIC9JIHRydWUK
+ICAgICAgL0NTIC9EZXZpY2VSR0IKICAgPj4KICAgL1Jlc291cmNlcwo8PAogICAvRXh0R1N0YXRl
+IDw8CiAgICAgIC9hMCA8PCAvQ0EgMSAvY2EgMSA+PgogICA+PgogICAvWE9iamVjdCA8PCAveDE2
+IDE2IDAgUiA+Pgo+Pgo+PgpzdHJlYW0KeJwr5DJUMABCCJmcy6WfaKCQXqygX2FopuCSzxXIBQB6
+dwdYCmVuZHN0cmVhbQplbmRvYmoKMTcgMCBvYmoKPDwgL1R5cGUgL01hc2sKICAgL1MgL0FscGhh
+CiAgIC9HIDE0IDAgUgo+PgplbmRvYmoKMTIgMCBvYmoKPDwgL1R5cGUgL0V4dEdTdGF0ZQogICAv
+U01hc2sgMTcgMCBSCiAgIC9jYSAxCiAgIC9DQSAxCiAgIC9BSVMgZmFsc2UKPj4KZW5kb2JqCjE4
+IDAgb2JqCjw8IC9MZW5ndGggMTkgMCBSCiAgIC9GaWx0ZXIgL0ZsYXRlRGVjb2RlCiAgIC9UeXBl
+IC9YT2JqZWN0CiAgIC9TdWJ0eXBlIC9JbWFnZQogICAvV2lkdGggMTAwMQogICAvSGVpZ2h0IDg4
+CiAgIC9Db2xvclNwYWNlIC9EZXZpY2VHcmF5CiAgIC9JbnRlcnBvbGF0ZSB0cnVlCiAgIC9CaXRz
+UGVyQ29tcG9uZW50IDgKPj4Kc3RyZWFtCnic7cEBDQAACMCgB7N/Lms4BxQAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAACHDPBeC5Yc6mEKZW5kc3RyZWFtCmVuZG9iagoxOSAwIG9iagogICAxMTIK
+ZW5kb2JqCjE1IDAgb2JqCjw8IC9MZW5ndGggMjAgMCBSCiAgIC9GaWx0ZXIgL0ZsYXRlRGVjb2Rl
+CiAgIC9UeXBlIC9YT2JqZWN0CiAgIC9TdWJ0eXBlIC9JbWFnZQogICAvV2lkdGggMTAwMQogICAv
+SGVpZ2h0IDg4CiAgIC9Db2xvclNwYWNlIC9EZXZpY2VHcmF5CiAgIC9JbnRlcnBvbGF0ZSB0cnVl
+CiAgIC9CaXRzUGVyQ29tcG9uZW50IDEKICAgL1NNYXNrIDE4IDAgUgo+PgpzdHJlYW0KeJztwQEB
+AAAAgiD/r25IQAEAAAAAAAAAAADArwErUAABCmVuZHN0cmVhbQplbmRvYmoKMjAgMCBvYmoKICAg
+MzMKZW5kb2JqCjE2IDAgb2JqCjw8IC9MZW5ndGggMjIgMCBSCiAgIC9GaWx0ZXIgL0ZsYXRlRGVj
+b2RlCiAgIC9UeXBlIC9YT2JqZWN0CiAgIC9TdWJ0eXBlIC9Gb3JtCiAgIC9CQm94IFsgMCAwIDc1
+MSA2NiBdCiAgIC9SZXNvdXJjZXMgMjEgMCBSCj4+CnN0cmVhbQp4nCvkKlTQLzYyVkgvVtCvMDJR
+cMlXCOQK5AIATkMF5AplbmRzdHJlYW0KZW5kb2JqCjIyIDAgb2JqCiAgIDMyCmVuZG9iagoyMSAw
+IG9iago8PAogICAvRXh0R1N0YXRlIDw8CiAgICAgIC9zMjMgMjMgMCBSCiAgID4+CiAgIC9YT2Jq
+ZWN0IDw8IC94MjQgMjQgMCBSID4+Cj4+CmVuZG9iagoyNSAwIG9iago8PCAvVHlwZSAvWE9iamVj
+dAogICAvTGVuZ3RoIDc5CiAgIC9GaWx0ZXIgL0ZsYXRlRGVjb2RlCiAgIC9TdWJ0eXBlIC9Gb3Jt
+CiAgIC9CQm94IFsgNTkgMCA1NDkgNjYgXQogICAvR3JvdXAgPDwKICAgICAgL1R5cGUgL0dyb3Vw
+CiAgICAgIC9TIC9UcmFuc3BhcmVuY3kKICAgICAgL0kgdHJ1ZQogICAgICAvQ1MgL0RldmljZVJH
+QgogICA+PgogICAvUmVzb3VyY2VzCjw8CiAgIC9FeHRHU3RhdGUgPDwKICAgICAgL2EwIDw8IC9D
+QSAxIC9jYSAxID4+CiAgID4+CiAgIC9YT2JqZWN0IDw8IC94MjYgMjYgMCBSID4+Cj4+Cj4+CnN0
+cmVhbQp4nA3Iuw2AMAwFwN5TvAVIbONfehZgBERBhRCiYXzQdXeTDQ63pilVA/yTSpYWI0UTXi3M
+1AuTlCf/r5Yz9pP6xjge9FcDy0UrfV+WECoKZW5kc3RyZWFtCmVuZG9iagoyNCAwIG9iago8PCAv
+VHlwZSAvWE9iamVjdAogICAvTGVuZ3RoIDM3CiAgIC9GaWx0ZXIgL0ZsYXRlRGVjb2RlCiAgIC9T
+dWJ0eXBlIC9Gb3JtCiAgIC9CQm94IFsgNTkgMCA1NDkgNjYgXQogICAvR3JvdXAgPDwKICAgICAg
+L1R5cGUgL0dyb3VwCiAgICAgIC9TIC9UcmFuc3BhcmVuY3kKICAgICAgL0kgdHJ1ZQogICAgICAv
+Q1MgL0RldmljZVJHQgogICA+PgogICAvUmVzb3VyY2VzCjw8CiAgIC9FeHRHU3RhdGUgPDwKICAg
+ICAgL2EwIDw8IC9DQSAxIC9jYSAxID4+CiAgID4+CiAgIC9YT2JqZWN0IDw8IC94MjcgMjcgMCBS
+ID4+Cj4+Cj4+CnN0cmVhbQp4nCvkMlQwAEIImZzLpZ9ooJBerKBfYWSu4JLPFcgFAHqGB1oKZW5k
+c3RyZWFtCmVuZG9iagoyOCAwIG9iago8PCAvVHlwZSAvTWFzawogICAvUyAvQWxwaGEKICAgL0cg
+MjUgMCBSCj4+CmVuZG9iagoyMyAwIG9iago8PCAvVHlwZSAvRXh0R1N0YXRlCiAgIC9TTWFzayAy
+OCAwIFIKICAgL2NhIDEKICAgL0NBIDEKICAgL0FJUyBmYWxzZQo+PgplbmRvYmoKMjkgMCBvYmoK
+PDwgL0xlbmd0aCAzMCAwIFIKICAgL0ZpbHRlciAvRmxhdGVEZWNvZGUKICAgL1R5cGUgL1hPYmpl
+Y3QKICAgL1N1YnR5cGUgL0ltYWdlCiAgIC9XaWR0aCAxMDAxCiAgIC9IZWlnaHQgODgKICAgL0Nv
+bG9yU3BhY2UgL0RldmljZUdyYXkKICAgL0ludGVycG9sYXRlIHRydWUKICAgL0JpdHNQZXJDb21w
+b25lbnQgOAo+PgpzdHJlYW0KeJztwQENAAAIwKAHs38uazgHFAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAIcM8F4LlhzqYQplbmRzdHJlYW0KZW5kb2JqCjMwIDAgb2JqCiAgIDExMgplbmRvYmoK
+MjYgMCBvYmoKPDwgL0xlbmd0aCAzMSAwIFIKICAgL0ZpbHRlciAvRmxhdGVEZWNvZGUKICAgL1R5
+cGUgL1hPYmplY3QKICAgL1N1YnR5cGUgL0ltYWdlCiAgIC9XaWR0aCAxMDAxCiAgIC9IZWlnaHQg
+ODgKICAgL0NvbG9yU3BhY2UgL0RldmljZUdyYXkKICAgL0ludGVycG9sYXRlIHRydWUKICAgL0Jp
+dHNQZXJDb21wb25lbnQgMQogICAvU01hc2sgMjkgMCBSCj4+CnN0cmVhbQp4nO3BAQEAAACCIP+v
+bkhAAQAAAAAAAAAAAMCvAStQAAEKZW5kc3RyZWFtCmVuZG9iagozMSAwIG9iagogICAzMwplbmRv
+YmoKMjcgMCBvYmoKPDwgL0xlbmd0aCAzMyAwIFIKICAgL0ZpbHRlciAvRmxhdGVEZWNvZGUKICAg
+L1R5cGUgL1hPYmplY3QKICAgL1N1YnR5cGUgL0Zvcm0KICAgL0JCb3ggWyAwIDAgNzUxIDY2IF0K
+ICAgL1Jlc291cmNlcyAzMiAwIFIKPj4Kc3RyZWFtCnicDcqxDcNACAXQnin+AuHgDAj6LODKtRVF
+rpzo7Cbj5/TaN2jFIC8ILItTChG43tjwoUFWwhqmkjMIHl07u1bPgCeHWfeELsoiFm54ndR2wXGj
+/RbD80vr9AcvIxU4CmVuZHN0cmVhbQplbmRvYmoKMzMgMCBvYmoKICAgOTUKZW5kb2JqCjMyIDAg
+b2JqCjw8CiAgIC9FeHRHU3RhdGUgPDwKICAgICAgL2EwIDw8IC9DQSAxIC9jYSAxID4+CiAgID4+
+CiAgIC9YT2JqZWN0IDw8IC94MzQgMzQgMCBSID4+Cj4+CmVuZG9iagozNCAwIG9iago8PCAvTGVu
+Z3RoIDM1IDAgUgogICAvRmlsdGVyIC9GbGF0ZURlY29kZQogICAvVHlwZSAvWE9iamVjdAogICAv
+U3VidHlwZSAvSW1hZ2UKICAgL1dpZHRoIDM2MgogICAvSGVpZ2h0IDE3NQogICAvQ29sb3JTcGFj
+ZSAvRGV2aWNlR3JheQogICAvSW50ZXJwb2xhdGUgZmFsc2UKICAgL0JpdHNQZXJDb21wb25lbnQg
+OAo+PgpzdHJlYW0KeJztXXewVkWWv9/7XiDzeOToQ0DAhCAgqCQDDjAIYhhkdEQMIIg4igomEEcx
+oQioiEoURVABRWWQpCgoEiQp6VFTu1VT88/W1mzt7O7E3ndD3z6n+5zu+wUeI/N+VVq8e7rP7dvf
+vd2nTxSiGtWoRjWqUY1qVKMa1ajGycF791zcrFnnqad6GP+kmN+tYdOBH+aD0xftvBA35IPb6YYT
+fcPJ+UXurFbU9yR6PZ87u9MMFR3l5FyWK6tNhR7Ab/IxutMJPdTcvJ4jqyFwor0eeRne6YPZYG66
+5cirMZrp8ryM7/RBPzA36R9z41UHzXTD/AzwtMG5cHIO5MarCZrpuvkZ4GmD9nByXskjL691fgaY
+AfbsPXESuP44vXX58Dvey5XN1CI0Oznxex7z+lnGDHZ/dzT7u1eMaZRK1TrrxrycCxS2PlkePs7y
+HBkNRJPj/ToXXhdgXo0zfMFGl3pejaHZzvWqlvK+D2bJgcQvCiTb1J25cVqZQrPzcC68LsYzXZTZ
+pJ0T9mr6UVb3XgtufGNWHEhcAR/oseT9lo4ffP8h7VpdNDuv5jKsh/FMD86o889lt5rfZXPvXvDO
+12fDgcJO9ECDyCbP3rP0A+3aqhZ+81baO9MAMduRy7i+xzO9NJO+H6t+47K49XZ86wVZsKDwHOJ6
+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
+br/K8Nufrg7K9WA2eox9cc6Qul/1Y1vN0Zl7cuDH8e+bHk14i65Db/WlI3uefU63IXdMn//ht2LP
+POQzVicTX9MEGO/Jf+1Z/faCQUGQysZ4Id4jvqk8iweWwdZeKu0v3xeRh+lIQ3r/hoaiiXr9UyEx
+1eBrpdwpMvwoysIMfDseUG5qqeVdhZivFFrzwXkN506I3o/CzvftF7fo+riSVjPDaJEmkQx//EHc
+pHH7Ni1a9I4Yd8cW324dGjc2VWr5wtPhvMdS9vXCPzhOdHf0D2489ffx2lpYQjQbWPnfZ3ehT3fc
+G0LMUi3AP40AmrEfvLpoQzCTxJFYoGFtIgW60Iw1R7fY3N3c8kR5Q09f315Yv8XgxD1sE60Cbmt+
+yrXQHtN3tgBVvl+yNL1iiyQQ9afwTUCCnou3rJVOCoF5+Ea9Z/rFZuKnhz/I99WSanj2C7ND5VrQ
+0I/g5+qpG9MprWUjguUKbhJF+EQdee4XNOli6L81B+rmt+sNfhqIk1qRURcmvFJruil9ptsc5+j6
+Ort5/myaJfLLKx1pkY/+uVExtm+bsgZNut+ZSUCDA3BqLsKkSYNa+69oYZowEnGIxN9Ure5jlrpb
+/4shnuhOswza4W0fbdzbsSq2tH8JVE5yrWbe4AzSF1ejGtWoRjWqUY1qVKMa1Tjl+H9TPqNpCmVu
+ZHN0cmVhbQplbmRvYmoKMzUgMCBvYmoKICAgODMwNwplbmRvYmoKMSAwIG9iago8PCAvVHlwZSAv
+UGFnZXMKICAgL0tpZHMgWyAyIDAgUiBdCiAgIC9Db3VudCAxCj4+CmVuZG9iagozNiAwIG9iago8
+PCAvUHJvZHVjZXIgKGNhaXJvIDEuMTYuMCAoaHR0cHM6Ly9jYWlyb2dyYXBoaWNzLm9yZykpCiAg
+IC9DcmVhdG9yIDxGRUZGMDA0OTAwNkUwMDZCMDA3MzAwNjMwMDYxMDA3MDAwNjUwMDIwMDAzMTAw
+MkUwMDMwMDAyRTAwMzIwMDIwMDAyODAwNjgwMDc0MDA3NDAwNzAwMDczMDAzQTAwMkYwMDJGMDA2
+OTAwNkUwMDZCMDA3MzAwNjMwMDYxMDA3MDAwNjUwMDJFMDA2RjAwNzIwMDY3MDAyOT4KICAgL0Ny
+ZWF0aW9uRGF0ZSAoRDoyMDIxMDIwOTEwMjczMSswMScwMCkKPj4KZW5kb2JqCjM3IDAgb2JqCjw8
+IC9UeXBlIC9DYXRhbG9nCiAgIC9QYWdlcyAxIDAgUgo+PgplbmRvYmoKeHJlZgowIDM4CjAwMDAw
+MDAwMDAgNjU1MzUgZiAKMDAwMDAxNDIzMiAwMDAwMCBuIAowMDAwMDAwNzkyIDAwMDAwIG4gCjAw
+MDAwMDA2OTIgMDAwMDAgbiAKMDAwMDAwMDAxNSAwMDAwMCBuIAowMDAwMDAwNjcwIDAwMDAwIG4g
+CjAwMDAwMDEwMjIgMDAwMDAgbiAKMDAwMDAwMTM2NSAwMDAwMCBuIAowMDAwMDAxMzQ0IDAwMDAw
+IG4gCjAwMDAwMDE0NjUgMDAwMDAgbiAKMDAwMDAwMTc3NCAwMDAwMCBuIAowMDAwMDAxNzUyIDAw
+MDAwIG4gCjAwMDAwMDI3MDMgMDAwMDAgbiAKMDAwMDAwMjI3NCAwMDAwMCBuIAowMDAwMDAxODY3
+IDAwMDAwIG4gCjAwMDAwMDMxNDIgMDAwMDAgbiAKMDAwMDAwMzQzMCAwMDAwMCBuIAowMDAwMDAy
+NjQzIDAwMDAwIG4gCjAwMDAwMDI3OTEgMDAwMDAgbiAKMDAwMDAwMzExOSAwMDAwMCBuIAowMDAw
+MDAzNDA4IDAwMDAwIG4gCjAwMDAwMDM2NDQgMDAwMDAgbiAKMDAwMDAwMzYyMiAwMDAwMCBuIAow
+MDAwMDA0NTc3IDAwMDAwIG4gCjAwMDAwMDQxNDggMDAwMDAgbiAKMDAwMDAwMzczNyAwMDAwMCBu
+IAowMDAwMDA1MDE2IDAwMDAwIG4gCjAwMDAwMDUzMDQgMDAwMDAgbiAKMDAwMDAwNDUxNyAwMDAw
+MCBuIAowMDAwMDA0NjY1IDAwMDAwIG4gCjAwMDAwMDQ5OTMgMDAwMDAgbiAKMDAwMDAwNTI4MiAw
+MDAwMCBuIAowMDAwMDA1NTgxIDAwMDAwIG4gCjAwMDAwMDU1NTkgMDAwMDAgbiAKMDAwMDAwNTY4
+NCAwMDAwMCBuIAowMDAwMDE0MjA4IDAwMDAwIG4gCjAwMDAwMTQyOTcgMDAwMDAgbiAKMDAwMDAx
+NDU4MSAwMDAwMCBuIAp0cmFpbGVyCjw8IC9TaXplIDM4CiAgIC9Sb290IDM3IDAgUgogICAvSW5m
+byAzNiAwIFIKPj4Kc3RhcnR4cmVmCjE0NjM0CiUlRU9GCg==
+# end bandeau-sif.pdf

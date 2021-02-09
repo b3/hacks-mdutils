@@ -1,0 +1,109 @@
+% On s'assure de la présence des paquets utilisés
+\usepackage{xcolor}             % gestion des couleurs
+\usepackage{fancyhdr}           % gestion des entêtes et pieds de pages
+\usepackage{microtype}          % utilisé pour les espacements dans le logo
+\usepackage{tikz}               % pour avoir des dessins portables
+\usepackage{pgfpages}           % pour les fond de pages
+
+% Paramétrages génériques
+
+%% Les couleurs de la SIF
+\definecolor{BleuSIF}{HTML}{6b91c6}
+\definecolor{NoirSIF}{HTML}{2f3033}
+\definecolor{VertSIF}{HTML}{97be0d}
+\definecolor{BleuLogoSIF}{HTML}{3aaadc}        % en HTML : 3aaadc
+\definecolor{NoirLogoSIF}{HTML}{221920}        % en HTML : 1a17b1
+\definecolor{VertLogoSIF}{HTML}{97be0d}        % en HTML : 97be0d
+\definecolor{BleuBandeauSIF}{HTML}{26abe3}     % en HTML : 26abe3
+\definecolor{NoirBandeauSIF}{HTML}{221920}     % en HTML : 221920
+\definecolor{VertBandeauSIF}{HTML}{8bc636}     % en HTML : 8bc636
+\definecolor{BleuWebSIF}{HTML}{6b91c6}         % en HTML : 6b91c6
+\definecolor{NoirWebSIF}{HTML}{2f3033}         % en HTML : 2f3033
+\definecolor{VertWebSIF}{HTML}{8dc89d}         % en HTML : 8dc89d
+
+%% Les polices de caractères
+\usepackage{lmodern}            % pour sf et tt
+\usepackage{fourier}            % pour rm
+\usepackage{bbm}                % pour les mathbbm
+\usepackage[scaled=.92]{helvet} % pour sf on prend la même police que le web
+
+% Adaptation LaTeX
+\makeatletter
+
+%% Les pieds de page
+\geometry{includehead,includefoot,bottom=1cm}
+\pagestyle{fancy}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot{}
+\fancyfoot[LE]{\thepage\quad\raisebox{-.2em}{\includegraphics[height=1em]{bandeau-sif}}}
+\fancyfoot[RO]{\raisebox{-.2em}{\includegraphics[height=1em]{bandeau-sif}}\quad\thepage}
+\fancypagestyle{plain}{}
+\renewcommand{\chaptermark}[1]{\markboth{\@title}{}}
+\renewcommand{\sectionmark}[1]{\markboth{\@title}{}}
+
+%% la page de titre
+\renewcommand{\maketitle}{%
+  \thispagestyle{empty}
+  \begin{titlepage}%
+    % Fond de page
+    \iftitlebackground
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[opacity=0.15,inner sep=0pt] at (current page.center){%
+        \includegraphics[width=\paperwidth,height=\paperheight]{\inserttitlebackground}%
+      };
+    \end{tikzpicture}
+    \fi
+    % Logo normal
+    \iftitlegraphic\else
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[anchor=south west] at (current page.south west){%
+        \begin{tabular}{l}
+          \raisebox{-.5\height}{\includegraphics[width=.3\textwidth]{logo-sif}}%
+          ~
+          \raisebox{-\height}{\includegraphics[width=.7\textwidth]{bandeau-sif}}\\
+          \hspace{2em}{\textls[100]{\small\textbf{SOCIÉTÉ~~INFORMATIQUE~~DE~~FRANCE}}}
+        \end{tabular}
+      };
+    \end{tikzpicture}
+    \fi
+    % Titre & Date
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[yshift=-6cm,inner sep=0pt] at (current page.north){%
+        \begin{minipage}{.99\columnwidth}
+          \centering%
+          {\larger[4]\bfseries \@title}\par%
+          \@ifundefined{insertsubtitle}{}{%
+            \bigskip%
+            {\larger[3]\color[gray]{.3}\slshape \insertsubtitle}\par}%
+          \@ifundefined{@date}{}{%
+            \bigskip%
+            {\larger[3] \@date \par}}%
+        \end{minipage}
+      };%
+    \end{tikzpicture}
+    % Auteurs
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[yshift=-6cm,inner sep=0pt] at (current page.center){%
+        \begin{minipage}{.9\columnwidth}
+          \centering\larger[2]
+          \begin{tabular}[t]{c}%
+            \@author
+          \end{tabular}%
+        \end{minipage}
+      };%
+    \end{tikzpicture}
+    % Logos
+    \iftitlegraphic
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[yshift=3cm,inner sep=0pt] at (current page.south){%
+        \begin{minipage}{.99\columnwidth}
+          \centering\larger[2]\inserttitlegraphic
+        \end{minipage}
+      };%
+    \end{tikzpicture}
+    \fi
+  \end{titlepage}
+}
+
+\makeatother
