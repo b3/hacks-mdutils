@@ -11,10 +11,11 @@ beamer: ARGS += --slide-level=$(SLIDELEVEL)
 
 report: $(FILE)
 report: TEMPLATE ?= $(CONFDIR)/pandoc-report.tex
-report: THEME ?= cgir
+report: THEME ?= ulille
 report: ARGS += -t latex
 report: ARGS += --top-level-division=chapter
 report: ARGS += -N
+report: ARGS += --toc
 
 ARGS = --standalone
 ARGS += --template=$(TEMPLATE)
@@ -25,7 +26,6 @@ ARGS += -L $(CONFDIR)/center-image.lua
 ARGS += -L $(CONFDIR)/svg-image-to-pdf.lua
 ARGS += -V theme=$(THEME)
 ARGS += -V themeoptions=$(THEMEOPTIONS)
-ARGS += --toc
 ARGS += --highlight-style=tango
 
 %.pdf %.tex: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
