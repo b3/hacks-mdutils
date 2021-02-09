@@ -254,14 +254,14 @@ do
             shift
             ;;
         "-d"|"--demo")
-			if ! test -z "$2" && ! test -d "$2"; then
-				mkdir $2 || _die "$2: unable to create directory"
-			fi
-			extract_files "${2:-.}" demo
-			mkdir -p "${2:-.}"/img
-			mv "${2:-.}"/*.pdf "${2:-.}"/img
-			exit 0
-			;;
+            if ! test -z "$2" && ! test -d "$2"; then
+                mkdir $2 || _die "$2: unable to create directory"
+            fi
+            extract_files "${2:-.}" demo
+            mkdir -p "${2:-.}"/img
+            mv "${2:-.}"/*.pdf "${2:-.}"/img
+            exit 0
+            ;;
         "-L"|"--latex") _ext=.tex ;;
         "-P"|"--pandoc-extra")
             test -z "$2" && _die "$1: missing args"
