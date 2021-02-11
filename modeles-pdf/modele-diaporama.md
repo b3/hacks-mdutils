@@ -15,6 +15,7 @@ titlegraphic:
 - file: logo-beamer
   width: .04
 titlebackground: gnu
+toc: true
 ---
 
 
@@ -66,7 +67,7 @@ titlebackground: gnu
 ## Utiliser `md2pdf` pour faire une présentation
 
 - Conseils
-    1. construire la structure (plan) de la présentation en premier
+    1. construire la **structure (plan)** de la présentation en premier
     2. remplir le contenu ensuite sans trop surcharger le texte
     3. ne pas s'occuper de la mise en forme (`md2pdf` s'en occupe)
     4. avoir un peu de **discipline**
@@ -114,8 +115,9 @@ La syntaxe de Markdown permet
     - <https://daringfireball.net/projects/markdown>
     - [Pandoc Markdown](https://pandoc.org/MANUAL.html#pandocs-markdown)
 
-- d'inclure des images via des liens spécifiques : `![Texte alternatif](img/tex-friendly-zone.svg)`
+- d'inclure des images via des liens spécifiques :
 
+  `![Texte alternatif](img/tex-friendly-zone.svg)`
 
 Elle est décrite en détails ailleurs (cf liens de cette diapo)
 
@@ -124,7 +126,7 @@ Elle est décrite en détails ailleurs (cf liens de cette diapo)
 Pandoc ajoute des fonctionnalités à la syntaxe Markdown
 
 - Précision sur la nature des élements
-    - zone entourée d'accolades juste après l'élément à qualifier
+    - zone entourée d'accolades `{...}` juste après l'élément à qualifier
     - `attribut=valeur`
     - `.classe`
 
@@ -185,7 +187,6 @@ Il peut être inclus depuis un fichier
 ``` {include="md2pdf-exemple-code" .bash .numberLines}
 ```
 
-
 ## Spécificité pour les présentations
 
 **Listes**
@@ -209,18 +210,18 @@ Il peut être inclus depuis un fichier
 > - ne pas trop en abuser !
 
 
-## Réglages `pandoc` utilisés par `md2pdf`
+## Réglages `pandoc` utilisés par `md2pdf -p`
 
-- les réglages utilisés sont visibles dans `etc/makefile-pandoc`
+**Les diapositives sont les élements de niveau 2**
 
-- les diapositives sont les élements de niveau 2
-    - niveaux supérieurs sont les sections du diaporama
-    - niveaux inférieurs sont des blocs
-    - modifiable via la variable d'environnement `$SLIDELEVEL`
+- niveaux supérieurs sont les sections du diaporama
+- niveaux inférieurs sont des blocs
+- modifiable via
+    - option `-P --slide-level=N` passée à `md2pdf`
+    - la variable d'environnement `$SLIDELEVEL`
+    - variable `slide-level` dans le document
 
-- transformation avec un [*template*](https://pandoc.org/MANUAL.html#templates) ad-hoc
-    - variables pour la page de titre
-    - fixables dans un bloc [YAML](http://yaml.org/) (en début de fichier)
+**Transformation avec un [*template*](https://pandoc.org/MANUAL.html#templates) ad-hoc**
 
 - variables prises en charge
     - `title`, `subtitle`, `author`, `date`
@@ -229,19 +230,33 @@ Il peut être inclus depuis un fichier
         - `width` : largeur en pourcentage (<1) de largeur diapo (0.1 par défaut)
         - `nl` : passage à la ligne après le logo
     - `titlebackground` : image de fond de la page de titre (fichier sans extension)
+    - `theme`, `themeoptions` : thème et options du thème Beamer
+    - `toc`, `toc-title` : générer une diapo de plan
+
+## Thèmes
+
+- plusieurs thèmes inclus
+    - `md2pdf -t list`
+- autres thèmes utilisables
+    - doivent être accessibles (dossier courant ou sous-dossiers)
+    - format Beamer (`themebeamerTHEME.sty`)
+- choix du thème via
+    - option `-t` passée à `md2pdf`
+    - variable d'environnement `$THEME` et `$THEMEOPTIONS`
+    - variables `theme` et `themeoptions` dans le document
+- par défaut utilise le thème inclus `ulille`
 
 ## Autres détails
 
-- **`md2pdf`**
-    - plusieurs thèmes possibles
-        - format Beamer (`themebeamerTHEME.sty`)
-        - choix du thème via l'option `-t` ou la variable d'environnement `$THEME`
-        - plusieurs thèmes inclus (`md2pdf -t list`)
-        - thèmes externes doivent être accessibles (dans le dossier courant)
-        - par défaut thème inclus `ulille`
-    - autres paramètres pandoc ajoutables
-        - via l'option `-P` ou la variable d'environnement `$EXTRAS`
-- Documentation
+- **réglages `md2pdf`**
+    - réglages pandoc utilisés visibles dans `etc/makefile-pandoc`
+    - ajustables via
+        - l'option `-P` passée à `md2pdf`
+        - la variable d'environnement `$EXTRAS`
+        - bloc de variables [YAML](http://yaml.org/) dans le source (*généralement en début de fichier*)
+    - template utilisé par défaut : `etc/pandoc-beamer.tex`
+
+- **documentation**
     - intégrée
 
         ```console
@@ -249,4 +264,4 @@ Il peut être inclus depuis un fichier
         md2pdf --man
         ```
 
-    - lire la section [*Structuring the slide show*](http://pandoc.org/MANUAL.html#structuring-the-slide-show) de `pandoc(1)` aide aussi
+    - lire la section [*Structuring the slide show*](http://pandoc.org/MANUAL.html#structuring-the-slide-show) de [`pandoc(1)`](https://pandoc.org/MANUAL.html) aide aussi

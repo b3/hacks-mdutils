@@ -44,10 +44,10 @@ Pour produire un rapport au format PDF on utilise différents format et outils :
 
 # Utiliser `md2pdf` pour faire un rapport
 
-Comme pour tout document il faut d'abord s'atteler à construire la
-structure (plan) du rapport en plaçant dans un document les titres des
-différentes parties, chapitres et sections. Dans cette étape il faut
-penser à utiliser les six différents niveaux de titre offerts par
+Comme pour tout document il faut d'abord s'atteler à **construire la
+structure (plan)** du rapport en plaçant dans un document les titres
+des différentes parties, chapitres et sections. Dans cette étape il
+faut penser à utiliser les six différents niveaux de titre offerts par
 Markdown.
 
 Ensuite il faut remplir le contenu de chacune des sections. Il est

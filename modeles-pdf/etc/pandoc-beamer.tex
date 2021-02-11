@@ -64,7 +64,7 @@ $endif$
 
 % Paramétrages Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-$if(theme)$\usetheme{$theme$}$endif$
+$if(theme)$\usetheme[$for(themeoptions)$$themeoptions$$sep$,$endfor$]{$theme$}$endif$
 $if(titlebackground)$
 \makeatletter
 \@ifundefined{titlebackground}
@@ -118,14 +118,15 @@ $endif$
 \begin{document}
 
 \begin{frame}[plain]
-  $if(titlebackground)$\addtitlebackground$endif$
-  \titlepage
+  $if(titlebackground)$\addtitlebackground
+  $endif$\titlepage
 \end{frame}
 
-\begin{frame}
-  \frametitle{Plan}
+$if(toc)$$if(toc-title)$\renewcommand*\contentsname{$toc-title$}$endif$
+\begin{frame}[allowframebreaks]{$if(toc-title)$$toc-title$$else$Plan$endif$}
   \tableofcontents % il faut compiler deux fois pour mettre à jour la TDM
 \end{frame}
+$endif$
 
 $body$
 

@@ -226,13 +226,11 @@ $endfor$
 
 \maketitle
 
-\tableofcontents
-$if(lot)$
-\listoftables
-$endif$
-$if(lof)$
-\listoffigures
-$endif$
+$if(toc)$$if(toc-title)$\renewcommand*\contentsname{$toc-title$}
+$endif$$if(toc-depth)$\setcounter{tocdepth}{$toc-depth$}
+$endif$\tableofcontents$endif$
+$if(lot)$\listoftables$endif$
+$if(lof)$\listoffigures$endif$
 
 $body$
 

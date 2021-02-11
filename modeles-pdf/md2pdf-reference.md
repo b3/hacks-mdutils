@@ -41,13 +41,13 @@ nombre de format de documents les uns vers les autres.
 Par ailleurs il existe une extension [Markdown spécifique à
 Pandoc](https://pandoc.org/MANUAL.html#pandocs-markdown). Sa
 philosophie est un peu étendue par rapport à celle de la version
-initiale de Markdown puisque elle ne se limite pas à convertir vers
+initiale de Markdown puisqu'elle ne se limite pas à convertir vers
 HTML. Elle est particulièrement adaptée à l'outil et aux différentes
 conversions qu'il est capable de faire.
 
 Toutes les fonctionnalités standards de cette extension sont
 accessibles lors de la création de document via la commande `md2pdf`
-et peuvent donc être incluses dans les fichiers Markdown utilisé.
+et peuvent donc être incluses dans les fichiers Markdown utilisés.
 
 Un changement important est la possibilité de préciser la nature des
 élements (titres, liens, images, blocs, etc.) par l'utilisation d'une
@@ -179,15 +179,36 @@ transformation en \LaTeX{}. Pour les présentations c'est le fichier
 `pandoc-report.tex`.
 
 Ces modèles gèrent par exemple des variables pour personnaliser la
-page de titre ou des commandes \LaTeX{} pour gérer les annexes.
+page de titre, le sommaires ou des commandes \LaTeX{} pour gérer les
+annexes. Ces variables pandoc sont ajustables de plusieurs manières
+différentes.
+
+La plus simple est d'utiliser un bloc [YAML](https://yaml.org) dans le
+source du document source lui même. Généralement on le place en début
+de fichier principal. Le bloc est en YAML et est donc encadré par des
+lignes ne contenant que 3 tirets (`---`) chacune.
+
+Les autres possibilités sont de transmettre à pandoc les options
+fixant les variables via sa ligne de commande :
+
+- via l'option `-P` passée de `md2pdf` qui lui passe son argument tel quel,
+- via la variable d'environnement `$EXTRAS` dont le contenu est ajouté
+  à la ligne d'appel de pandoc.
+
+Par exemple pour fixer la variable `toc` à `false` on peut inclure le
+bloc suivant dans le fichier source.
+
+```markdown
+---
+toc: false
+---
+```
+
+De la même manière on peut passer l'option `-P "-V toc=false"` (les
+guillemets sont importantes) à `md2pdf` ou bien fixer comme valeur `-V
+toc=false` à la variable d'environnement `$EXTRAS`.
 
 ## Titre
-
-La page de titre du document est généré à partir de paramètres extrait
-de blocs [YAML](https://yaml.org) qui doivent être présent dans le
-fichier principal. Généralement on le place en début de fichier. Le
-bloc est en YAML et est donc encadré par des lignes ne contenant que 3
-tirets (`---`) chacune.
 
 Les paramètres suivants sont utilisés pour générer la page de titre.
 
@@ -200,6 +221,16 @@ Les paramètres suivants sont utilisés pour générer la page de titre.
 - `titlebackground` : nom du fichier image supplémentaire sur la page
   de titre (fond de page)
 
+## Sommaire
+
+Les paramètres suivants sont pris en compte pour la génération des
+sommaires :
+
+- `toc`, `toc-title` : générer ou pas la table des matières, changer
+  le nom de la table des matières
+- `toc-depth` : la profondeur de la table des matières
+- `lot`, `lof` : générer ou pas la liste de tables, la liste des figures
+
 ## Annexes
 
 Pour démarrer une partie du document contenant les annexes il suffit
@@ -208,11 +239,22 @@ qui contiennent chacune des annexes. Une page précisant le début des
 annexes est alors créée et la numérotation des sections suivantes est
 adaptée.
 
+## Code \LaTeX{}
+
+On peut personnaliser le code \LaTeX{} créé par la transformation en
+utilisant les variables `include-before`, `include-after`. Elles
+peuvent contenir du code \LaTeX{} à ajouter en début ou fin de
+document.
+
+
 # Autres détails
 
-`md2pdf` crée un fichier `etc/makefile-pandoc` lors de son
-exécution. On y retrouve les réglages qu'il utilise lors de son appel
-à `pandoc`.
+`md2pdf` crée un répertoire `etc` lors de son exécution. On y retrouve
+les réglages qu'il utilise pour son appel à `pandoc`. Par exemple
+`etc/makefile-pandoc` contient les règles et paramétrages d'appel de
+pandoc, `etc/pandoc-report.tex` est le *template* utilisé pour la
+transformation, etc. Le nom de ce répertoire est modifiable via
+l'option `-C` de `md2pdf`ou la variable `$CONFDIR`.
 
 `md2pdf` ajoute les paramètres qu'il trouve dans la variable
 d'environnement `$EXTRAS` et ceux qu'il reçoit par le paramètre `-P` à
