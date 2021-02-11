@@ -121,10 +121,9 @@ $endif$
   $if(titlebackground)$\addtitlebackground
   $endif$\titlepage
 \end{frame}
-$if(toc)$
 
-\begin{frame}
-  \frametitle{Plan}
+$if(toc)$$if(toc-title)$\renewcommand*\contentsname{$toc-title$}$endif$
+\begin{frame}[allowframebreaks]{$if(toc-title)$$toc-title$$else$Plan$endif$}
   \tableofcontents % il faut compiler deux fois pour mettre à jour la TDM
 \end{frame}
 $endif$
