@@ -273,7 +273,7 @@ do
             shift
             ;;
         "-C"|"--confdir")
-            test -z "$2" && die "$1: missing directory"
+            test -z "$2" && _die "$1: missing directory"
             CONFDIR="$2"
             shift
             ;;
