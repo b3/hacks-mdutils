@@ -45,3 +45,12 @@
 ### 2021-02-09-1
 
 - Ajout thème SIF
+
+### 2021-02-11-1
+
+- Modification templates (table des matières, options de thèmes)
+- Mise à jour exemples documentations
+- Modification comportement par défaut
+    - pas de table des matières en mode diaporama
+    - thème `ulille`
+
