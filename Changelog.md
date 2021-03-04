@@ -54,7 +54,10 @@
     - pas de table des matières en mode diaporama
     - thème `ulille`
 
+## v2.1
+
 ### 2021-03-04-1
 
 - Ajout options `-O`
-- Mise à jour thème `ulille`
+- Mise à jour thème `ulille` et `sif`
+
