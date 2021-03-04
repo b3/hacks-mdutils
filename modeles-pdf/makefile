@@ -2,7 +2,7 @@ all: modele-diaporama.pdf modele-rapport.pdf
 
 images_pdf := $(addsuffix .pdf,$(basename $(wildcard img/*.svg)))
 
-MD2PDF := ../md2pdf/md2pdf
+MD2PDF := ../md2pdf/md2pdf -O
 
 modele-diaporama.pdf: modele-diaporama.md md2pdf-exemple-code $(images_pdf)
 	$(MD2PDF) $<

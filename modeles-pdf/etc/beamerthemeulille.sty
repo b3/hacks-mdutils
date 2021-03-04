@@ -1,12 +1,13 @@
 % Un thème Beamer pour l'Université de Lille
-% Copyright (C) 2018-2019 Bruno BEAUFILS
+% Copyright (C) 2018-2021 Bruno BEAUFILS
 % This file is distributed under the terms of the WTFPL license.
 
-\def\filedate{2021/01/26}
+\def\filedate{2021/03/04}
 
 % Paramétrages génériques %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Les couleurs de l'Université de Lille 1
+%%% https://identite.intranet.univ-lille.fr/r%C3%A8gles-dutilisation/couleurs
 \definecolor{Lille1Pourpre}{HTML}{ae2573}
 \definecolor{Lille1NeutreNoir}{HTML}{382f2d}
 \definecolor{Lille1NeutreBleu}{HTML}{7fa0ac}
@@ -27,13 +28,18 @@
 \usepackage{bbm}                % pour les mathbbm
 
 %% La police Lille 1 n'est pas libre (Verdana) on prend le truc le plus proche
+%%% https://identite.intranet.univ-lille.fr/r%C3%A8gles-dutilisation/police-de-caract%C3%A8res
 \usepackage[scaled=.92]{helvet}
+
+%% Pour les dessins portables et fond de diapo
+\usepackage{tikz}
+\usepackage{pgfpages}
 
 %% Paramétrage hyperref
 \hypersetup{%
   colorlinks,%
   linkcolor=,%
-  urlcolor=Lille1Pourpre}
+  urlcolor=Lille1FroideBleu}
   
 % Paramétrage Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -50,7 +56,7 @@
 \DeclareOptionBeamer{nosectionpage}{\sectionpagefalse}
 
 %%% page en début de chaque subsection ou non
-\newif\ifsubsectionpage\subsectionpagetrue
+\newif\ifsubsectionpage\subsectionpagefalse
 \DeclareOptionBeamer{subsectionpage}{\subsectionpagetrue}
 \DeclareOptionBeamer{nosubsectionpage}{\subsectionpagefalse}
 
@@ -101,6 +107,10 @@
 
 %% Adaptation des modèles
 
+%%% Image de fond pour la page de titre
+\newif\iftitlebackground\titlebackgroundfalse
+\providecommand{\titlebackground}[1]{\titlebackgroundtrue\def\inserttitlebackground{#1}}
+
 %%% Logos
 \titlegraphic{%
   \raisebox{-0.5\height}{\includegraphics[width=6em]{logo-univ-lille}}
@@ -108,7 +118,43 @@
 \logo{\includegraphics[height=1.5em]{logo-univ-lille}}
 
 %%% La page de titre
-\renewcommand{\maketitle}[1][]{%
+\defbeamertemplate*{title page}{bdefault}[1][]{%
+  % image de fond
+  \iftitlebackground
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[opacity=0.15,inner sep=0pt] at (current page.center){%
+      \includegraphics[width=\paperwidth,height=\paperheight]{\inserttitlebackground}%
+    };
+  \end{tikzpicture}
+  \fi
+  \vbox{}
+  \vfill
+  % titre/sous-titre/auteur/institution/date
+  \begin{centering}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty\else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%
+    \end{beamercolorbox}%
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center,#1]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}\vskip0.5em
+    % logo
+    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+  \end{centering}
+  \vfill
+}
+\setbeamertemplate{title page}[bdefault]
+\renewcommand{\maketitle}[1][]{% pas de numéro sur la page de titre
   \addtocounter{framenumber}{-1}\frame[plain,#1]{\titlepage}}
 
 %%% Sections dans la table des matières
@@ -136,6 +182,9 @@
 \AtBeginSubsection[]{\frame{\subsectionpage}}
 \fi
 
+%%% Type des continuations
+\setbeamertemplate{frametitle continuation}[from second][(suite)]
+
 %%% Styles des blocs
 \setbeamertemplate{blocks}[rounded][shadow=true]
 \setbeamerfont{block title}{size={}}
@@ -149,18 +198,19 @@
 %%% Des pieds de diapo simples
 \setbeamertemplate{footline}
 {
-  \leavevmode%
+ \leavevmode%
   \hbox{%
     \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{footline}
       \usebeamerfont{date in head/foot}
       \hspace*{1.25ex}
-      \inserttitle{}%
-      \ifsectioninfoot \hspace*{3ex} \emph{\textmd{\insertsection}\fi}
+      \insertshorttitle{}%
+      \ifsectioninfoot \hspace*{3ex} \emph{\textmd{\insertsection}}\fi
       \hfill
       \insertframenumber{} / \inserttotalframenumber
       \hspace*{1.25ex}
       \llap{\raisebox{2em}{\insertlogo}\hspace{.75ex}}
-    \end{beamercolorbox}}%
+    \end{beamercolorbox}%
+  }%
   \vskip0pt%
 }
 \setbeamertemplate{navigation symbols}{} % pas de navigation affichée

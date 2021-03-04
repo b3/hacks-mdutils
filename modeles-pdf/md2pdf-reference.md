@@ -254,7 +254,8 @@ les réglages qu'il utilise pour son appel à `pandoc`. Par exemple
 `etc/makefile-pandoc` contient les règles et paramétrages d'appel de
 pandoc, `etc/pandoc-report.tex` est le *template* utilisé pour la
 transformation, etc. Le nom de ce répertoire est modifiable via
-l'option `-C` de `md2pdf`ou la variable `$CONFDIR`.
+l'option `-C` de `md2pdf`ou la variable `$CONFDIR`. Si les fichiers
+existent déjà ils ne sont remplacés que si l'option `-O` est utilisée.
 
 `md2pdf` ajoute les paramètres qu'il trouve dans la variable
 d'environnement `$EXTRAS` et ceux qu'il reçoit par le paramètre `-P` à
