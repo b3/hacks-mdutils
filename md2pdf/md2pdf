@@ -984,7 +984,7 @@ $endfor$
 \hypersetup{%
   colorlinks,%
   linkcolor=,%
-  urlcolor=Lille1FroideBleu}
+  urlcolor=blue}
   
 % Paramétrage Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -5177,7 +5177,7 @@ ICAgL1Jvb3QgOTYgMCBSCiAgIC9JbmZvIDk1IDAgUgo+PgpzdGFydHhyZWYKMjIzNjkKJSVFT0YK
 % Copyright (C) 2021 Bruno BEAUFILS
 % This file is distributed under the terms of the WTFPL license.
 
-\def\filedate{2021/02/09}
+\def\filedate{2021/03/04}
 
 % Paramétrages génériques %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -5212,7 +5212,7 @@ ICAgL1Jvb3QgOTYgMCBSCiAgIC9JbmZvIDk1IDAgUgo+PgpzdGFydHhyZWYKMjIzNjkKJSVFT0YK
 \hypersetup{%
   colorlinks,%
   linkcolor=,%
-  urlcolor=BleuSIF}
+  urlcolor=BleuLogoSIF}
 
 % Paramétrage Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
