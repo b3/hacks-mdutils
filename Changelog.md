@@ -61,3 +61,10 @@
 - Ajout options `-O`
 - Mise à jour thème `ulille` et `sif`
 
+### 2021-03-18-1
+
+- Remplacement option `-L`(apparu uniquement dans pandoc 2.8
+  seulement) par `--lua-filter`
+- Correction de la manière dont les tests de présence et de validité
+  des outils nécessaires sont faits (ajout liste des paquets Debian
+  nécessaire)

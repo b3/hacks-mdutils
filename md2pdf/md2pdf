@@ -20,7 +20,7 @@
 #     -r, --report             produit un rapport
 #     -t, --theme THEME        utilise THEME (au lieu de `ulille`) comme
 #                              personnalisation. THEME vide ou égal à `list`
-#                              affiche ceux embarqués dans le script.
+#                              affiche ceux embarqués dans le script
 #     -d, --demo [DIR]         produit des fichiers exemples dans `.` (ou DIR)
 #     -L, --latex              produit le source LaTeX (au lieu du résultat PDF)
 #     -P, --pandoc-extra ARGS  ajoute ARGS à la ligne de commande pandoc
@@ -75,10 +75,11 @@
 # # DEPENDANCES
 #
 #     Pour fonctionner md2pdf a besoin que [pandoc] ainsi qu'une
-#     installation TeX (avec `pdflatex` et la classe `beamer.cls`)
-#     soit accessible. Seule la distribution [TeXLive] disponible pour
-#     Unix et Windows (sous le nom [MacTeX] pour Mac OS X) a été
-#     testée.
+#     installation TeX (avec `pdflatex`, la classe `beamer.cls`, le
+#     support du français, des polices communes, la librairie Python
+#     [pygments]) soit accessible. Seule la distribution [TeXLive]
+#     disponible pour Unix et Windows (sous le nom [MacTeX] pour Mac
+#     OS X) a été testée.
 #
 #     Par ailleurs il a besoin de filtres POSIX standards (`cut`,
 #     `grep`, `sed`, `tr`) mais également des commandes `base64`,
@@ -87,16 +88,20 @@
 #     [pandoc]: http://pandoc.org
 #     [TeXLive]: http://tug.org/texlive
 #     [MacTeX]: http://tug.org/mactex
+#     [pygments]: https://pygments.org/
 #     [make]: https://www.gnu.org/software/make
 #
 #     Sur une distribution Debian stable (aka `buster` aujourd'hui)
-#     ceci correspond aux paquets :
+#     ceci correspond à l'installation des paquets :
 #
 #     - coreutils
 #     - make
 #     - pandoc
-#     - texlive-latex-base
-#     - texlive-latex-recommanded
+#     - texlive-latex-recommended (donc texlive-latex-base)
+#     - texlive-lang-french
+#     - texlive-fonts-extra
+#     - cm-super-minimal
+#     - python-pygments
 #
 # # DETAILS D'IMPLEMENTATION
 #
@@ -182,7 +187,7 @@
 # précautionneux avec les options de commandes Unix classiques qui sont
 # souvent différentes. Dans l'idéal il faudrait penser POSIX.
 
-VERSION=2.1.2021-03-04-1
+VERSION=2.1.2021-03-18-1
 
 _CMD=$(realpath $0)
 
@@ -227,14 +232,39 @@ extract_files ()
     done
 }
 
+# préviens de l'absence ou la non validité d'un outil
+need ()
+{
+    echo "${0##*/}: error: $1" 1>&2
+    ready=false
+    test -z "$2" || debian="$debian $2"
+}
+
 ##############################################################################
 
-_mute which make || _die "make: unavailable"
-_mute which pandoc || _die "pandoc: unavailable"
-_mute which base64 || _die "base64: unavailable"
-_mute which pdflatex || _die "pdflatex: unavailable"
-_mute kpsewhich beamer.cls || _die "beamer.cls: unavailable"
 
+# vérification présence et validité des outils nécessaires
+ready=true
+debian=
+_mute which base64 || need "base64: unavailable" coreutils
+_mute which make || need "make: unavailable" make
+if ! _mute which pandoc ; then
+    need "pandoc: unavailable" pandoc
+else
+    test $(pandoc -v | head -1 | cut -d ' ' -f2 | cut -d . -f1) -ge 2 || need "pandoc: version too old"
+fi
+_mute which pdflatex || need "pdflatex: unavailable" texlive-latex-base
+_mute kpsewhich beamer.cls || need "beamer.cls: unavailable" texlive-latex-recommended
+_mute kpsewhich french.sty || need "french.sty: unavailable" texlive-lang-french
+_mute kpsewhich fourier.sty || need "fourier.sty: unavailable" texlive-fonts-extra
+_mute kpsewhich type1ec.sty || need "type1ec.sty: unavailable" cm-super-minimal
+_mute which pygmentize || need "pygmentize: unavailable" python-pygments
+if ! $ready ; then
+    test -z "$debian" || echo "${0##*/}: error: under debian buster install these packages:$debian" 1>&2
+    exit 1
+fi
+
+# variables par défaut
 TYPE=beamer
 [ ${0##*/} = "md2beamer" ] && TYPE=beamer
 [ ${0##*/} = "md2report" ] && TYPE=report
@@ -270,6 +300,10 @@ do
             mkdir -p "${2:-.}"/img
             mv "${2:-.}"/*.pdf "${2:-.}"/img
             exit 0
+            ;;
+        "--debian")
+            check
+            exit
             ;;
         "-L"|"--latex") _ext=.tex ;;
         "-P"|"--pandoc-extra")
@@ -335,10 +369,10 @@ report: ARGS += --toc
 ARGS = --standalone
 ARGS += --template=$(TEMPLATE)
 ARGS += --pdf-engine-opt=-shell-escape
-ARGS += -L $(CONFDIR)/include-files.lua
-ARGS += -L $(CONFDIR)/include-code-files.lua
-ARGS += -L $(CONFDIR)/center-image.lua
-ARGS += -L $(CONFDIR)/svg-image-to-pdf.lua
+ARGS += --lua-filter $(CONFDIR)/include-files.lua
+ARGS += --lua-filter $(CONFDIR)/include-code-files.lua
+ARGS += --lua-filter $(CONFDIR)/center-image.lua
+ARGS += --lua-filter $(CONFDIR)/svg-image-to-pdf.lua
 ARGS += -V theme=$(THEME)
 ARGS += -V themeoptions=$(THEMEOPTIONS)
 ARGS += --highlight-style=tango

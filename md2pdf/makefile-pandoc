@@ -20,10 +20,10 @@ report: ARGS += --toc
 ARGS = --standalone
 ARGS += --template=$(TEMPLATE)
 ARGS += --pdf-engine-opt=-shell-escape
-ARGS += -L $(CONFDIR)/include-files.lua
-ARGS += -L $(CONFDIR)/include-code-files.lua
-ARGS += -L $(CONFDIR)/center-image.lua
-ARGS += -L $(CONFDIR)/svg-image-to-pdf.lua
+ARGS += --lua-filter $(CONFDIR)/include-files.lua
+ARGS += --lua-filter $(CONFDIR)/include-code-files.lua
+ARGS += --lua-filter $(CONFDIR)/center-image.lua
+ARGS += --lua-filter $(CONFDIR)/svg-image-to-pdf.lua
 ARGS += -V theme=$(THEME)
 ARGS += -V themeoptions=$(THEMEOPTIONS)
 ARGS += --highlight-style=tango
