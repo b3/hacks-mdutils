@@ -14,7 +14,7 @@
       `titleimg` ne sont pas prises en compte de la même manière dans les
       transformations (pas du tout dans la version Beamer).
 
-	  Les modèles ont été corrigés et les variables remplacées par
+      Les modèles ont été corrigés et les variables remplacées par
       `titlegraphics` et `titlebackground`.
 
 - [ ] les variables YAML theme et themeoptions dans le document ne
@@ -22,6 +22,9 @@
 
 - [ ] il n'y a pas de tests du bon fonctionnement de la vérification
       de présence et validité des outils
+
+- [ ] il n'y a pas de gestion de la recompilation quand les fichiers
+      inclus sont modifiés (un truc à la makefile.dep serait cool)
 
 ## Thèmes
 
@@ -43,11 +46,11 @@
       salles de TP 4A10).
 - [X] Autoriser `titleimg` dans le bloc de méta-données (image de fond de la
       page de titre)
-	  Remplacé par `titlegraphics` et `titlebackground`
+      Remplacé par `titlegraphics` et `titlebackground`
 - [ ] n'extraire que les fichiers nécessaires au type (ajouter TYPE en
       paramètre de `extract_file` et `list_files`
 - [X] extraire/remettre tous les fichiers inclus simplement
-	  Utilisation de `shembed`
+      Utilisation de `shembed`
 - [X] trouver un moyen élégant de gérer les tables
       Activation de tout le Markdown Pandoc
 - [X] cacher le bloc de méta-données dans un bloc de commentaires HTML
@@ -56,14 +59,14 @@
 
 - [X] ajouter la liste et une référence des options ajoutées dans les doc de
       `md2beamer` et `md2report`.
-	  Toute la documentation a été refaite et on utilise un makefile
+      Toute la documentation a été refaite et on utilise un makefile
 - [X] documenter la limitation Beamer à 3 niveaux de profondeurs
 - [X] documenter gestion des images centrées uniquement quand seul sur une
       ligne (faire référence à la documentation pandoc)
 - [X] documenter possibilité utilisation \appendix en mode `report`
 - [ ] documenter utilisation image en mode référence 
 - [X] documenter titleimg, (avec bg)
-	  Remplacé par `titlebackground`
+      Remplacé par `titlebackground`
 
 # `loadmd`
 
