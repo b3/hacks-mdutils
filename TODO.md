@@ -13,13 +13,13 @@
 - [X] les variables YAML `img` (documenté dans `modele-diaporama.md`) et
       `titleimg` ne sont pas prises en compte de la même manière dans les
       transformations (pas du tout dans la version Beamer).
-	  
+
 	  Les modèles ont été corrigés et les variables remplacées par
       `titlegraphics` et `titlebackground`.
-	  
+
 - [ ] les variables YAML theme et themeoptions dans le document ne
       sont pas prises en compte
-	  
+
 - [ ] il n'y a pas de tests du bon fonctionnement de la vérification
       de présence et validité des outils
 
