@@ -19,9 +19,9 @@ fichiers textes au format
 
 ### [`modele-diaporama.md`](modeles-pdf/modele-diaporama.md)
 
-C'est un modèle de diaporama utilisable avec `md2beamer`. Il utilise
-des images présentes dans le répertoire `modeles-pdf/img`. Il contient une
-référence sur l'utilisation de `md2beamer`.
+C'est un modèle de diaporama utilisable avec `md2pdf`. Il utilise des
+images présentes dans le répertoire `modeles-pdf/img`. Il contient une
+courte référence sur l'utilisation de `md2beamer` (`md2pdf -p`).
 
 Pour obtenir la version
 [`modele-diaporama.pdf`](modeles-pdf/modele-diaporama.pdf), il suffit
@@ -34,9 +34,9 @@ make modele-diaporama.pdf
 
 ### [`modele-rapport.md`](modeles-pdf/modele-rapport.md)
 
-C'est un modèle de rapport utilisable avec `md2beamer`. Il utilise
-des images présentes dans le répertoire `modeles-pdf/img`. Il contient une
-référence sur l'utilisation de `md2report`.
+C'est un modèle de rapport utilisable avec `md2pdf`. Il utilise des
+images présentes dans le répertoire `modeles-pdf/img`. Il contient une
+référence sur l'utilisation de `md2report` (`md2pdf -r`).
 
 Pour obtenir la version
 [`modele-rapport.pdf`](modeles-pdf/modele-rapport.pdf), il suffit
@@ -47,14 +47,14 @@ cd modeles-pdf
 make modele-rapport.pdf
 ```
 
-### [`index.html`](modele-web/index.html)
+### [`index.html`](modeles-web/index.html)
 
 C'est un modèle de page web dont le contenu, rendu quand la page est
 servie par un serveur web, est le contenu d'un fichier au format
 markdown de même nom de base.
 
 La documentation est dans le fichier
-[`index.md`](modele-web/index.md).
+[`index.md`](modeles-web/index.md).
 
 # Auteurs
 
