@@ -68,3 +68,10 @@
 - Correction de la manière dont les tests de présence et de validité
   des outils nécessaires sont faits (ajout liste des paquets Debian
   nécessaire)
+
+### 2021-05-08-1
+
+- Correction du makefile généré
+- Modification des templates
+    - traitement des options de theme Beamer
+    - ajout d'option de classe (beamer et report)
