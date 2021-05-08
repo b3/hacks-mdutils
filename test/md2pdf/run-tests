@@ -6,7 +6,7 @@ dir="$(cd $(dirname $0) ; pwd)"
 errmsg="${cmd##*/}: error:"
 stderr() { $* 2>&1 1>/dev/null ; }
 cporig() { for f in "$@" ; do cp $f.orig $f ; done ; }
-mute() { $* 1>/dev/null 2>&1 ; }
+mute() { "$@" 1>/dev/null 2>&1 ; }
 
 # test cases definition
 cd $dir
