@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-test_theme_via_cli() {
+test_template_theme_via_cli() {
     reset
     mute $cmd -t toto -L simple.md
     assertReturn "$(grep -Fq '\usetheme{toto}' simple.tex)" 0
     rm -f simple.tex
 }
 
-test_theme_via_env() {
+test_template_theme_via_env() {
     reset
     export THEME=toto
     mute $cmd -L simple.md
@@ -16,14 +16,14 @@ test_theme_via_env() {
     rm -f simple.tex
 }
 
-test_themeoptions_via_cli() {
+test_template_themeoptions_via_cli() {
     reset
     mute $cmd -t toto -P "-V themeoptions=titi=titi" -L simple.md
     assertReturn "$(grep -Fq '\usetheme[titi=titi]{toto}' simple.tex)" 0
     rm -f simple.tex
 }
 
-test_themeoptions_via_env() {
+test_template_themeoptions_via_env() {
     reset
     export THEME=toto
     export THEMEOPTIONS=titi=titi
@@ -34,7 +34,7 @@ test_themeoptions_via_env() {
     rm -f simple.tex
 }
 
-test_themeoptions_multiple_via_env() {
+test_template_themeoptions_multiple_via_env() {
     reset
     export THEME=toto
     export THEMEOPTIONS=titi=titi,tata=tata
