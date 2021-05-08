@@ -595,7 +595,7 @@ end
 ##############################################################################
 
 # begin-all pandoc-beamer.tex 
-\documentclass[10pt,t]{beamer}
+\documentclass[t,$if(fontsize)$$fontsize$$else$10pt$endif$$if(aspectratio)$,aspectratio=$aspectratio$$endif$$if(classoption)$,$for(classoption)$$classoption$$sep$,$endfor$$endif$]{beamer}
 
 % Paquets LaTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -733,7 +733,7 @@ $body$
 ##############################################################################
 
 # begin-all pandoc-report.tex 
-\documentclass[10pt,twoside,openright]{report}
+\documentclass[$if(fontsize)$$fontsize$$else$10pt,$endif$twoside,openright$if(classoption)$,$for(classoption)$$classoption$$sep$,$endfor$$endif$]{report}
 
 % Paquets LaTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
