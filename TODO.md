@@ -68,6 +68,12 @@
 - [X] documenter titleimg, (avec bg)
       Remplacé par `titlebackground`
 
+## Gestion
+
+- [ ] Fixer un moyen pour la gestion des versions (le tag sur la
+      dernière version majeure) histoire d'avoir à éviter de faire des
+      `git push --delete github :refs/tags/md2pdf-2.0`
+
 # `loadmd`
 
 - [X] ajouter un `.htaccess` qui renvoie (via réécriture) un contenu HTML
