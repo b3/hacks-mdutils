@@ -23,7 +23,7 @@ ARGS += --pdf-engine-opt=-shell-escape
 ARGS += --highlight-style=tango
 ARGS += --lua-filter $(CONFDIR)/include-files.lua
 ARGS += --lua-filter $(CONFDIR)/include-code-files.lua
-ARGS += --lua-filter $(CONFDIR)/center-image.lua
+ARGS += --lua-filter $(CONFDIR)/center.lua
 ARGS += --lua-filter $(CONFDIR)/svg-image-to-pdf.lua
 ARGS += -V theme=$(THEME)
 ifdef THEMEOPTIONS

@@ -124,7 +124,7 @@
 #
 #     - [include-files]
 #     - [include-code-files]
-#     - center-image
+#     - center
 #     - svg-image-to-pdf
 #
 #     [lua]: https://pandoc.org/lua-filters.html
@@ -372,7 +372,7 @@ ARGS += --pdf-engine-opt=-shell-escape
 ARGS += --highlight-style=tango
 ARGS += --lua-filter $(CONFDIR)/include-files.lua
 ARGS += --lua-filter $(CONFDIR)/include-code-files.lua
-ARGS += --lua-filter $(CONFDIR)/center-image.lua
+ARGS += --lua-filter $(CONFDIR)/center.lua
 ARGS += --lua-filter $(CONFDIR)/svg-image-to-pdf.lua
 ARGS += -V theme=$(THEME)
 ifdef THEMEOPTIONS
@@ -558,8 +558,8 @@ return {
 
 ##############################################################################
 
-# begin-all center-image.lua 
---- center-image.lua – filter to center image on their line
+# begin-all center.lua 
+--- center.lua – filter to center image on their line and div content
 ---
 --- ideas from https://pandoc.org/lua-filters.html#center-images-in-latex-and-html-output
 --- TODO : automatize that for images alone on a line (without the need to add a final backslash)
@@ -576,8 +576,19 @@ if FORMAT:match 'latex' or FORMAT:match 'beamer' then
       return elem
     end
   end
+  function Div (elem)
+    if elem.classes:includes("center", 1) then
+      return {
+        pandoc.RawBlock('latex', '\\begin{center}'),
+        elem,
+        pandoc.RawBlock('latex', '\\end{center}')
+      }
+    else
+      return elem
+    end
+  end
 end
-# end center-image.lua
+# end center.lua
 
 ##############################################################################
 
@@ -1509,6 +1520,23 @@ Il peut être inclus depuis un fichier
 ``` {include="md2pdf-exemple-code" .bash .numberLines}
 ```
 
+## Centrage
+
+::: {.center}
+Les divisions sont des blocs entourés par `:::`.
+
+Elles peuvent être centrées en leur attribuant la classe `center`.
+
+Elles peuvent contenir plusieurs paragraphes ou autres élements.
+
+| **Outil**  | **Utilité**                     |
+|------------|---------------------------------|
+| `pandoc`   | conversion de formats           |
+| `pdflatex` | composition de \LaTeX{} en PDF  |
+| `beamer`   | jeux de balisage \LaTeX{} pour  |
+:::
+
+
 ## Spécificité pour les présentations
 
 **Listes**
@@ -1519,17 +1547,22 @@ Il peut être inclus depuis un fichier
 
 **Affichage incrémental**
 
-> - affichage incrémental
->
->     - pause via un paragraphe avec une ligne de trois points
->
->             . . .
->
->     - des items de listes dans des blocs de citations
->
->             > -
->
-> - ne pas trop en abuser !
+::: {.incremental}
+- affichage incrémental
+
+     - pause via un paragraphe avec une ligne de trois points
+
+             . . .
+
+     - des items de listes dans des blocs avec la classe `incremental`
+
+             ::: {.incremental}
+             - un
+             - deux
+             :::
+
+ - ne pas trop en abuser !
+:::
 
 
 ## Réglages `pandoc` utilisés par `md2pdf -p`
@@ -1842,8 +1875,8 @@ ajoutant un blanc protégé juste avant ou juste après elles),
 elles sont placées exactement à l'endroit choisi sans être considérées
 comme des figures. C'est le cas de la *TeX Friendly Zone* ci dessous.
 
-Grâce au filtre `center-image.lua` (activé par défaut par `md2pdf`),
-si elles ont la classe `.center`, elles sont, en plus, centrées sur la
+Grâce au filtre `center.lua` (activé par défaut par `md2pdf`), si
+elles ont la classe `.center`, elles sont, en plus, centrées sur la
 largeur de la page.
 
 ![TeX Friendly Zone](img/tex-friendly-zone.pdf){ width=30% .center }\ 
@@ -1889,6 +1922,28 @@ Ce qui donne le résultat suivant.
 
 ``` {include="md2pdf-exemple-code" .bash .numberLines}
 ```
+
+
+## Alignement
+
+Grâce au filtre `center.lua` (activé par défaut par `md2pdf`), si des
+zones de texte sont déclarées comme des divisions et qu'elles ont la
+classe `.center`, alors elles sont centrées.
+
+Par exemple le code suivant définit une division et lui attribue la classe `center`.
+
+```markdown
+::: {.center}
+Une zone qui doit être centrée
+:::
+```
+
+Ce qui donne le résultat suivant.
+
+::: {.center}
+Une zone qui doit être centrée
+:::
+
 
 ## Tableaux
 
@@ -3338,7 +3393,7 @@ KGNhaXJvIDEuMTYuMCAoaHR0cHM6Ly9jYWlyb2dyYXBoaWNzLm9yZykpCiAgIC9DcmVhdG9yIDxG
 RUZGMDA0OTAwNkUwMDZCMDA3MzAwNjMwMDYxMDA3MDAwNjUwMDIwMDAzMTAwMkUwMDMwMDAyRTAw
 MzIwMDIwMDAyODAwNjgwMDc0MDA3NDAwNzAwMDczMDAzQTAwMkYwMDJGMDA2OTAwNkUwMDZCMDA3
 MzAwNjMwMDYxMDA3MDAwNjUwMDJFMDA2RjAwNzIwMDY3MDAyOT4KICAgL0NyZWF0aW9uRGF0ZSAo
-RDoyMDIxMDIxMTE5MTU1OCswMScwMCkKPj4KZW5kb2JqCjcgMCBvYmoKPDwgL1R5cGUgL0NhdGFs
+RDoyMDIxMDUwOTAxNTg1NCswMicwMCkKPj4KZW5kb2JqCjcgMCBvYmoKPDwgL1R5cGUgL0NhdGFs
 b2cKICAgL1BhZ2VzIDEgMCBSCj4+CmVuZG9iagp4cmVmCjAgOAowMDAwMDAwMDAwIDY1NTM1IGYg
 CjAwMDAwNzM4NDMgMDAwMDAgbiAKMDAwMDA3MzYxMSAwMDAwMCBuIAowMDAwMDczNTM5IDAwMDAw
 IG4gCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDA3MzUxNSAwMDAwMCBuIAowMDAwMDczOTA4IDAw
@@ -3367,8 +3422,8 @@ CiAgIC9Db3VudCAxCj4+CmVuZG9iago2IDAgb2JqCjw8IC9Qcm9kdWNlciAoY2Fpcm8gMS4xNi4w
 IChodHRwczovL2NhaXJvZ3JhcGhpY3Mub3JnKSkKICAgL0NyZWF0b3IgPEZFRkYwMDQ5MDA2RTAw
 NkIwMDczMDA2MzAwNjEwMDcwMDA2NTAwMjAwMDMxMDAyRTAwMzAwMDJFMDAzMjAwMjAwMDI4MDA2
 ODAwNzQwMDc0MDA3MDAwNzMwMDNBMDAyRjAwMkYwMDY5MDA2RTAwNkIwMDczMDA2MzAwNjEwMDcw
-MDA2NTAwMkUwMDZGMDA3MjAwNjcwMDI5PgogICAvQ3JlYXRpb25EYXRlIChEOjIwMjEwMjExMTkx
-NTU4KzAxJzAwKQo+PgplbmRvYmoKNyAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZwogICAvUGFnZXMg
+MDA2NTAwMkUwMDZGMDA3MjAwNjcwMDI5PgogICAvQ3JlYXRpb25EYXRlIChEOjIwMjEwNTA5MDE1
+ODU0KzAyJzAwKQo+PgplbmRvYmoKNyAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZwogICAvUGFnZXMg
 MSAwIFIKPj4KZW5kb2JqCnhyZWYKMCA4CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDc1NiAw
 MDAwMCBuIAowMDAwMDAwNTM4IDAwMDAwIG4gCjAwMDAwMDA0NjYgMDAwMDAgbiAKMDAwMDAwMDAx
 NSAwMDAwMCBuIAowMDAwMDAwNDQ0IDAwMDAwIG4gCjAwMDAwMDA4MjEgMDAwMDAgbiAKMDAwMDAw
@@ -3494,7 +3549,7 @@ MCBvYmoKPDwgL1Byb2R1Y2VyIChjYWlybyAxLjE2LjAgKGh0dHBzOi8vY2Fpcm9ncmFwaGljcy5v
 cmcpKQogICAvQ3JlYXRvciA8RkVGRjAwNDkwMDZFMDA2QjAwNzMwMDYzMDA2MTAwNzAwMDY1MDAy
 MDAwMzEwMDJFMDAzMDAwMkUwMDMyMDAyMDAwMjgwMDY4MDA3NDAwNzQwMDcwMDA3MzAwM0EwMDJG
 MDAyRjAwNjkwMDZFMDA2QjAwNzMwMDYzMDA2MTAwNzAwMDY1MDAyRTAwNkYwMDcyMDA2NzAwMjk+
-CiAgIC9DcmVhdGlvbkRhdGUgKEQ6MjAyMTAyMTExOTE1NTkrMDEnMDApCj4+CmVuZG9iago3IDAg
+CiAgIC9DcmVhdGlvbkRhdGUgKEQ6MjAyMTA1MDkwMTU4NTQrMDInMDApCj4+CmVuZG9iago3IDAg
 b2JqCjw8IC9UeXBlIC9DYXRhbG9nCiAgIC9QYWdlcyAxIDAgUgo+PgplbmRvYmoKeHJlZgowIDgK
 MDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDA2MjYwIDAwMDAwIG4gCjAwMDAwMDYwMzUgMDAwMDAg
 biAKMDAwMDAwNTk2MyAwMDAwMCBuIAowMDAwMDAwMDE1IDAwMDAwIG4gCjAwMDAwMDU5NDAgMDAw
@@ -3732,7 +3787,7 @@ MQo+PgplbmRvYmoKNiAwIG9iago8PCAvUHJvZHVjZXIgKGNhaXJvIDEuMTYuMCAoaHR0cHM6Ly9j
 YWlyb2dyYXBoaWNzLm9yZykpCiAgIC9DcmVhdG9yIDxGRUZGMDA0OTAwNkUwMDZCMDA3MzAwNjMw
 MDYxMDA3MDAwNjUwMDIwMDAzMTAwMkUwMDMwMDAyRTAwMzIwMDIwMDAyODAwNjgwMDc0MDA3NDAw
 NzAwMDczMDAzQTAwMkYwMDJGMDA2OTAwNkUwMDZCMDA3MzAwNjMwMDYxMDA3MDAwNjUwMDJFMDA2
-RjAwNzIwMDY3MDAyOT4KICAgL0NyZWF0aW9uRGF0ZSAoRDoyMDIxMDIxMTE5MTU1OSswMScwMCkK
+RjAwNzIwMDY3MDAyOT4KICAgL0NyZWF0aW9uRGF0ZSAoRDoyMDIxMDUwOTAxNTg1NSswMicwMCkK
 Pj4KZW5kb2JqCjcgMCBvYmoKPDwgL1R5cGUgL0NhdGFsb2cKICAgL1BhZ2VzIDEgMCBSCj4+CmVu
 ZG9iagp4cmVmCjAgOAowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMTI2MDEgMDAwMDAgbiAKMDAw
 MDAxMjM2OSAwMDAwMCBuIAowMDAwMDEyMjk3IDAwMDAwIG4gCjAwMDAwMDAwMTUgMDAwMDAgbiAK
@@ -3762,7 +3817,7 @@ ciAoY2Fpcm8gMS4xNi4wIChodHRwczovL2NhaXJvZ3JhcGhpY3Mub3JnKSkKICAgL0NyZWF0b3Ig
 PEZFRkYwMDQ5MDA2RTAwNkIwMDczMDA2MzAwNjEwMDcwMDA2NTAwMjAwMDMxMDAyRTAwMzAwMDJF
 MDAzMjAwMjAwMDI4MDA2ODAwNzQwMDc0MDA3MDAwNzMwMDNBMDAyRjAwMkYwMDY5MDA2RTAwNkIw
 MDczMDA2MzAwNjEwMDcwMDA2NTAwMkUwMDZGMDA3MjAwNjcwMDI5PgogICAvQ3JlYXRpb25EYXRl
-IChEOjIwMjEwMjExMTkxNjAwKzAxJzAwKQo+PgplbmRvYmoKNyAwIG9iago8PCAvVHlwZSAvQ2F0
+IChEOjIwMjEwNTA5MDE1ODU1KzAyJzAwKQo+PgplbmRvYmoKNyAwIG9iago8PCAvVHlwZSAvQ2F0
 YWxvZwogICAvUGFnZXMgMSAwIFIKPj4KZW5kb2JqCnhyZWYKMCA4CjAwMDAwMDAwMDAgNjU1MzUg
 ZiAKMDAwMDAwMDcxNCAwMDAwMCBuIAowMDAwMDAwNDg5IDAwMDAwIG4gCjAwMDAwMDA0MTcgMDAw
 MDAgbiAKMDAwMDAwMDAxNSAwMDAwMCBuIAowMDAwMDAwMzk1IDAwMDAwIG4gCjAwMDAwMDA3Nzkg
@@ -4765,7 +4820,7 @@ Y2Fpcm8gMS4xNi4wIChodHRwczovL2NhaXJvZ3JhcGhpY3Mub3JnKSkKICAgL0NyZWF0b3IgPEZF
 RkYwMDQ5MDA2RTAwNkIwMDczMDA2MzAwNjEwMDcwMDA2NTAwMjAwMDMxMDAyRTAwMzAwMDJFMDAz
 MjAwMjAwMDI4MDA2ODAwNzQwMDc0MDA3MDAwNzMwMDNBMDAyRjAwMkYwMDY5MDA2RTAwNkIwMDcz
 MDA2MzAwNjEwMDcwMDA2NTAwMkUwMDZGMDA3MjAwNjcwMDI5PgogICAvQ3JlYXRpb25EYXRlIChE
-OjIwMjEwMjExMTkxNjAwKzAxJzAwKQo+PgplbmRvYmoKNyAwIG9iago8PCAvVHlwZSAvQ2F0YWxv
+OjIwMjEwNTA5MDE1ODU2KzAyJzAwKQo+PgplbmRvYmoKNyAwIG9iago8PCAvVHlwZSAvQ2F0YWxv
 ZwogICAvUGFnZXMgMSAwIFIKPj4KZW5kb2JqCnhyZWYKMCA4CjAwMDAwMDAwMDAgNjU1MzUgZiAK
 MDAwMDA1NjIyOSAwMDAwMCBuIAowMDAwMDU2MDExIDAwMDAwIG4gCjAwMDAwNTU5MzkgMDAwMDAg
 biAKMDAwMDAwMDAxNSAwMDAwMCBuIAowMDAwMDU1OTE1IDAwMDAwIG4gCjAwMDAwNTYyOTQgMDAw
@@ -5167,7 +5222,7 @@ byAxLjE2LjAgKGh0dHBzOi8vY2Fpcm9ncmFwaGljcy5vcmcpKQogICAvQ3JlYXRvciA8RkVGRjAw
 NDkwMDZFMDA2QjAwNzMwMDYzMDA2MTAwNzAwMDY1MDAyMDAwMzEwMDJFMDAzMDAwMkUwMDMyMDAy
 MDAwMjgwMDY4MDA3NDAwNzQwMDcwMDA3MzAwM0EwMDJGMDAyRjAwNjkwMDZFMDA2QjAwNzMwMDYz
 MDA2MTAwNzAwMDY1MDAyRTAwNkYwMDcyMDA2NzAwMjk+CiAgIC9DcmVhdGlvbkRhdGUgKEQ6MjAy
-MTAyMTExOTE2MDArMDEnMDApCj4+CmVuZG9iago5NiAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZwog
+MTA1MDkwMTU4NTYrMDInMDApCj4+CmVuZG9iago5NiAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZwog
 ICAvUGFnZXMgMSAwIFIKPj4KZW5kb2JqCnhyZWYKMCA5NwowMDAwMDAwMDAwIDY1NTM1IGYgCjAw
 MDAwMjE5NjcgMDAwMDAgbiAKMDAwMDAwNTMzMiAwMDAwMCBuIAowMDAwMDA0NzQ2IDAwMDAwIG4g
 CjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwNDcyMyAwMDAwMCBuIAowMDAwMDA1Nzc1IDAwMDAw

@@ -25,7 +25,7 @@ md2pdf/md2pdf: images           ## mets à jour les fichiers inclus de md2pdf
 	shembed -u md2pdf/makefile-pandoc $@
 	shembed -u md2pdf/etc/include-files.lua $@
 	shembed -u md2pdf/etc/include-code-files.lua $@
-	shembed -u md2pdf/etc/center-image.lua $@
+	shembed -u md2pdf/etc/center.lua $@
 	shembed -u md2pdf/etc/svg-image-to-pdf.lua $@
 	shembed -u md2pdf/etc/pandoc-beamer.tex $@
 	shembed -u md2pdf/etc/pandoc-report.tex $@
