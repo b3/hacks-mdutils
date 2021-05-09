@@ -1,6 +1,6 @@
 .PHONY: clean reset
 
-CONFDIR ?= $(dir $(MAKEFILE_LIST))etc
+CONFDIR ?= $(dir $(MAKEFILE_LIST))
 
 beamer: $(FILE)
 beamer: TEMPLATE ?= $(CONFDIR)/pandoc-beamer.tex
@@ -20,13 +20,15 @@ report: ARGS += --toc
 ARGS = --standalone
 ARGS += --template=$(TEMPLATE)
 ARGS += --pdf-engine-opt=-shell-escape
-ARGS += -L $(CONFDIR)/include-files.lua
-ARGS += -L $(CONFDIR)/include-code-files.lua
-ARGS += -L $(CONFDIR)/center-image.lua
-ARGS += -L $(CONFDIR)/svg-image-to-pdf.lua
-ARGS += -V theme=$(THEME)
-ARGS += -V themeoptions=$(THEMEOPTIONS)
 ARGS += --highlight-style=tango
+ARGS += --lua-filter $(CONFDIR)/include-files.lua
+ARGS += --lua-filter $(CONFDIR)/include-code-files.lua
+ARGS += --lua-filter $(CONFDIR)/center.lua
+ARGS += --lua-filter $(CONFDIR)/svg-image-to-pdf.lua
+ARGS += -V theme=$(THEME)
+ifdef THEMEOPTIONS
+ARGS += -V themeoptions=$(THEMEOPTIONS)
+endif
 
 %.pdf %.tex: %.md $(MAKEFILE_LIST) $(wildcard $(CONFDIR)/*)
 	TEXINPUTS=.//:$(CONFDIR): pandoc $(ARGS) $(EXTRAS) -o $@ -- $<

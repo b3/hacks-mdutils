@@ -79,8 +79,8 @@ ajoutant un blanc protégé juste avant ou juste après elles),
 elles sont placées exactement à l'endroit choisi sans être considérées
 comme des figures. C'est le cas de la *TeX Friendly Zone* ci dessous.
 
-Grâce au filtre `center-image.lua` (activé par défaut par `md2pdf`),
-si elles ont la classe `.center`, elles sont, en plus, centrées sur la
+Grâce au filtre `center.lua` (activé par défaut par `md2pdf`), si
+elles ont la classe `.center`, elles sont, en plus, centrées sur la
 largeur de la page.
 
 ![TeX Friendly Zone](img/tex-friendly-zone.pdf){ width=30% .center }\ 
@@ -126,6 +126,28 @@ Ce qui donne le résultat suivant.
 
 ``` {include="md2pdf-exemple-code" .bash .numberLines}
 ```
+
+
+## Alignement
+
+Grâce au filtre `center.lua` (activé par défaut par `md2pdf`), si des
+zones de texte sont déclarées comme des divisions et qu'elles ont la
+classe `.center`, alors elles sont centrées.
+
+Par exemple le code suivant définit une division et lui attribue la classe `center`.
+
+```markdown
+::: {.center}
+Une zone qui doit être centrée
+:::
+```
+
+Ce qui donne le résultat suivant.
+
+::: {.center}
+Une zone qui doit être centrée
+:::
+
 
 ## Tableaux
 

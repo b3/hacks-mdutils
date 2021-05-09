@@ -1,4 +1,4 @@
-\documentclass[10pt,t]{beamer}
+\documentclass[t,$if(fontsize)$$fontsize$$else$10pt$endif$$if(aspectratio)$,aspectratio=$aspectratio$$endif$$if(classoption)$,$for(classoption)$$classoption$$sep$,$endfor$$endif$]{beamer}
 
 % Paquets LaTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -64,7 +64,7 @@ $endif$
 
 % Paramétrages Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-$if(theme)$\usetheme[$for(themeoptions)$$themeoptions$$sep$,$endfor$]{$theme$}$endif$
+$if(theme)$\usetheme$if(themeoptions)$[$for(themeoptions)$$themeoptions$$sep$,$endfor$]$endif${$theme$}$endif$
 $if(titlebackground)$
 \makeatletter
 \@ifundefined{titlebackground}

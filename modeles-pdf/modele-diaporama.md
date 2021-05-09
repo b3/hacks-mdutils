@@ -187,6 +187,23 @@ Il peut être inclus depuis un fichier
 ``` {include="md2pdf-exemple-code" .bash .numberLines}
 ```
 
+## Centrage
+
+::: {.center}
+Les divisions sont des blocs entourés par `:::`.
+
+Elles peuvent être centrées en leur attribuant la classe `center`.
+
+Elles peuvent contenir plusieurs paragraphes ou autres élements.
+
+| **Outil**  | **Utilité**                     |
+|------------|---------------------------------|
+| `pandoc`   | conversion de formats           |
+| `pdflatex` | composition de \LaTeX{} en PDF  |
+| `beamer`   | jeux de balisage \LaTeX{} pour  |
+:::
+
+
 ## Spécificité pour les présentations
 
 **Listes**
@@ -197,17 +214,22 @@ Il peut être inclus depuis un fichier
 
 **Affichage incrémental**
 
-> - affichage incrémental
->
->     - pause via un paragraphe avec une ligne de trois points
->
->             . . .
->
->     - des items de listes dans des blocs de citations
->
->             > -
->
-> - ne pas trop en abuser !
+::: {.incremental}
+- affichage incrémental
+
+     - pause via un paragraphe avec une ligne de trois points
+
+             . . .
+
+     - des items de listes dans des blocs avec la classe `incremental`
+
+             ::: {.incremental}
+             - un
+             - deux
+             :::
+
+ - ne pas trop en abuser !
+:::
 
 
 ## Réglages `pandoc` utilisés par `md2pdf -p`
