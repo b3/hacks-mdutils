@@ -75,3 +75,9 @@
 - Modification des templates
     - traitement des options de theme Beamer
     - ajout d'option de classe (beamer et report)
+
+### 2021-05-08-2
+
+- Ajout du support du centrage pour les div
+- Mise à jour des thème Beamer
+- Mise à jour des modèles pdf
