@@ -76,7 +76,7 @@
     - traitement des options de theme Beamer
     - ajout d'option de classe (beamer et report)
 
-### 2021-05-08-2
+### 2021-05-09-1
 
 - Ajout du support du centrage pour les div
 - Mise à jour des thème Beamer
