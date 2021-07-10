@@ -3,18 +3,35 @@
 # $1 : dir
 # $2 : indent size
 
-_echo () { test -n "$1" && eval printf "%$1c" 1 | tr '1' ' ' ; shift ; echo "$@" ; }
+makepretty(){
+    tr '-' ' ' | awk '{$0=toupper(substr($0,1,1)) substr($0,2)} 1'
+}
 
-test $# -eq 0 && exit 0
+_tree () {
+    _tab () { test -n "$1" && printf "%$1c" 1 | tr '1' ' ' ; }
 
-! test -d "$1" && exit 0
+    local dir="${1:-.}"
+    local indent="$2"
 
-_echo "$2" '{type:"directory","name": "'$(basename $1)'","contents":["'
+    # pretty page name
+    _tab "$indent" ; echo "${indent:+- }name: $(echo ${dir##*/} | makepretty)"
 
-for i in "$1"/*
-do
-    if test -d "$i" ; then
-        $0 "$i" "$(($2 + 2))"
-    fi
-done
-_echo  "$2" ']}'
+    # path relative to site root
+    _tab "$indent" ; echo "${indent:+  }path: $(echo $dir | sed 's/^\.//')"
+
+    # content
+    empty=true
+    for entry in "$dir"/*
+    do
+        if test -d "$entry" && ! test -e "$entry/.hide" ; then
+            $empty && {
+                _tab "$indent" ; echo "${indent:+  }contents:"
+                indent="$(($indent + 2))"
+                empty=false
+            }
+            $0 "$entry" "$indent"
+        fi
+    done
+}
+
+_tree "$@"
