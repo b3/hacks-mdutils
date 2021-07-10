@@ -20,7 +20,7 @@ _tree () {
     _tab "$indent" ; echo "${indent:+  }path: $(echo $dir | sed 's/^\.//')"
 
     # content
-    empty=true
+    local empty=true
     for entry in "$dir"/*
     do
         if test -d "$entry" && ! test -e "$entry/.hide" ; then
@@ -29,7 +29,7 @@ _tree () {
                 indent="$(($indent + 2))"
                 empty=false
             }
-            $0 "$entry" "$indent"
+            _tree "$entry" "$indent"
         fi
     done
 }
