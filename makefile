@@ -33,8 +33,8 @@ md2pdf/md2pdf: images           ## mets à jour les fichiers inclus de md2pdf
 	shembed -u md2pdf/etc/logo-univ-lille.pdf $@
 	shembed -u md2pdf/etc/reportthemeulille.sty $@
 	shembed -u md2pdf/etc/beamerthemesif.sty $@
-	shembed -u md2pdf/etc/logo-sif.pdf $@
-	shembed -u md2pdf/etc/bandeau-sif.pdf $@
+	shembed -u md2pdf/etc/logo-sif-2022-horizontal.pdf $@
+	shembed -u md2pdf/etc/logo-sif-2022-horizontal.pdf $@
 	shembed -u md2pdf/etc/reportthemesif.sty $@
 	shembed -u modeles-pdf/modele-diaporama.md $@
 	shembed -u modeles-pdf/modele-rapport.md $@
