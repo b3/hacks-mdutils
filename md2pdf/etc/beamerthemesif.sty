@@ -1,24 +1,32 @@
 % Un thème Beamer pour la SIF
-% Copyright (C) 2021 Bruno BEAUFILS
+% Copyright (C) 2021-2023 Bruno BEAUFILS
 % This file is distributed under the terms of the WTFPL license.
 
-\def\filedate{2021/03/04}
+\def\filedate{2023/02/03}
 
 % Paramétrages génériques %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% Les couleurs de la SIF 2022
+\definecolor{BaseSIF}{HTML}{005b7b}
+\definecolor{BleuSIF}{HTML}{00b1e0}
+\definecolor{VertSIF}{HTML}{3aaa35}
+\definecolor{OrangeSIF}{HTML}{ef7831}
+\definecolor{VioletSIF}{HTML}{8c1e7f}
+\definecolor{NoirSIF}{HTML}{000000}
+
 %% Les couleurs de la SIF
-\definecolor{BleuSIF}{HTML}{6b91c6}
-\definecolor{NoirSIF}{HTML}{2f3033}
-\definecolor{VertSIF}{HTML}{97be0d}
-\definecolor{BleuLogoSIF}{HTML}{3aaadc}        % en HTML : 3aaadc
-\definecolor{NoirLogoSIF}{HTML}{221920}        % en HTML : 1a17b1
-\definecolor{VertLogoSIF}{HTML}{97be0d}        % en HTML : 97be0d
-\definecolor{BleuBandeauSIF}{HTML}{26abe3}     % en HTML : 26abe3
-\definecolor{NoirBandeauSIF}{HTML}{221920}     % en HTML : 221920
-\definecolor{VertBandeauSIF}{HTML}{8bc636}     % en HTML : 8bc636
-\definecolor{BleuWebSIF}{HTML}{6b91c6}         % en HTML : 6b91c6
-\definecolor{NoirWebSIF}{HTML}{2f3033}         % en HTML : 2f3033
-\definecolor{VertWebSIF}{HTML}{8dc89d}         % en HTML : 8dc89d
+\definecolor{AncienBleuSIF}{HTML}{6b91c6}
+\definecolor{AncienNoirSIF}{HTML}{2f3033}
+\definecolor{AncienVertSIF}{HTML}{97be0d}
+\definecolor{AncienBleuLogoSIF}{HTML}{3aaadc}
+\definecolor{AncienNoirLogoSIF}{HTML}{221920}
+\definecolor{AncienVertLogoSIF}{HTML}{97be0d}
+\definecolor{AncienBleuBandeauSIF}{HTML}{26abe3}
+\definecolor{AncienNoirBandeauSIF}{HTML}{221920}
+\definecolor{AncienVertBandeauSIF}{HTML}{8bc636}
+\definecolor{AncienBleuWebSIF}{HTML}{6b91c6}
+\definecolor{AncienNoirWebSIF}{HTML}{2f3033}
+\definecolor{AncienVertWebSIF}{HTML}{8dc89d}
 
 %% Les polices de caractères
 \usepackage{lmodern}            % pour sf et tt
@@ -37,7 +45,7 @@
 \hypersetup{%
   colorlinks,%
   linkcolor=,%
-  urlcolor=BleuLogoSIF}
+  urlcolor=VioletSIF}
 
 % Paramétrage Beamer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -79,17 +87,17 @@
 \usecolortheme{orchid}
 \setbeamercolor{background canvas}{bg=}
 \setbeamercolor{normal text}{fg=NoirSIF}
-\setbeamercolor{structure}{fg=BleuSIF}
-\setbeamercolor{frametitle}{fg=BleuSIF,bg=white}
-\setbeamercolor{footline}{fg=BleuSIF}
-\setbeamercolor{block title}{fg=white,bg=BleuSIF}
+\setbeamercolor{structure}{fg=BaseSIF}
+\setbeamercolor{frametitle}{fg=BaseSIF,bg=white}
+\setbeamercolor{footline}{fg=BaseSIF}
+\setbeamercolor{block title}{fg=white,bg=BaseSIF}
 \setbeamercolor{block title example}{fg=white,bg=VertSIF}
-\setbeamercolor{alerted text}{fg=VertSIF}
+\setbeamercolor{alerted text}{fg=OrangeSIF}
 
-\setbeamercolor{title}{fg=BleuSIF}
+\setbeamercolor{title}{fg=BaseSIF}
 \setbeamercolor{subtitle}{fg=VertSIF}
-\setbeamercolor{author}{fg=NoirSIF}
-\setbeamercolor{institute}{fg=NoirSIF}
+\setbeamercolor{author}{fg=VioletSIF}
+\setbeamercolor{institute}{fg=BleuSIF}
 \setbeamercolor{date}{fg=VertSIF}
 
 %% Polices de caractères
@@ -130,11 +138,8 @@
   \iftitlegraphic\else
   \begin{tikzpicture}[remember picture,overlay]
     \node[anchor=south west] at (current page.south west){%
-      \begin{tabular}{l}
-        \raisebox{-.5\height}{\includegraphics[width=.3\textwidth]{logo-sif}}%
-        ~
-        \raisebox{-\height}{\includegraphics[width=.6\textwidth]{bandeau-sif}}\\
-        \hspace{2em}{\textls[100]{\small\textbf{SOCIÉTÉ~~INFORMATIQUE~~DE~~FRANCE}}}
+      \begin{tabular}{c}
+        \includegraphics[width=.9\textwidth]{logo-sif-2022-horizontal}
       \end{tabular}
     };
   \end{tikzpicture}
@@ -203,38 +208,44 @@
 
 %%% Style des listes
 \setbeamertemplate{itemize item}[triangle]
-\setbeamercolor{itemize item}{fg=BleuSIF}
+\setbeamercolor{itemize item}{fg=BaseSIF}
 \setbeamertemplate{itemize subitem}[square]
-\setbeamercolor{itemize subitem}{fg=BleuSIF}
+\setbeamercolor{itemize subitem}{fg=BaseSIF}
 \setbeamertemplate{itemize subsubitem}[triangle]
 \setbeamercolor{itemize subsubitem}{fg=NoirSIF}
 
 \setbeamertemplate{enumerate item}[circle]
-\setbeamercolor{enumerate item}{fg=BleuSIF}
+\setbeamercolor{enumerate item}{fg=BaseSIF}
 \setbeamertemplate{enumerate subitem}[square]
-\setbeamercolor{enumerate item}{fg=BleuSIF}
+\setbeamercolor{enumerate item}{fg=BaseSIF}
 
-\setbeamercolor{item projected}{fg=white,bg=BleuSIF}
+\setbeamercolor{item projected}{fg=white,bg=BaseSIF}
 
-%%% Des pieds de diapo simples
+%%% Des pieds de diapo simples et un logo un haut à droite
 \setbeamertemplate{footline}
 {
   \leavevmode%
   \hbox{%
     \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{footline}
       \usebeamerfont{date in head/foot}
-      \raisebox{-.1em}{\includegraphics[height=1em]{bandeau-sif}}
-      \hspace*{1ex}
+      \hspace*{1.25ex}
       \insertshorttitle{}%
       \ifsectioninfoot \hspace*{3ex} \emph{\textmd{\insertsection}}\fi
       \hfill
       \insertframenumber{} / \inserttotalframenumber
-      \hspace*{1.25ex}
+      \hspace*{1.25ex}%
+      \smash{%
+        \tikz[remember picture, overlay]{%
+          \node[anchor=north east] at (current page.north east){%
+            \includegraphics[height=8em]{logo-sif-2022-vertical}%
+          }%
+        }%
+      }%
     \end{beamercolorbox}}%
   \vskip0pt%
 }
 \setbeamertemplate{navigation symbols}{} % pas de navigation affichée
-\setbeamertemplate{sidebar right}{}      % pas de logo
+%\setbeamertemplate{sidebar right}{}      % pas de logo
 
 %% D'autres paramètres Beamer en vrac
 
