@@ -58,7 +58,7 @@ La documentation est dans le fichier
 
 # Auteurs
 
-Copyright (C) 2016-2021 Bruno BEAUFILS
+Copyright (C) 2016-2023 Bruno BEAUFILS
 
 Ces bricolages ont été écrit par Bruno BEAUFILS.
 
